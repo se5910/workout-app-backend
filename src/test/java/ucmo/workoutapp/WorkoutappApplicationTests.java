@@ -8,6 +8,7 @@ class WorkoutappApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }
