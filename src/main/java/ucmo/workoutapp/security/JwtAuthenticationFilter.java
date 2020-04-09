@@ -1,7 +1,61 @@
 package ucmo.workoutapp.security;
-// 
-// John Irle
-// 08 April 2020
 
-public class JwtAuthenticationFilter {
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
+import ucmo.workoutapp.entities.User;
+import ucmo.workoutapp.services.CustomUserDetailsService;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
+
+import static ucmo.workoutapp.security.SecurityConstants.HEADER_STRING;
+import static ucmo.workoutapp.security.SecurityConstants.TOKEN_PREFIX;
+
+public class JwtAuthenticationFilter extends OncePerRequestFilter{
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
+
+  @Autowired
+  private CustomUserDetailsService customUserDetailsService;
+
+  @Override
+  protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+    try {
+      String jwt = getJWTFromRequest(httpServletRequest);
+
+      if(StringUtils.hasText(jwt)&& jwtTokenProvider.validateToken(jwt)) {
+        Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
+        User userDetails = customUserDetailsService.loadUserById(userId);
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, Collections.emptyList());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+      }
+    } catch (Exception ex) {
+      logger.error("Could not set user authentication in security context", ex);
+    }
+
+    filterChain.doFilter(httpServletRequest, httpServletResponse);
+  }
+
+  private String getJWTFromRequest(HttpServletRequest request) {
+    String bearerToken = request.getHeader(HEADER_STRING);
+
+    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
+      return bearerToken.substring(7, bearerToken.length());
+    }
+
+    return null;
+  }
 }

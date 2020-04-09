@@ -6,9 +6,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.Role;
 import ucmo.workoutapp.entities.User;
+import ucmo.workoutapp.exceptions.UsernameAlreadyExistsException;
 import ucmo.workoutapp.repositories.UserRepository;
 
 import javax.transaction.Transactional;
@@ -18,33 +20,27 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String userName) {
-        User user = userRepository.findByUsername(userName);
-        if(user == null) {
-            throw new UsernameNotFoundException(String.format("The username %s doesn't exist", userName));
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public User saveUser (User newUser) {
+        try {
+            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+            // Username has to be unique
+            newUser.setUsername(newUser.getUsername());
+            // Make sure that password and confirmPassword match
+            // Don't persist or show confirmPassword
+            newUser.setConfirmPassword("");
+            return userRepository.save(newUser);
+        } catch (Exception e) {
+            throw new UsernameAlreadyExistsException("Username '" + newUser.getUsername()+ "' already exists");
         }
-        List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
-        return buildUserForAuthentication(user, authorities);
     }
 
-    private List<GrantedAuthority> getUserAuthority(Set<Role> userRoles) {
-        Set<GrantedAuthority> roles = new HashSet<>();
-        for (Role role : userRoles) {
-            roles.add(new SimpleGrantedAuthority(role.getRole()));
-        }
-        return new ArrayList<>(roles);
-    }
-
-    private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                user.isEnabled(), true, true, true, authorities);
-    }
 
 }
 

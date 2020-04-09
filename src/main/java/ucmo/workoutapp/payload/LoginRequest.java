@@ -1,16 +1,16 @@
-package ucmo.workoutapp.exceptions;
+package ucmo.workoutapp.payload;
 // 
 // John Irle
 // 08 April 2020
 
-public class InvalidLoginResponse {
-  private String username;
-  private String password;
+import javax.validation.constraints.NotBlank;
 
-  public InvalidLoginResponse() {
-    this.username = "Invalid Username";
-    this.password = "Invalid Password";
-  }
+public class LoginRequest {
+
+  @NotBlank(message = "Username cannot be blank")
+  private String username;
+  @NotBlank(message = "Password cannot be blank")
+  private String password;
 
   public String getUsername() {
     return username;

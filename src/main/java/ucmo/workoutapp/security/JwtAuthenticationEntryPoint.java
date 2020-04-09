@@ -1,11 +1,11 @@
 package ucmo.workoutapp.security;
-// 
-// John Irle
-// 08 April 2020
 
+
+import com.google.gson.Gson;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import ucmo.workoutapp.exceptions.InvalidLoginResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,5 +17,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint  {
   @Override
   public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
     InvalidLoginResponse loginResponse = new InvalidLoginResponse();
+    String jsonLoginResponse = new Gson().toJson(loginResponse);
+
+    httpServletResponse.setContentType("application/json");
+    httpServletResponse.setStatus(401);
+    httpServletResponse.getWriter().print(jsonLoginResponse);
   }
 }
