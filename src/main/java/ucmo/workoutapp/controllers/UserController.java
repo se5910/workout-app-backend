@@ -3,10 +3,7 @@ package ucmo.workoutapp.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ucmo.workoutapp.entities.Role;
 import ucmo.workoutapp.entities.User;
 import ucmo.workoutapp.repositories.UserRepository;
@@ -15,15 +12,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Controller
+@RestController
+@RequestMapping("/api/users")
 public class UserController {
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/addUser")
+    @PostMapping("/register")
     public @ResponseBody
     User create(@RequestParam String username, @RequestParam String password) {
         Role authority = new Role(2);
