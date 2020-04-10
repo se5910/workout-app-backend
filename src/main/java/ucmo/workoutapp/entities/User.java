@@ -1,6 +1,7 @@
 package ucmo.workoutapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
