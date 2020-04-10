@@ -101,66 +101,66 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getFullName() {
+  public String getFullName() {
     return fullName;
   }
 
-    public void setFullName(String fullName) {
+  public void setFullName(String fullName) {
     this.fullName = fullName;
   }
 
-    public String getConfirmPassword() {
+  public String getConfirmPassword() {
     return confirmPassword;
   }
 
-    public void setConfirmPassword(String confirmPassword) {
+  public void setConfirmPassword(String confirmPassword) {
     this.confirmPassword = confirmPassword;
   }
 
-    public Date getCreated_At() {
+  public Date getCreated_At() {
     return created_At;
   }
 
-    public void setCreated_At(Date created_At) {
+  public void setCreated_At(Date created_At) {
     this.created_At = created_At;
   }
 
-    public Date getUpdated_At() {
+  public Date getUpdated_At() {
     return updated_At;
   }
 
-    public void setUpdated_At(Date updated_At) {
+  public void setUpdated_At(Date updated_At) {
     this.updated_At = updated_At;
   }
 
-    /* UserDetails interface methods */
+  /* UserDetails interface methods */
 
-    @Override
-    @JsonIgnore
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+  @Override
+  @JsonIgnore
+  public Collection<? extends GrantedAuthority> getAuthorities() {
     return null;
   }
 
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonExpired() {
+  @Override
+  @JsonIgnore
+  public boolean isAccountNonExpired() {
     return true;
   }
 
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonLocked() {
+  @Override
+  @JsonIgnore
+  public boolean isAccountNonLocked() {
     return true;
   }
 
-    @Override
-    @JsonIgnore
-    public boolean isCredentialsNonExpired() {
+  @Override
+  @JsonIgnore
+  public boolean isCredentialsNonExpired() {
     return true;
   }
 
-    @Override
-    @JsonIgnore
-    public boolean isEnabled() { return true; }
+  @Override
+  @JsonIgnore
+  public boolean isEnabled() { return true; }
 }
 
