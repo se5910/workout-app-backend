@@ -19,7 +19,7 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Email(message = "Username needs to be an email")
     @Column(nullable = false, unique = true)
@@ -44,8 +44,6 @@ public class User implements UserDetails {
 
     @PreUpdate
     protected void onUpdate() {this.updated_At = new Date();}
-
-
 
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
@@ -77,11 +75,11 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

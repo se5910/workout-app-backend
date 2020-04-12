@@ -12,7 +12,7 @@ public class ClientService {
 
     public Client SaveOrUpdateClient(Client client, String username){
         if (client.getID() != null) {
-            Client existingClient = clientRepository.getByID(client.getID());
+            Client existingClient = clientRepository.getById(client.getID());
 
         }
         return clientRepository.save(client);

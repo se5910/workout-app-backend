@@ -1,7 +1,6 @@
 package ucmo.workoutapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,10 +8,9 @@ import java.util.Date;
 
 @Entity
 public class Client {
-
     @Id
-    @GeneratedValue
-    private Long ID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotBlank(message = "Name is required")
     private String name;
@@ -39,7 +37,7 @@ public class Client {
 
     private String goalStatement;
 
-    @NotBlank
+    @NotBlank(message = "Health History is required")
     private String healthHistory;
 
     private Date created_At;
@@ -50,11 +48,11 @@ public class Client {
     }
 
     public Long getID() {
-        return ID;
+        return id;
     }
 
     public void setID(Long ID) {
-        this.ID = ID;
+        this.id = id;
     }
 
     public String getName() {
