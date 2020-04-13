@@ -36,6 +36,8 @@ public class Food {
 
     private Double fiber;
 
+    public Food(){}
+
     public Long getId() {
         return id;
     }
