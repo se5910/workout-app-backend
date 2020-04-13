@@ -9,6 +9,10 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exerciseId;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
+    private ExerciseSlot exerciseSlot;
+
     @NotBlank(message = "Exercise name is required")
     private String exerciseName;
 
@@ -33,6 +37,14 @@ public class Exercise {
 
     public void setExerciseId(Long exerciseId) {
         this.exerciseId = exerciseId;
+    }
+
+    public ExerciseSlot getExerciseSlot() {
+        return exerciseSlot;
+    }
+
+    public void setExerciseSlot(ExerciseSlot exerciseSlot) {
+        this.exerciseSlot = exerciseSlot;
     }
 
     public String getExerciseName() {

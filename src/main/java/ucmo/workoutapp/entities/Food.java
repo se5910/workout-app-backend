@@ -52,6 +52,14 @@ public class Food {
         this.category = category;
     }
 
+    public Meal getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
+    }
+
     public String getName() {
         return name;
     }
