@@ -13,9 +13,9 @@ public class ExercisePlan extends Plan {
     private String name;
 
     // Each exercise plan has many exercises, and each exercise can be in in many exercise plans
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exercisePlan")
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Exercise> exercises;
+    private List<Day> days;
 
     public ExercisePlan(){
 
@@ -31,13 +31,5 @@ public class ExercisePlan extends Plan {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Exercise> getExercises() {
-        return exercises;
-    }
-
-    public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
     }
 }

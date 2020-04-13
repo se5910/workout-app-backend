@@ -1,5 +1,7 @@
 package ucmo.workoutapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,37 +10,37 @@ import java.util.List;
 public class Day {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long dayId;
+    private Long id;
 
     // Should be day 1, day 2.... day 7 and no more. List of days?
     private String name;
 
-    // Each day has many exercises, but each exercise cannot be duplicated inside a day (hopefuly lol)
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Exercise> exercises = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "plan_id", updatable = false, nullable = false)
+    private ExercisePlan exercisePlan;
+
+    // Each day has many exercises, but each exercise cannot be duplicated inside a day (hopefully lol)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "day")
+    @JsonIgnore
+    private List<ExerciseSlot> exerciseSlots = new ArrayList<>();
 
     private String workoutType;
 
     private String phase;
 
     // What week it is
-    @Transient
-    private List<String> week;
-
-    // Each entry in the list represents a set. Each value is the number of reps.
-    // List[0] = 10 && List[1] = 5 -> Set 1, reps 10 && Set 2, reps 5
-    @Transient
-    private List<Integer> reps;
+    //@Transient
+    //private List<String> week;
 
     public Day() {
     }
 
-    public long getDayId() {
-        return dayId;
+    public long getId() {
+        return id;
     }
 
-    public void setDayId(long dayId) {
-        this.dayId = dayId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -49,12 +51,12 @@ public class Day {
         this.name = name;
     }
 
-    public List<Exercise> getExercises() {
-        return exercises;
+    public List<ExerciseSlot> getExerciseSlots() {
+        return exerciseSlots;
     }
 
-    public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
+    public void setExerciseSlots(List<ExerciseSlot> exerciseSlots) {
+        this.exerciseSlots = exerciseSlots;
     }
 
     public String getWorkoutType() {
@@ -73,19 +75,4 @@ public class Day {
         this.phase = phase;
     }
 
-    public List<String> getWeek() {
-        return week;
-    }
-
-    public void setWeek(List<String> week) {
-        this.week = week;
-    }
-
-    public List<Integer> getReps() {
-        return reps;
-    }
-
-    public void setReps(List<Integer> reps) {
-        this.reps = reps;
-    }
 }

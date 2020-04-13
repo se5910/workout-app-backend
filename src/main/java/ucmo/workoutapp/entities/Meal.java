@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ public class Meal {
     // Each meal can have many foods, but each food cannot be duplicated inside a meal (hopefully lol)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "meal")
     @JsonIgnore
-    private List<Food> foods;
+    private List<Food> foods = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "plan_id", updatable = false, nullable = false)
@@ -47,5 +48,13 @@ public class Meal {
 
     public void setFoods(List<Food> foods) {
         this.foods = foods;
+    }
+
+    public MealPlan getMealPlan() {
+        return mealPlan;
+    }
+
+    public void setMealPlan(MealPlan mealPlan) {
+        this.mealPlan = mealPlan;
     }
 }
