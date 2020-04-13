@@ -26,6 +26,8 @@ public class Meal {
     @JoinColumn(name = "plan_id", updatable = false, nullable = false)
     private MealPlan mealPlan;
 
+    public Meal(){}
+
     public Long getId() {
         return id;
     }

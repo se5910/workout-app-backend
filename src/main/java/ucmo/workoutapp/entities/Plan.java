@@ -21,6 +21,8 @@ public class Plan {
     private Date created_At;
     private Date updated_At;
 
+    public Plan(){}
+
     @PrePersist
     protected void onCreate() {this.created_At = new Date();}
 
