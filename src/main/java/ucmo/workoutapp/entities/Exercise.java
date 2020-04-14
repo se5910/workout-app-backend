@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long exerciseId;
+    private Long id;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
@@ -31,12 +31,12 @@ public class Exercise {
 
     }
 
-    public Long getExerciseId() {
-        return exerciseId;
+    public Long getId() {
+        return id;
     }
 
-    public void setExerciseId(Long exerciseId) {
-        this.exerciseId = exerciseId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public ExerciseSlot getExerciseSlot() {
