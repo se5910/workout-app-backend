@@ -20,7 +20,7 @@ public class Meal {
     // Each meal can have many foods, but each food cannot be duplicated inside a meal (hopefully lol)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "meal")
     @JsonIgnore
-    private List<Food> foods = new ArrayList<>();
+    private List<FoodSlot> foodSlots = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "plan_id", updatable = false, nullable = false)
@@ -44,12 +44,12 @@ public class Meal {
         this.name = name;
     }
 
-    public List<Food> getFoods() {
-        return foods;
+    public List<FoodSlot> getFoodSlots() {
+        return foodSlots;
     }
 
-    public void setFoods(List<Food> foods) {
-        this.foods = foods;
+    public void setFoodSlots(List<FoodSlot> foodSlots) {
+        this.foodSlots = foodSlots;
     }
 
     public MealPlan getMealPlan() {

@@ -22,18 +22,14 @@ public class Day {
     // Each day has many exercises, but each exercise cannot be duplicated inside a day (hopefully lol)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "day")
     @JsonIgnore
-    private List<ExerciseSlot> exerciseSlots = new ArrayList<>();
+    private List<Week> weeks = new ArrayList<>();
 
     private String workoutType;
 
     private String phase;
 
-    private Integer week1;
-    private Integer week2;
-    private Integer week3;
-    private Integer week4;
-
     public Day() {
+
     }
 
     public Long getId() {
@@ -60,12 +56,12 @@ public class Day {
         this.exercisePlan = exercisePlan;
     }
 
-    public List<ExerciseSlot> getExerciseSlots() {
-        return exerciseSlots;
+    public List<Week> getWeeks() {
+        return weeks;
     }
 
-    public void setExerciseSlots(List<ExerciseSlot> exerciseSlots) {
-        this.exerciseSlots = exerciseSlots;
+    public void setWeeks(List<Week> weeks) {
+        this.weeks = weeks;
     }
 
     public String getWorkoutType() {
@@ -82,37 +78,5 @@ public class Day {
 
     public void setPhase(String phase) {
         this.phase = phase;
-    }
-
-    public Integer getWeek1() {
-        return week1;
-    }
-
-    public void setWeek1(Integer week1) {
-        this.week1 = week1;
-    }
-
-    public Integer getWeek2() {
-        return week2;
-    }
-
-    public void setWeek2(Integer week2) {
-        this.week2 = week2;
-    }
-
-    public Integer getWeek3() {
-        return week3;
-    }
-
-    public void setWeek3(Integer week3) {
-        this.week3 = week3;
-    }
-
-    public Integer getWeek4() {
-        return week4;
-    }
-
-    public void setWeek4(Integer week4) {
-        this.week4 = week4;
     }
 }

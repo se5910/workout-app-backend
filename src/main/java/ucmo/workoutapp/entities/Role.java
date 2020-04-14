@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     @NotEmpty
@@ -15,7 +15,7 @@ public class Role {
 
     public Role(){ }
 
-    public Role(Integer id){
+    public Role(Long id){
         this.id = id;
     }
 
@@ -23,11 +23,11 @@ public class Role {
         this.role = authority;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

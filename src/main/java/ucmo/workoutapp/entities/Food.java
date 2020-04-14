@@ -3,19 +3,15 @@ package ucmo.workoutapp.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-
-// Might split Category to its own entity later on
 @Entity
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String category;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "meal_id", updatable = false, nullable = false)
-    private Meal meal;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "food_slot_id", updatable = false, nullable = false)
+    private FoodSlot foodSlot;
 
     @NotBlank(message = "Food name is required")
     private String name;
@@ -46,20 +42,12 @@ public class Food {
         this.id = id;
     }
 
-    public String getCategory() {
-        return category;
+    public FoodSlot getFoodSlot() {
+        return foodSlot;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public Meal getMeal() {
-        return meal;
-    }
-
-    public void setMeal(Meal meal) {
-        this.meal = meal;
+    public void setFoodSlot(FoodSlot foodSlot) {
+        this.foodSlot = foodSlot;
     }
 
     public String getName() {
