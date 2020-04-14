@@ -3,7 +3,6 @@ package ucmo.workoutapp.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class ExerciseSlot {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
     @JsonIgnore
-    private List<Set> sets = new ArrayList<>();
+    private List<Sets> sets = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
     @JsonIgnore
@@ -45,11 +44,11 @@ public class ExerciseSlot {
         this.exercise = exercise;
     }
 
-    public List<Set> getSets() {
+    public List<Sets> getSets() {
         return sets;
     }
 
-    public void setSets(List<Set> sets) {
+    public void setSets(List<Sets> sets) {
         this.sets = sets;
     }
 

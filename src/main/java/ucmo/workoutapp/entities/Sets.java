@@ -3,7 +3,7 @@ package ucmo.workoutapp.entities;
 import javax.persistence.*;
 
 @Entity
-public class Set {
+public class Sets {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +20,7 @@ public class Set {
 
     private Integer rpe;
 
-    public Set() {}
+    public Sets() {}
 
     public Long getId() {
         return id;

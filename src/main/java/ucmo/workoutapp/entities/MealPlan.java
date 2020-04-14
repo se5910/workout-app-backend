@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.persistence.criteria.Fetch;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ public class MealPlan extends Plan {
     // Each meal plan has many meals, and each meal belongs to one plan
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "mealPlan")
     @JsonIgnore
-    private List<Meal> meals;
+    private List<Meal> meals = new ArrayList<>();
 
     private Integer remainingCalories;
 
