@@ -18,12 +18,12 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-<<<<<<< HEAD
-          <factory-entry name="entityManagerFactory" />
-=======
+
           <factory-entry name="Entities" />
           <factory-entry name="entityManagerFactory" value="54d58c00-6329-4f99-9369-5e624cdfc21a" />
->>>>>>> Added superclass Plan which is extended by Exercise Plan and Meal Plan. Mealplan -> meal -> foods | ExercisePlan -> day -> exercises
+          <factory-entry name="Entities" />
+          <factory-entry name="entityManagerFactory" value="54d58c00-6329-4f99-9369-5e624cdfc21a" />
+
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
@@ -40,15 +40,9 @@
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-<<<<<<< HEAD
-<<<<<<< HEAD
     <orderEntry type="library" name="Spring Security-5.2.1" level="project" />
-=======
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.0" level="project" />
->>>>>>> Added superclass Plan which is extended by Exercise Plan and Meal Plan. Mealplan -> meal -> foods | ExercisePlan -> day -> exercises
-=======
->>>>>>> Removed weird duplicate tables by creating join columns between necessary entities.
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-thymeleaf:2.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.2.4.RELEASE" level="project" />
