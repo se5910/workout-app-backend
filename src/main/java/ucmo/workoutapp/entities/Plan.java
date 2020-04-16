@@ -1,5 +1,6 @@
 package ucmo.workoutapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -17,8 +18,11 @@ public class Plan {
     @OneToOne(fetch = FetchType.LAZY)
     private Client client;
 
-    @Transient
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(updatable = false)
     private Date created_At;
+
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
     public Plan(){}
