@@ -1,5 +1,6 @@
 package ucmo.workoutapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -40,12 +41,22 @@ public class Client {
     @NotBlank(message = "Health History is required")
     private String healthHistory;
 
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(updatable = false)
     private Date created_At;
+
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
     public Client() {
 
     }
+
+    @PrePersist
+    protected void onCreate() {this.created_At = new Date();}
+
+    @PreUpdate
+    protected void onUpdate() {this.updated_At = new Date();}
 
     public Long getID() {
         return id;
