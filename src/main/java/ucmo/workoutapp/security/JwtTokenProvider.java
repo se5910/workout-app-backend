@@ -63,4 +63,12 @@ public class JwtTokenProvider {
 
     return Long.parseLong(id);
   }
+  // Get user role from token
+  public String getRoleFromJWT(String token) {
+    Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+
+    String role = (String)claims.get("role");
+
+    return role;
+  }
 }
