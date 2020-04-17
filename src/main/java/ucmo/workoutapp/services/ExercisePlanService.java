@@ -11,8 +11,6 @@ import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.ExercisePlanRepository;
 import ucmo.workoutapp.repositories.UserRepository;
 
-import javax.validation.constraints.Null;
-
 @Service
 public class ExercisePlanService {
     @Autowired

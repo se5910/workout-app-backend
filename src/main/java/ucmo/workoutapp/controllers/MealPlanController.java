@@ -1,6 +1,5 @@
 package ucmo.workoutapp.controllers;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +20,14 @@ public class MealPlanController {
     private MealPlanService mealPlanService;
 
     @PostMapping("")
-    public ResponseEntity<?> createNewExercisePlan(@Valid @RequestBody MealPlan mealPlan, BindingResult result, Principal principal) {
-        mealPlanService.SaveOrUpdateExercisePlan(mealPlan, principal.getName());
+    public ResponseEntity<?> createNewMealPlan(@Valid @RequestBody MealPlan mealPlan, BindingResult result, Principal principal) {
+        mealPlanService.SaveOrUpdateMealPlan(mealPlan, principal.getName());
         return new ResponseEntity<>(mealPlan, HttpStatus.CREATED);
 
     }
 
     @GetMapping("/all")
-    public  Iterable<MealPlan> getAllExercisePlans(Principal principal) {
+    public  Iterable<MealPlan> getAllMealPlans(Principal principal) {
         return mealPlanService.findAllMealPlans(principal.getName());
     }
 }
