@@ -39,8 +39,13 @@ public class User implements UserDetails {
     private Date created_At;
     private Date updated_At;
 
+    private boolean isCoach;
+
     @PrePersist
-    protected void onCreate() {this.created_At = new Date();}
+    protected void onCreate() {
+        this.created_At = new Date();
+        this.isCoach = true;
+    }
 
     @PreUpdate
     protected void onUpdate() {this.updated_At = new Date();}
@@ -61,6 +66,14 @@ public class User implements UserDetails {
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
+    }
+
+    public boolean isCoach() {
+        return isCoach;
+    }
+
+    public void setCoach(boolean coach) {
+        isCoach = coach;
     }
 
     public Set<Role> getRoles() {
