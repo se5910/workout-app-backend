@@ -36,4 +36,11 @@ public class MealPlanController {
     public  Iterable<MealPlan> getAllMealPlans(Principal principal) {
         return mealPlanService.findAllMealPlans(principal.getName());
     }
+
+    @GetMapping("/{planId}")
+    public ResponseEntity<?> getMealPlanById(@PathVariable Long planId, Principal principal) {
+        MealPlan plan = mealPlanService.getMealPlanById(planId, principal.getName());
+
+        return new ResponseEntity<>(plan, HttpStatus.OK);
+    }
 }

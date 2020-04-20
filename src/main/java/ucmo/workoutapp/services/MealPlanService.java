@@ -3,10 +3,7 @@ package ucmo.workoutapp.services;
 import jdk.nashorn.internal.parser.Lexer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ucmo.workoutapp.entities.Client;
-import ucmo.workoutapp.entities.ExercisePlan;
-import ucmo.workoutapp.entities.MealPlan;
-import ucmo.workoutapp.entities.User;
+import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.MealPlanRepository;
@@ -52,5 +49,15 @@ public class MealPlanService {
         Client client = clientRepository.getByUser(user);
 
         return mealPlanRepository.findAllByClient(client);
+    }
+
+    public MealPlan getMealPlanById(Long id, String username) {
+        MealPlan mealplan = mealPlanRepository.getByPlanId(id);
+
+        if(mealplan == null) {
+            throw new PlanNotFoundException("Plan not found");
+        }
+
+        return mealplan;
     }
 }
