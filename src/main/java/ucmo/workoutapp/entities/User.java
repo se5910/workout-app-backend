@@ -39,8 +39,13 @@ public class User implements UserDetails {
     private Date created_At;
     private Date updated_At;
 
+    private boolean isCoach;
+
     @PrePersist
-    protected void onCreate() {this.created_At = new Date();}
+    protected void onCreate() {
+        this.created_At = new Date();
+        this.isCoach = true;
+    }
 
     @PreUpdate
     protected void onUpdate() {this.updated_At = new Date();}
@@ -61,6 +66,14 @@ public class User implements UserDetails {
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
+    }
+
+    public boolean isCoach() {
+        return isCoach;
+    }
+
+    public void setCoach(boolean coach) {
+        isCoach = coach;
     }
 
     public Set<Role> getRoles() {
@@ -99,66 +112,66 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-  public String getFullName() {
+    public String getFullName() {
     return fullName;
   }
 
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
-  }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-  public String getConfirmPassword() {
-    return confirmPassword;
-  }
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
 
-  public void setConfirmPassword(String confirmPassword) {
-    this.confirmPassword = confirmPassword;
-  }
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
-  public Date getCreated_At() {
-    return created_At;
-  }
+    public Date getCreated_At() {
+        return created_At;
+    }
 
-  public void setCreated_At(Date created_At) {
-    this.created_At = created_At;
-  }
+    public void setCreated_At(Date created_At) {
+        this.created_At = created_At;
+    }
 
-  public Date getUpdated_At() {
-    return updated_At;
-  }
+    public Date getUpdated_At() {
+        return updated_At;
+    }
 
-  public void setUpdated_At(Date updated_At) {
-    this.updated_At = updated_At;
-  }
+    public void setUpdated_At(Date updated_At) {
+        this.updated_At = updated_At;
+    }
 
-  /* UserDetails interface methods */
+    /* UserDetails interface methods */
 
-  @Override
-  @JsonIgnore
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
-  }
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 
-  @Override
-  @JsonIgnore
-  public boolean isAccountNonExpired() {
-    return true;
-  }
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-  @Override
-  @JsonIgnore
-  public boolean isAccountNonLocked() {
-    return true;
-  }
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-  @Override
-  @JsonIgnore
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-  @Override
-  @JsonIgnore
-  public boolean isEnabled() { return true; }
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() { return true; }
 }
 

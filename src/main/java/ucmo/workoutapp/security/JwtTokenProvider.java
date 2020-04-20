@@ -27,6 +27,7 @@ public class JwtTokenProvider {
     claims.put("id", (Long.toString(user.getId())));
     claims.put("username", user.getUsername());
     claims.put("fullName", user.getFullName());
+    claims.put("isCoach", user.isCoach());
 
     return Jwts.builder()
             .setSubject(userId)
@@ -62,5 +63,13 @@ public class JwtTokenProvider {
     String id = (String)claims.get("id");
 
     return Long.parseLong(id);
+  }
+  // Get user role from token
+  public String getRoleFromJWT(String token) {
+    Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+
+    String role = (String)claims.get("role");
+
+    return role;
   }
 }
