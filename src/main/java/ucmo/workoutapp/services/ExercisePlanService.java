@@ -2,10 +2,7 @@ package ucmo.workoutapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ucmo.workoutapp.entities.Client;
-import ucmo.workoutapp.entities.ExercisePlan;
-import ucmo.workoutapp.entities.Plan;
-import ucmo.workoutapp.entities.User;
+import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.ExercisePlanRepository;
@@ -51,5 +48,28 @@ public class ExercisePlanService {
         Client client = clientRepository.getByUser(user);
 
         return exercisePlanRepository.findAllByClient(client);
+    }
+
+    public ExercisePlan findExercisePlanById(Long planId, String username) {
+        try {
+            ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
+            Client client = clientRepository.getByUser(userRepository.findByUsername(username));
+
+            if (exercisePlan == null) {
+                throw new PlanNotFoundException("Plan doesn't not exist");
+            }
+
+            if (!exercisePlan.getClient().equals(client)) {
+                throw new PlanNotFoundException("Exercise Plan not found in your account");
+            }
+            return exercisePlan;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void deleteByExercisePlanId(Long planId, String username) {
+        exercisePlanRepository.delete(findExercisePlanById(planId, username));
     }
 }
