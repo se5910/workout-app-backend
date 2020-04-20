@@ -43,4 +43,11 @@ public class MealPlanController {
 
         return new ResponseEntity<>(plan, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{planId}")
+    public ResponseEntity<?> deleteMealPlanById(@PathVariable Long planId, Principal principal) {
+        mealPlanService.deleteByExercisePlanId(planId, principal.getName());
+
+        return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
+    }
 }
