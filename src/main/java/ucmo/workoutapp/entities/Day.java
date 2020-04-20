@@ -17,6 +17,7 @@ public class Day {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "plan_id", updatable = false, nullable = false)
+    @JsonIgnore
     private ExercisePlan exercisePlan;
 
     // Each day has many exercises, but each exercise cannot be duplicated inside a day (hopefully lol)

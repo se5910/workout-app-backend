@@ -13,7 +13,6 @@ public class ExercisePlan extends Plan {
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exercisePlan")
-    @JsonIgnore
     private List<Day> days;
 
     public ExercisePlan(){
@@ -26,5 +25,13 @@ public class ExercisePlan extends Plan {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Day> getDays() {
+        return days;
+    }
+
+    public void setDays(List<Day> days) {
+        this.days = days;
     }
 }
