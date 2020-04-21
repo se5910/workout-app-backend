@@ -6,10 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ucmo.workoutapp.entities.ExercisePlan;
+import ucmo.workoutapp.entities.Meal;
 import ucmo.workoutapp.entities.MealPlan;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.MealPlanService;
+import ucmo.workoutapp.services.MealService;
 
+import javax.naming.Binding;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -22,6 +25,9 @@ public class MealPlanController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
+
+    @Autowired
+    private MealService mealService;
 
     @PostMapping("")
     public ResponseEntity<?> createNewMealPlan(@Valid @RequestBody MealPlan mealPlan, BindingResult result, Principal principal) {
@@ -49,5 +55,14 @@ public class MealPlanController {
         mealPlanService.deleteByExercisePlanId(planId, principal.getName());
 
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
+    }
+
+    @PostMapping("/{planId}/meal")
+    public ResponseEntity<?> createMealForMealPlan(@Valid @RequestBody Meal meal, BindingResult result, @PathVariable Long planId, Principal principal){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+        mealService.createMealForMealPlan(meal, planId, principal.getName());
+
+        return new ResponseEntity<>(meal, HttpStatus.CREATED);
     }
 }

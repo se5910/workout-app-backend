@@ -3,6 +3,7 @@ package ucmo.workoutapp.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +13,12 @@ public class Day {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Should be day 1, day 2.... day 7 and no more. List of days?
+    @NotBlank(message = "Day name is required")
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "plan_id", updatable = false, nullable = false)
+    @JsonIgnore
     private ExercisePlan exercisePlan;
 
     // Each day has many exercises, but each exercise cannot be duplicated inside a day (hopefully lol)
@@ -24,8 +26,10 @@ public class Day {
     @JsonIgnore
     private List<Week> weeks = new ArrayList<>();
 
+    @NotBlank(message = "Workout type is required")
     private String workoutType;
 
+    @NotBlank(message = "Workout phase is required")
     private String phase;
 
     public Day() {
