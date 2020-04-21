@@ -24,6 +24,7 @@ public class Meal {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "plan_id", updatable = false, nullable = false)
+    @JsonIgnore
     private MealPlan mealPlan;
 
     public Meal(){}

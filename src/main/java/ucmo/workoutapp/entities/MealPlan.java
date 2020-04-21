@@ -16,7 +16,6 @@ public class MealPlan extends Plan {
 
     // Each meal plan has many meals, and each meal belongs to one plan
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "mealPlan")
-    @JsonIgnore
     private List<Meal> meals = new ArrayList<>();
 
     private Integer remainingCalories;
