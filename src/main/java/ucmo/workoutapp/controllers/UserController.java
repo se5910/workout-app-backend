@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ucmo.workoutapp.entities.Client;
 import ucmo.workoutapp.entities.Role;
 import ucmo.workoutapp.entities.User;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
@@ -18,10 +19,13 @@ import ucmo.workoutapp.payload.JWTLoginSuccessResponse;
 import ucmo.workoutapp.payload.LoginRequest;
 import ucmo.workoutapp.repositories.UserRepository;
 import ucmo.workoutapp.security.JwtTokenProvider;
+import ucmo.workoutapp.services.ClientService;
 import ucmo.workoutapp.services.UserService;
 import ucmo.workoutapp.validator.UserValidator;
 
+import javax.naming.Binding;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +44,9 @@ public class UserController {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -75,6 +82,15 @@ public class UserController {
         User newUser = userService.saveUser(user);
 
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/client")
+    public ResponseEntity<?> createClient(@Valid @RequestBody Client client, BindingResult result, Principal principal) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Client newClient = clientService.SaveOrUpdateClient(client, principal.getName());
+        return new ResponseEntity<>(newClient, HttpStatus.OK);
     }
 
 //    @PostMapping("/register")
