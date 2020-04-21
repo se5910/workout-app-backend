@@ -73,11 +73,12 @@ public class ExercisePlanController {
     }
 
     @PostMapping("/{planId}/day")
-    public ResponseEntity<?> addDayToExercisePlan(@PathVariable Long planId, Principal principal) {
-        Day day = new Day();
-        Day test = dayService.addDayToExercisePlan(planId, day, principal.getName());
+    public ResponseEntity<?> createDayForExercisePlan(@Valid @RequestBody Day day, BindingResult result, @PathVariable Long planId, Principal principal) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+        dayService.createDayForExercisePlan(day, planId, principal.getName());
 
-        return new ResponseEntity<>(test, HttpStatus.OK);
+        return new ResponseEntity<>(day, HttpStatus.CREATED);
     }
 
     @GetMapping("/{planId}/{dayId}")

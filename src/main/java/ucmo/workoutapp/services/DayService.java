@@ -1,10 +1,11 @@
 package ucmo.workoutapp.services;
 
+import io.netty.handler.codec.MessageAggregationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ucmo.workoutapp.entities.Day;
-import ucmo.workoutapp.entities.Exercise;
-import ucmo.workoutapp.entities.ExercisePlan;
+import ucmo.workoutapp.entities.*;
+import ucmo.workoutapp.exceptions.PlanNotFoundException;
+import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.DayRepository;
 import ucmo.workoutapp.repositories.ExercisePlanRepository;
 import ucmo.workoutapp.repositories.UserRepository;
@@ -22,12 +23,18 @@ public class DayService {
     @Autowired
     UserRepository userRepository;
 
-    public Day addDayToExercisePlan(Long planId, Day day, String username){
+    @Autowired
+    ClientRepository clientRepository;
+
+
+    public Day createDayForExercisePlan(Day day, Long planId, String username){
         ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
         day.setExercisePlan(exercisePlan);
+        day.setPhase(day.getPhase());
+        day.setWorkoutType(day.getWorkoutType());
+        day.setName(day.getName());
 
         return dayRepository.save(day);
-
     }
 
     public Day getDayById(Long planId, Long dayId, String username){
