@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -20,16 +22,16 @@ public class Client {
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @NotBlank(message = "Height is required")
+    @NotNull(message = "Height is required")
     private Integer height;
 
-    @NotBlank(message = "Weight")
+    @NotNull(message = "Weight")
     private Double weight;
 
-    @NotBlank(message = "Goal Weight is required")
+    @NotNull(message = "Goal Weight is required")
     private Double goalWeight;
 
-    @NotBlank(message = "Age is required")
+    @NotNull(message = "Age is required")
     private Integer age;
 
     private Double bodyFatPercentage;
