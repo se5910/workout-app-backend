@@ -17,10 +17,10 @@ public class Week {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "day_id", updatable = false, nullable = false)
+    @JsonIgnore
     private Day day;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "week")
-    @JsonIgnore
     private List<ExerciseSlot> exerciseSlots;
 
     public Week() {

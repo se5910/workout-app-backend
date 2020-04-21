@@ -23,7 +23,6 @@ public class Day {
 
     // Each day has many exercises, but each exercise cannot be duplicated inside a day (hopefully lol)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "day")
-    @JsonIgnore
     private List<Week> weeks = new ArrayList<>();
 
     @NotBlank(message = "Workout type is required")

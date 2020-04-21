@@ -13,15 +13,14 @@ public class ExerciseSlot {
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
-    @JsonIgnore
     private List<Sets> sets = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
-    @JsonIgnore
     private Exercise exercise;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "week_id", updatable = false, nullable = false)
+    @JsonIgnore
     private Week week;
 
     public ExerciseSlot(){

@@ -16,13 +16,13 @@ public class MealService {
     private MealPlanRepository mealPlanRepository;
 
     @Autowired
-    MealRepository mealRepository;
+    private MealRepository mealRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     public Meal createMealForMealPlan(Meal meal, Long planId, String username){
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
