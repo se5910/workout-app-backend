@@ -18,8 +18,9 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercise")
+@RequestMapping("/api/exercise/{planId}/{dayId}/{weekId}")
 public class ExerciseSlotController {
+
 
     @Autowired
     private DayService dayService;
@@ -31,7 +32,10 @@ public class ExerciseSlotController {
     private ExerciseSlotService exerciseSlotService;
 
 
-    @PostMapping("/{planId}/{dayId}/{weekId}/exerciseSlot")
+    // @route   POST /api/exercise/{planId}/{dayId}/{weekId}
+    // @desc    Create exercise Slot for day
+    // @access  Private
+    @PostMapping("/exerciseSlot")
     public ResponseEntity<?> createExerciseSlotForDay(@Valid @RequestBody ExerciseSlot exerciseSlot, BindingResult result, @PathVariable Long weekId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -40,7 +44,10 @@ public class ExerciseSlotController {
         return new ResponseEntity<>(exerciseSlot, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{planId}/{dayId}/{weekId}/{exerciseSlotId}")
+    // @route   POST api/exercise/{planId}/{dayId}/{weekId}/{exerciseSlotId}
+    // @desc    Get all exercise slots from day
+    // @access  Private
+    @GetMapping("/{exerciseSlotId}")
     public ResponseEntity<?> getAllExerciseSlotsFromDay(@PathVariable Long weekId, @PathVariable Long exerciseSlotId, Principal principal){
        ExerciseSlot exerciseSlot = exerciseSlotService.getExerciseSlotById(weekId , exerciseSlotId, principal.getName());
 

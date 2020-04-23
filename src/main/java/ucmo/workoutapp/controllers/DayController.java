@@ -17,7 +17,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercise")
+@RequestMapping("/api/exercise/{planId}")
 public class DayController {
     @Autowired
     private DayService dayService;
@@ -25,8 +25,10 @@ public class DayController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-
-    @PostMapping("/{planId}/day")
+    // @route   POST api/exercise/day/:planId
+    // @desc    Create day on exercise plan
+    // @access  Private
+    @PostMapping("/day")
     public ResponseEntity<?> createDayForExercisePlan(@Valid @RequestBody Day day, BindingResult result, @PathVariable Long planId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -35,7 +37,10 @@ public class DayController {
         return new ResponseEntity<>(day, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{planId}/{dayId}")
+    // @route   GET api/exercise/day/:planId/:dayId
+    // @desc    Get all days from planId
+    // @access  Private
+    @GetMapping("/{dayId}")
     public ResponseEntity<?> getAllDaysFromExercisePlan(@PathVariable Long planId, @PathVariable Long dayId, Principal principal){
         Day day = dayService.getDayById(planId, dayId, principal.getName());
 

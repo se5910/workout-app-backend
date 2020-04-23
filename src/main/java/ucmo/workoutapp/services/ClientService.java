@@ -27,7 +27,7 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    public Client getClientByUser(String username) {
+    public User getClientByUser(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new ClientNotFoundException("How about now?");
@@ -41,7 +41,7 @@ public class ClientService {
         if (!client.getName().equals(username)) {
             throw new ClientNotFoundException("Profile not found in your account");
         }
-        return client;
+        return user;
     }
 
 }

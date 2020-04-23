@@ -36,6 +36,9 @@ public class ExercisePlanController {
     @Autowired
     private WeekService weekService;
 
+    // @route   POST api/exercise
+    // @desc    Register a user
+    // @access  Private
     @PostMapping("")
     public ResponseEntity<?> createNewExercisePlan(@Valid @RequestBody ExercisePlan exercisePlan, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -45,6 +48,9 @@ public class ExercisePlanController {
 
     }
 
+    // @route   GET api/exercise/all
+    // @desc    Get all exercise plans of user
+    // @access  Private
     @GetMapping("/all")
     public  Iterable<ExercisePlan> getAllExercisePlans(Principal principal) {
 
