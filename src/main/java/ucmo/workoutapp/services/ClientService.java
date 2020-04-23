@@ -27,21 +27,33 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    public User getClientByUser(String username) {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new ClientNotFoundException("How about now?");
-        }
-        Client client = clientRepository.getByUser(user);
+    public Client getClientByUser(String username) {
+        try {
+            User user = userRepository.findByUsername(username);
 
-        if (client == null) {
-            throw new ClientNotFoundException("Client doesn't not exist");
-        }
+            if (user == null) {
+                throw new ClientNotFoundException("How about now?");
+            }
 
-        if (!client.getName().equals(username)) {
-            throw new ClientNotFoundException("Profile not found in your account");
+            Client client = clientRepository.getByUser(user);
+
+            if (client == null) {
+                throw new ClientNotFoundException("Client doesn't not exist");
+            }
+
+            // Need toLowerCase()
+            //System.out.println(user.getFullName()); This is lowercase
+            //System.out.println(client.getName()); This is not
+
+            if (!user.getFullName().equals(client.getName().toLowerCase())) {
+                throw new ClientNotFoundException("Profile not found in your account");
+            }
+
+            return client;
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        return user;
+        return null;
     }
 
 }

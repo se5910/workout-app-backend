@@ -41,7 +41,7 @@ public class ClientController {
     // @access  Private
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentClient(Principal principal) {
-        User currentClient = clientService.getClientByUser(principal.getName());
+        Client currentClient = clientService.getClientByUser(principal.getName());
         System.out.println(principal.getName());
 
         return new ResponseEntity<>(currentClient, HttpStatus.OK);
