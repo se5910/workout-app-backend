@@ -15,7 +15,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/users/client")
+@RequestMapping("/api/client")
 public class ClientController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class ClientController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    // @route   POST api/users/client
+    // @route   POST api/client
     // @desc    Create a client associated to user
     // @access  Private
     @PostMapping("")
@@ -36,7 +36,7 @@ public class ClientController {
         return new ResponseEntity<>(newClient, HttpStatus.CREATED);
     }
 
-    // @route   POST api/users/client/me
+    // @route   POST api/client/me
     // @desc    Return client info for current user
     // @access  Private
     @GetMapping("/me")
