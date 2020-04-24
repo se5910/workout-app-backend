@@ -45,15 +45,14 @@ public class ClientService {
             //System.out.println(user.getFullName()); This is lowercase
             //System.out.println(client.getName()); This is not
 
-            if (!user.getFullName().equals(client.getName().toLowerCase())) {
+            if (!user.getFullName().equals(client.getName())) {
                 throw new ClientNotFoundException("Profile not found in your account");
             }
 
             return client;
         } catch (Exception e){
-            e.printStackTrace();
+            throw new ClientNotFoundException("No Profile");
         }
-        return null;
     }
 
 }
