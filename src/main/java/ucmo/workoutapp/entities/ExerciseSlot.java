@@ -13,7 +13,7 @@ public class ExerciseSlot {
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
-    private List<Sets> sets = new ArrayList<>();
+    private List<ExerciseSet> sets = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
     private Exercise exercise;
@@ -43,11 +43,11 @@ public class ExerciseSlot {
         this.exercise = exercise;
     }
 
-    public List<Sets> getSets() {
+    public List<ExerciseSet> getSets() {
         return sets;
     }
 
-    public void setSets(List<Sets> sets) {
+    public void setSets(List<ExerciseSet> sets) {
         this.sets = sets;
     }
 

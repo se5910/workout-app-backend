@@ -9,19 +9,10 @@ import ucmo.workoutapp.repositories.*;
 @Service
 public class ExerciseSlotService {
     @Autowired
-    private ExercisePlanRepository exercisePlanRepository;
-
-    @Autowired
     private WeekRepository weekRepository;
 
     @Autowired
     private ExerciseSlotRepository exerciseSlotRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ClientRepository clientRepository;
 
     public ExerciseSlot createExerciseSlotForDay(ExerciseSlot exerciseSlot, Long weekId, String username){
         Week week = weekRepository.getById(weekId);

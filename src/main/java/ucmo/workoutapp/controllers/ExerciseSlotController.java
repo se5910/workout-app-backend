@@ -20,11 +20,6 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/exercise/{planId}/{dayId}/{weekId}")
 public class ExerciseSlotController {
-
-
-    @Autowired
-    private DayService dayService;
-
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
