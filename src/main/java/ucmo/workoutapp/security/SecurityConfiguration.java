@@ -70,19 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
-                .antMatchers(
-                        "/",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*,gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js"
-                ).permitAll()
-                .antMatchers(SIGN_UP_URLS).permitAll()
-                .antMatchers(H2_URL).permitAll()
+
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
