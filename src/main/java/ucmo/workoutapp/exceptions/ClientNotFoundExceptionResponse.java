@@ -6,7 +6,7 @@ public class ClientNotFoundExceptionResponse {
     private String ClientNotFound;
 
     public ClientNotFoundExceptionResponse(String planNotFound) {
-        ClientNotFound = ClientNotFound;
+        this.ClientNotFound = ClientNotFound;
     }
 
     public String getClientNotFound() {
