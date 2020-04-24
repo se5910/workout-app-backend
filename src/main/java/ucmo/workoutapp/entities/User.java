@@ -61,10 +61,16 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public User(String username, String password, boolean enabled, Set<Role> roles) {
+    public User(Long id, @Email(message = "Username needs to be an email") @NotBlank(message = "username is required") String username, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, boolean enabled, String confirmPassword, Date created_At, Date updated_At, boolean isCoach, Set<Role> roles) {
+        this.id = id;
         this.username = username;
+        this.fullName = fullName;
         this.password = password;
         this.enabled = enabled;
+        this.confirmPassword = confirmPassword;
+        this.created_At = created_At;
+        this.updated_At = updated_At;
+        this.isCoach = isCoach;
         this.roles = roles;
     }
 
