@@ -21,7 +21,7 @@ public class ExerciseSetController {
 
     @Autowired
     private ExerciseSetService exerciseSetService;
-
+    
     @PostMapping("/exerciseSet")
     public ResponseEntity<?> createSetForExerciseSlot(@Valid @RequestBody ExerciseSet exerciseSet, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);

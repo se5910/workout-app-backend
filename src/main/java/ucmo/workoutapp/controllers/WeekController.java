@@ -27,6 +27,9 @@ public class WeekController {
     @Autowired
     private WeekService weekService;
 
+    // @route   POST api/exercise/:planId/:dayId/week
+    // @desc    Create week for day
+    // @access  Private
     @PostMapping("/{planId}/{dayId}/week")
     public ResponseEntity<?> createWeekForDay(@Valid @RequestBody Week week, BindingResult result, @PathVariable Long dayId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -36,6 +39,9 @@ public class WeekController {
         return new ResponseEntity<>(week, HttpStatus.CREATED);
     }
 
+    // @route   GET api/exercise/:planId/:dayId/:weekId
+    // @desc    Get all weeks from day
+    // @access  Private
     @GetMapping("/{planId}/{dayId}/{weekId}")
     public ResponseEntity<?> getAllWeeksFromDay(@PathVariable Long dayId, @PathVariable Long weekId, Principal principal){
         Week week = weekService.getWeekById(dayId, weekId, principal.getName());
