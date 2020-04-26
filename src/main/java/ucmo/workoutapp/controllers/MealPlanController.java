@@ -29,6 +29,9 @@ public class MealPlanController {
     @Autowired
     private MealService mealService;
 
+    // @route   POST api/mealplan
+    // @desc    Create New meal plan
+    // @access  Private
     @PostMapping("")
     public ResponseEntity<?> createNewMealPlan(@Valid @RequestBody MealPlan mealPlan, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -38,11 +41,17 @@ public class MealPlanController {
 
     }
 
+    // @route   GET api/mealplan/all
+    // @desc    Get all meal plans of user
+    // @access  Private
     @GetMapping("/all")
     public  Iterable<MealPlan> getAllMealPlans(Principal principal) {
         return mealPlanService.findAllMealPlans(principal.getName());
     }
 
+    // @route   GET api/mealplan/:planId
+    // @desc    Get meal plan by id
+    // @access  Private
     @GetMapping("/{planId}")
     public ResponseEntity<?> getMealPlanById(@PathVariable Long planId, Principal principal) {
         MealPlan plan = mealPlanService.getMealPlanById(planId, principal.getName());
@@ -50,6 +59,9 @@ public class MealPlanController {
         return new ResponseEntity<>(plan, HttpStatus.OK);
     }
 
+    // @route   DELETE api/mealplan/:planId
+    // @desc    Delete meal plan by id
+    // @access  Private
     @DeleteMapping("/{planId}")
     public ResponseEntity<?> deleteMealPlanById(@PathVariable Long planId, Principal principal) {
         mealPlanService.deleteByExercisePlanId(planId, principal.getName());
@@ -57,6 +69,9 @@ public class MealPlanController {
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
     }
 
+    // @route   POST api/mealplan/:planid/meal
+    // @desc    Create meal for meal plan
+    // @access  Private
     @PostMapping("/{planId}/meal")
     public ResponseEntity<?> createMealForMealPlan(@Valid @RequestBody Meal meal, BindingResult result, @PathVariable Long planId, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
