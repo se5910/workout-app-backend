@@ -16,15 +16,25 @@ public class ClientService {
     @Autowired
     private UserRepository userRepository;
 
-    public Client SaveOrUpdateClient(Client client, String username){
-        if (client.getID() != null) {
-            Client existingClient = clientRepository.getById(client.getID());
-
-        }
+    public Client SaveOrUpdateClient(Client clientObject, String username){
         User user = userRepository.findByUsername(username);
+        Client client = clientRepository.getByUser(user);
+        if (client != null) {
+            client.setAge(clientObject.getAge());
+            client.setBodyFatPercentage(clientObject.getBodyFatPercentage());
+            client.setGoalStatement(clientObject.getGoalStatement());
+            client.setHeight(clientObject.getHeight());
+            client.setRestingHeartRate(clientObject.getRestingHeartRate());
+            client.setGoalWeight(clientObject.getGoalWeight());
+            client.setHealthHistory(clientObject.getHealthHistory());
+            client.setWeight(clientObject.getWeight());
 
-        client.setUser(user);
-        return clientRepository.save(client);
+            return clientRepository.save(client);
+        } else {
+
+            clientObject.setUser(user);
+            return clientRepository.save(clientObject);
+        }
     }
 
     public Client getClientByUser(String username) {
@@ -42,8 +52,8 @@ public class ClientService {
             }
 
             // Need toLowerCase()
-            //System.out.println(user.getFullName()); This is lowercase
-            //System.out.println(client.getName()); This is not
+            System.out.println(user.getFullName()); //This is lowercase
+            System.out.println(client.getName()); //This is not
 
             if (!user.getFullName().equals(client.getName())) {
                 throw new ClientNotFoundException("Profile not found in your account");
