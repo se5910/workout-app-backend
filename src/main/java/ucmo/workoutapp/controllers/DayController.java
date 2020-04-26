@@ -17,7 +17,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercise/{planId}")
+@RequestMapping("/api/exercisePlan/{planId}")
 public class DayController {
     @Autowired
     private DayService dayService;

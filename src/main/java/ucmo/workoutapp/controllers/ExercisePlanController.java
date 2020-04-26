@@ -19,7 +19,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercise")
+@RequestMapping("/api/exercisePlan")
 public class ExercisePlanController {
     @Autowired
     private ExercisePlanService exercisePlanService;
