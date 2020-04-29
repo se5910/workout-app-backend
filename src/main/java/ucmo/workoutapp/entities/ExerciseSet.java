@@ -1,6 +1,12 @@
 package ucmo.workoutapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GeneratorType;
+import org.hibernate.annotations.ValueGenerationType;
+
+import javax.annotation.Generated;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class ExerciseSet {
@@ -10,9 +16,10 @@ public class ExerciseSet {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
+    @JsonIgnore
     private ExerciseSlot exerciseSlot;
 
-    private Integer setNumber;
+    private Integer setNumber = 0;
 
     private Integer weight;
 

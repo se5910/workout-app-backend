@@ -1,5 +1,7 @@
 package ucmo.workoutapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -11,6 +13,7 @@ public class Exercise {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
+    @JsonIgnore
     private ExerciseSlot exerciseSlot;
 
     @NotBlank(message = "Exercise name is required")
