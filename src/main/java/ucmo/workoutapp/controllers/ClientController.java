@@ -1,6 +1,7 @@
 package ucmo.workoutapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,11 @@ public class ClientController {
         Client currentClient = clientService.getClientByUser(principal.getName());
 
         return new ResponseEntity<>(currentClient, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public Client getClientById(@PathVariable Long id, Principal principal) {
+        return clientService.getClientById(id, principal.getName());
     }
 
 
