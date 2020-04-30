@@ -61,7 +61,7 @@ public class MealPlanService {
         return mealplan;
     }
 
-    public void deleteByExercisePlanId(Long id, String username) {
+    public void deleteByMealPlanId(Long id, String username) {
         mealPlanRepository.delete(getMealPlanById(id, username));
     }
 }

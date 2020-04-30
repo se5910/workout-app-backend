@@ -16,7 +16,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/foodslot")
+@RequestMapping("/api/mealplan/{planId}/meal/{mealId}/foodslot")
 public class FoodSlotController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -25,7 +25,7 @@ public class FoodSlotController {
     private FoodSlotService foodSlotService;
 
 
-    @PostMapping("/{mealId}")
+    @PostMapping("")
     public ResponseEntity<?> createFoodSlotForMeal(@Valid @RequestBody FoodSlot foodSlot, BindingResult result, @PathVariable Long mealId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -35,7 +35,7 @@ public class FoodSlotController {
         return new ResponseEntity<>(foodSlot, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{mealId}/{foodSlotId}")
+    @GetMapping("/{foodSlotId}")
     public ResponseEntity<?> getFoodSlotForMeal(@PathVariable Long mealId, @PathVariable Long foodSlotId, Principal principal){
         FoodSlot foodSlot = foodSlotService.getFoodSlotById(mealId , principal.getName());
 

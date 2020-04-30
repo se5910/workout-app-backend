@@ -5,14 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ucmo.workoutapp.entities.ExercisePlan;
-import ucmo.workoutapp.entities.Meal;
 import ucmo.workoutapp.entities.MealPlan;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.MealPlanService;
 import ucmo.workoutapp.services.MealService;
 
-import javax.naming.Binding;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -64,20 +61,11 @@ public class MealPlanController {
     // @access  Private
     @DeleteMapping("/{planId}")
     public ResponseEntity<?> deleteMealPlanById(@PathVariable Long planId, Principal principal) {
-        mealPlanService.deleteByExercisePlanId(planId, principal.getName());
+        mealPlanService.deleteByMealPlanId(planId, principal.getName());
 
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
     }
 
-    // @route   POST api/mealplan/:planid/meal
-    // @desc    Create meal for meal plan
-    // @access  Private
-    @PostMapping("/{planId}/meal")
-    public ResponseEntity<?> createMealForMealPlan(@Valid @RequestBody Meal meal, BindingResult result, @PathVariable Long planId, Principal principal){
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if (errorMap != null) return errorMap;
-        mealService.createMealForMealPlan(meal, planId, principal.getName());
 
-        return new ResponseEntity<>(meal, HttpStatus.CREATED);
-    }
+
 }

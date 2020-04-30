@@ -15,7 +15,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/meal")
+@RequestMapping("/api/mealplan/{planId}/meal")
 public class MealController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -23,7 +23,7 @@ public class MealController {
     @Autowired
     private MealService mealService;
 
-    @PostMapping("/{planId}")
+    @PostMapping("")
     public ResponseEntity<?> createMealForMealPlan(@Valid @RequestBody Meal meal, BindingResult result, @PathVariable Long planId, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -32,7 +32,10 @@ public class MealController {
         return new ResponseEntity<>(meal, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{planId}/{mealId}")
+    // @route   POST api/mealplan/:planid/meal
+    // @desc    Create meal for meal plan
+    // @access  Private
+    @GetMapping("/{mealId}")
     public ResponseEntity<?> findMealByMealPlanId(@PathVariable Long planId, @PathVariable Long mealId, Principal principal){
         Meal meal = mealService.getMealsByMealPlanId(planId,mealId,principal.getName());
 
