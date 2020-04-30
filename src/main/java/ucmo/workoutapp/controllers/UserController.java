@@ -85,30 +85,4 @@ public class UserController {
 
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
-
-//    @PostMapping("/register")
-//    public @ResponseBody
-//    User create(@RequestParam String username, @RequestParam String password) {
-//        Role authority = new Role(2);
-//        Set<Role> authorities = new HashSet<Role>();
-//        authorities.add(authority);
-//
-//        User user = new User(username,bCryptPasswordEncoder.encode(password),true,authorities);
-//        return userRepository.save(user);
-//    }
-//
-//    @GetMapping("/addUser")
-//    public String addNewProctor() {
-//        return "addUser";
-//    }
-//
-//    @GetMapping("/getUsers")
-//    public @ResponseBody List<User> getProctors() {
-//        return userRepository.findByRoles_Id(2);
-//    }
-//
-//    @GetMapping("/all")
-//    public @ResponseBody List<User> getAllUsers(){
-//        return userRepository.findAll();
-//    }
 }

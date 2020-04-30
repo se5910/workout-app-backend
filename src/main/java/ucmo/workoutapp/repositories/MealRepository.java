@@ -5,4 +5,5 @@ import ucmo.workoutapp.entities.Meal;
 
 public interface MealRepository extends CrudRepository<Meal, Long> {
     Meal getById(Long Id);
+    Meal getMealByMealPlan(Long planId);
 }

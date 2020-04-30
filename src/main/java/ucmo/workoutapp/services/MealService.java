@@ -31,4 +31,14 @@ public class MealService {
 
         return mealRepository.save(meal);
     }
+
+    //get all the meals for a given plan
+    public Meal getMealsByMealPlanId(Long planId, Long mealId, String username){
+        return mealRepository.getMealByMealPlan(planId);
+    }
+
+    //get one meal
+    public Meal getOneMealById(Long planId, Long mealId, String username) {
+        return mealRepository.getById(mealId);
+    }
 }
