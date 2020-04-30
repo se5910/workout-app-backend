@@ -34,7 +34,7 @@ public class ClientService {
         } else {
 
             clientObject.setUser(user);
-            clientObject.setCoach("email@email.com");
+            clientObject.setCoach("irlejohn@gmail.com");
             return clientRepository.save(clientObject);
         }
     }
