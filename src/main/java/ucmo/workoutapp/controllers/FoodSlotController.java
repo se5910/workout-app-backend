@@ -53,4 +53,6 @@ public class FoodSlotController {
 
         return new ResponseEntity<>("Meal with ID: '" + foodSlotId + "' was deleted.", HttpStatus.OK);
     }
+
+
 }

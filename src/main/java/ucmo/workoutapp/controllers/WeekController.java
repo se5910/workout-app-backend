@@ -18,7 +18,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan")
+@RequestMapping("/api/exercisePlan/{planId}/day/{dayId}/week")
 public class WeekController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class WeekController {
     // @route   POST api/exercise/:planId/:dayId/week
     // @desc    Create week for day
     // @access  Private
-    @PostMapping("/{planId}/{dayId}/week")
+    @PostMapping("")
     public ResponseEntity<?> createWeekForDay(@Valid @RequestBody Week week, BindingResult result, @PathVariable Long dayId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -42,11 +42,18 @@ public class WeekController {
     // @route   GET api/exercise/:planId/:dayId/:weekId
     // @desc    Get all weeks from day
     // @access  Private
-    @GetMapping("/{planId}/{dayId}/{weekId}")
-    public ResponseEntity<?> getAllWeeksFromDay(@PathVariable Long dayId, @PathVariable Long weekId, Principal principal){
-        Week week = weekService.getWeekById(dayId, weekId, principal.getName());
+    @GetMapping("/{weekId}")
+    public ResponseEntity<?> getWeekById(@PathVariable Long weekId, Principal principal){
+        Week week = weekService.getWeekById(weekId, principal.getName());
 
         return new ResponseEntity<>(week, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{weekId}")
+    public ResponseEntity<?> deleteWeekFromDay(@PathVariable Long weekId, Principal principal){
+        weekService.deleteWeekById(weekId, principal.getName());
+
+        return new ResponseEntity<>("Week with ID: '" + weekId + "' was deleted.", HttpStatus.OK);
     }
 
 }

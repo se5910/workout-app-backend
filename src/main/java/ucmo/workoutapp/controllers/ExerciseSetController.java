@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/{dayId}/{weekId}/{exerciseSlotId}")
+@RequestMapping("/api/exercisePlan/{planId}/day/{dayId}/week/{weekId}/exerciseSlot/{exerciseSlotId}/exerciseSet")
 public class ExerciseSetController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -22,7 +22,7 @@ public class ExerciseSetController {
     @Autowired
     private ExerciseSetService exerciseSetService;
     
-    @PostMapping("/exerciseSet")
+    @PostMapping("")
     public ResponseEntity<?> createSetForExerciseSlot(@Valid @RequestBody ExerciseSet exerciseSet, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -32,9 +32,16 @@ public class ExerciseSetController {
     }
 
     @GetMapping("/{exerciseSetId}")
-    public ResponseEntity<?> getExerciseSetById(@PathVariable Long exerciseSlotId, @PathVariable Long exerciseSetId, Principal principal){
-        ExerciseSet exerciseSet = exerciseSetService.getExerciseSetById(exerciseSlotId, exerciseSetId, principal.getName());
+    public ResponseEntity<?> getExerciseSetById(@PathVariable Long exerciseSetId, Principal principal){
+        ExerciseSet exerciseSet = exerciseSetService.getExerciseSetById(exerciseSetId, principal.getName());
 
         return new ResponseEntity<>(exerciseSet, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{exerciseSetId}")
+    public ResponseEntity<?> deleteExerciseSetById(@PathVariable Long exerciseSetId, Principal principal){
+        exerciseSetService.deleteExerciseSetById(exerciseSetId, principal.getName());
+
+        return new ResponseEntity<>("Exercise set with ID: '" + exerciseSetId + "' was deleted.", HttpStatus.OK);
     }
 }

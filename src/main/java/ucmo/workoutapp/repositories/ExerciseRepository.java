@@ -7,4 +7,5 @@ import ucmo.workoutapp.entities.Exercise;
 @Repository
 public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
     Exercise getById(Long id);
+    Exercise getByExerciseName(String exerciseName);
 }

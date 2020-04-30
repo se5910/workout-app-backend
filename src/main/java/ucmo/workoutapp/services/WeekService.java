@@ -31,8 +31,12 @@ public class WeekService {
         return weekRepository.save(week);
     }
 
-    public Week getWeekById(Long dayId, Long weekId, String username){
-        Day day = dayRepository.getById(dayId);
+    public Week getWeekById(Long weekId, String username){
+
         return weekRepository.getById(weekId);
+    }
+
+    public void deleteWeekById(Long weekId, String username){
+        weekRepository.delete(getWeekById(weekId, username));
     }
 }

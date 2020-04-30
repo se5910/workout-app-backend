@@ -13,26 +13,24 @@ public class ExerciseService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    @Autowired
-    private ExerciseSlotRepository exerciseSlotRepository;
-
-    public Exercise createExerciseForExerciseSlot(Exercise exercise, Long exerciseSlotId, String username){
-
-        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
-
+    public Exercise createExercise(Exercise exercise, String username){
         // Determine if there is an exercise already created, if not continue with the request, else throw an exception
-        if (exerciseSlot.getExercise() == null) {
-            exercise.setExerciseSlot(exerciseSlot);
-        } else {
-            throw new DuplicateExerciseCreationException("Exercise slot " + exerciseSlot.getId() + " already has an exercise. Please create a new slot");
+        if (exerciseRepository.getByExerciseName(exercise.getExerciseName()) != null) {
+            throw new DuplicateExerciseCreationException("Exercise '" + exercise.getExerciseName() + "' already exists. Please call your exercise a different name, or remove the duplicate.");
         }
 
         return exerciseRepository.save(exercise);
 
     }
 
-    public Exercise getExerciseById(Long exerciseId, Long exerciseSlotId, String username){
-        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
+    public Exercise getExerciseById(Long exerciseId, String username){
         return exerciseRepository.getById(exerciseId);
+
     }
+
+    public void deleteExerciseById(Long exerciseId, String username){
+        exerciseRepository.delete(getExerciseById(exerciseId, username));
+
+    }
+
 }

@@ -32,8 +32,13 @@ public class ExerciseSetService {
         return exerciseSetRepository.save(exerciseSet);
     }
 
-    public ExerciseSet getExerciseSetById(Long exerciseSlotId, Long exerciseSetId, String username){
-        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
+    public ExerciseSet getExerciseSetById(Long exerciseSetId, String username){
         return exerciseSetRepository.getById(exerciseSetId);
+
+    }
+
+    public void deleteExerciseSetById(Long exerciseSetId, String username){
+        exerciseSetRepository.delete(getExerciseSetById(exerciseSetId, username));
+
     }
 }

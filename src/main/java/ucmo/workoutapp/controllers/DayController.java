@@ -17,7 +17,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}")
+@RequestMapping("/api/exercisePlan/{planId}/day")
 public class DayController {
     @Autowired
     private DayService dayService;
@@ -28,11 +28,11 @@ public class DayController {
     // @route   POST api/exercise/day/:planId
     // @desc    Create day on exercise plan
     // @access  Private
-    @PostMapping("/day")
-    public ResponseEntity<?> createDayForExercisePlan(@Valid @RequestBody Day day, BindingResult result, @PathVariable Long planId, Principal principal) {
+    @PostMapping("")
+    public ResponseEntity<?> createNewDayForExercisePlan(@Valid @RequestBody Day day, BindingResult result, @PathVariable Long planId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        dayService.createDayForExercisePlan(day, planId, principal.getName());
+        dayService.createNewDayForExercisePlan(day, planId, principal.getName());
 
         return new ResponseEntity<>(day, HttpStatus.CREATED);
     }
@@ -41,10 +41,17 @@ public class DayController {
     // @desc    Get all days from planId
     // @access  Private
     @GetMapping("/{dayId}")
-    public ResponseEntity<?> getAllDaysFromExercisePlan(@PathVariable Long planId, @PathVariable Long dayId, Principal principal){
-        Day day = dayService.getDayById(planId, dayId, principal.getName());
+    public ResponseEntity<?> getDayById(@PathVariable Long dayId, Principal principal){
+        Day day = dayService.getDayById(dayId, principal.getName());
 
         return new ResponseEntity<>(day, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{dayId}")
+    public ResponseEntity<?> deleteDayFromExercisePlan(@PathVariable Long dayId, Principal principal){
+        dayService.deleteDayFromExercisePlan(dayId, principal.getName());
+
+        return new ResponseEntity<>("Day with ID: '" + dayId + "' was deleted.", HttpStatus.OK);
     }
 
 

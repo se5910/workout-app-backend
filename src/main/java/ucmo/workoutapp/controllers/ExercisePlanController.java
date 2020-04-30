@@ -25,16 +25,7 @@ public class ExercisePlanController {
     private ExercisePlanService exercisePlanService;
 
     @Autowired
-    private DayService dayService;
-
-    @Autowired
     private MapValidationErrorService mapValidationErrorService;
-
-    @Autowired
-    private ExerciseSlotService exerciseSlotService;
-
-    @Autowired
-    private WeekService weekService;
 
     // @route   POST api/exercise
     // @desc    Register a user
@@ -51,10 +42,24 @@ public class ExercisePlanController {
     // @route   GET api/exercise/all
     // @desc    Get all exercise plans of user
     // @access  Private
-    @GetMapping("/all")
-    public  Iterable<ExercisePlan> getAllExercisePlans(Principal principal) {
+    @GetMapping("")
+    public Iterable<ExercisePlan> getAllExercisePlans(Principal principal) {
 
         return exercisePlanService.findAllExercisePlans(principal.getName());
     }
 
+    @GetMapping("/{planId}")
+    public ResponseEntity<?> getExercisePlanById(@PathVariable Long planId, Principal principal){
+        ExercisePlan exercisePlan = exercisePlanService.findExercisePlanById(planId, principal.getName());
+
+        return new ResponseEntity<>(planId, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/{planId}")
+    public ResponseEntity<?> deleteExercisePlanById(@PathVariable Long planId, Principal principal){
+        exercisePlanService.deleteByExercisePlanId(planId, principal.getName());
+
+        return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
+    }
 }

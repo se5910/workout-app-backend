@@ -2,6 +2,7 @@ package ucmo.workoutapp.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import ucmo.workoutapp.entities.Exercise;
 import ucmo.workoutapp.entities.ExerciseSlot;
 
 @Repository

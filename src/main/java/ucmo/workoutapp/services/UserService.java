@@ -49,7 +49,5 @@ public class UserService {
             throw new CoachNotFoundException("Coach not found");
         }
     }
-
-
 }
 

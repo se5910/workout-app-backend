@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/{dayId}/{weekId}/{exerciseSlotId}")
+@RequestMapping("/api/exercise")
 public class ExerciseController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -22,20 +22,27 @@ public class ExerciseController {
     @Autowired
     private ExerciseService exerciseService;
 
-    @PostMapping("/exercise")
-    public ResponseEntity<?> createExerciseForExerciseSlot(@Valid @RequestBody Exercise exercise, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal){
+    @PostMapping("")
+    public ResponseEntity<?> createExercise(@Valid @RequestBody Exercise exercise, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        exerciseService.createExerciseForExerciseSlot(exercise, exerciseSlotId, principal.getName());
+        exerciseService.createExercise(exercise, principal.getName());
 
         return new ResponseEntity<>(exercise, HttpStatus.CREATED);
     }
 
     @GetMapping("/{exerciseId}")
-    public ResponseEntity<?> getExerciseById(@PathVariable Long exerciseSlotId, @PathVariable Long exerciseId, Principal principal){
-        Exercise exercise = exerciseService.getExerciseById(exerciseSlotId, exerciseId, principal.getName());
+    public ResponseEntity<?> getExerciseById(@PathVariable Long exerciseId, Principal principal){
+        Exercise exercise = exerciseService.getExerciseById(exerciseId, principal.getName());
 
         return new ResponseEntity<>(exercise, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{exerciseId}")
+    public ResponseEntity<?> deleteExerciseById(@PathVariable Long exerciseId, Principal principal){
+        exerciseService.deleteExerciseById(exerciseId, principal.getName());
+
+        return new ResponseEntity<>("Plan with ID: '" + exerciseId + "' was deleted.", HttpStatus.OK);
 
     }
 }

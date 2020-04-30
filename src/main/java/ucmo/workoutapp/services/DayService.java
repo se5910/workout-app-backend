@@ -27,7 +27,7 @@ public class DayService {
     ClientRepository clientRepository;
 
 
-    public Day createDayForExercisePlan(Day day, Long planId, String username){
+    public Day createNewDayForExercisePlan(Day day, Long planId, String username){
         ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
         day.setExercisePlan(exercisePlan);
         day.setPhase(day.getPhase());
@@ -37,9 +37,14 @@ public class DayService {
         return dayRepository.save(day);
     }
 
-    public Day getDayById(Long planId, Long dayId, String username){
-        ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
+    public Day getDayById(Long dayId, String username){
+
         return dayRepository.getById(dayId);
+    }
+
+    public void deleteDayFromExercisePlan(Long dayId, String username){
+      dayRepository.delete(getDayById(dayId, username));
+
     }
 
 }
