@@ -49,8 +49,9 @@ public class Client {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
-    public Client() {
+    private String coach;
 
+    public Client() {
     }
 
     @PrePersist
@@ -59,11 +60,11 @@ public class Client {
     @PreUpdate
     protected void onUpdate() {this.updated_At = new Date();}
 
-    public Long getID() {
+    public Long getId() {
         return id;
     }
 
-    public void setID(Long ID) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -161,5 +162,12 @@ public class Client {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public String getCoach() {
+        return coach;
+    }
+    public void setCoach(String coach) {
+        this.coach = coach;
     }
 }
