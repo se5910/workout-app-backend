@@ -29,10 +29,12 @@ public class ClientService {
             client.setHealthHistory(clientObject.getHealthHistory());
             client.setWeight(clientObject.getWeight());
 
+
             return clientRepository.save(client);
         } else {
 
             clientObject.setUser(user);
+            clientObject.setCoach("email@email.com");
             return clientRepository.save(clientObject);
         }
     }
@@ -63,6 +65,15 @@ public class ClientService {
         } catch (Exception e){
             throw new ClientNotFoundException("No Profile");
         }
+    }
+
+    public Iterable<Client> getAllClients() {
+        return clientRepository.findAll();
+    }
+
+    public Iterable<Client> getAllClientsByCoach(String username) {
+        System.out.println(username);
+        return clientRepository.findAllByCoach(username);
     }
 
 }

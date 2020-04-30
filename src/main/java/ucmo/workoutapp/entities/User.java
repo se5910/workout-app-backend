@@ -44,7 +44,7 @@ public class User implements UserDetails {
     @PrePersist
     protected void onCreate() {
         this.created_At = new Date();
-        this.isCoach = true;
+        this.isCoach = false;
     }
 
     @PreUpdate
