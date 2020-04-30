@@ -46,4 +46,11 @@ public class FoodSlotController {
     public Iterable<FoodSlot> getAllFoodSlotsByMealId(@PathVariable Long mealId, Principal principal){
         return foodSlotService.getAllFoodSlotsByMealId(mealId, principal.getName());
     }
+
+    @DeleteMapping("/{foodSlotId}")
+    public ResponseEntity<?> deleteMealByMealPlanId(@PathVariable Long foodSlotId, Principal principal){
+        foodSlotService.deleteFoodSlotById(foodSlotId,principal.getName());
+
+        return new ResponseEntity<>("Meal with ID: '" + foodSlotId + "' was deleted.", HttpStatus.OK);
+    }
 }

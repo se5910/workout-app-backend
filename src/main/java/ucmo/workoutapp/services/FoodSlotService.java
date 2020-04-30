@@ -2,10 +2,8 @@ package ucmo.workoutapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ucmo.workoutapp.entities.ExerciseSlot;
 import ucmo.workoutapp.entities.FoodSlot;
 import ucmo.workoutapp.entities.Meal;
-import ucmo.workoutapp.entities.Week;
 import ucmo.workoutapp.repositories.FoodSlotRepository;
 import ucmo.workoutapp.repositories.MealRepository;
 
@@ -30,5 +28,9 @@ public class FoodSlotService {
 
     public Iterable<FoodSlot> getAllFoodSlotsByMealId(Long mealId, String username){
         return foodSlotRepository.getAllByMeal_Id(mealId);
+    }
+
+    public void deleteFoodSlotById(Long foodSlotId, String username){
+         foodSlotRepository.deleteById(foodSlotId);
     }
 }

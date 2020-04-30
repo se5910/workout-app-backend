@@ -33,12 +33,16 @@ public class MealService {
     }
 
     //get all the meals for a given plan
-    public Meal getMealsByMealPlanId(Long planId, Long mealId, String username){
-        return mealRepository.getMealByMealPlan(planId);
+    public Iterable<Meal> getMealsByMealPlanId(Long planId, Long mealId, String username){
+        return mealRepository.getMealsByMealPlan(planId);
     }
 
     //get one meal
     public Meal getOneMealById(Long planId, Long mealId, String username) {
         return mealRepository.getById(mealId);
+    }
+
+    public void deleteMealById(Long mealId,String username){
+         mealRepository.deleteById(mealId);
     }
 }

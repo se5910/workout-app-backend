@@ -12,6 +12,7 @@ import ucmo.workoutapp.services.MealService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -23,6 +24,9 @@ public class MealController {
     @Autowired
     private MealService mealService;
 
+    // @route   POST api/mealplan/:planid/meal
+    // @desc    Create meal for meal plan
+    // @access  Private
     @PostMapping("")
     public ResponseEntity<?> createMealForMealPlan(@Valid @RequestBody Meal meal, BindingResult result, @PathVariable Long planId, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -32,15 +36,18 @@ public class MealController {
         return new ResponseEntity<>(meal, HttpStatus.CREATED);
     }
 
-    // @route   POST api/mealplan/:planid/meal
-    // @desc    Create meal for meal plan
-    // @access  Private
+
     @GetMapping("/{mealId}")
     public ResponseEntity<?> findMealByMealPlanId(@PathVariable Long planId, @PathVariable Long mealId, Principal principal){
-        Meal meal = mealService.getMealsByMealPlanId(planId,mealId,principal.getName());
+        Iterable<Meal> meals = mealService.getMealsByMealPlanId(planId,mealId,principal.getName());
 
-        return new ResponseEntity<>(meal, HttpStatus.OK);
+        return new ResponseEntity<>(meals, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{mealId}")
+    public ResponseEntity<?> deleteMealByMealPlanId(@PathVariable Long mealId, Principal principal){
+         mealService.deleteMealById(mealId,principal.getName());
 
+        return new ResponseEntity<>("Meal with ID: '" + mealId + "' was deleted.", HttpStatus.OK);
+    }
 }
