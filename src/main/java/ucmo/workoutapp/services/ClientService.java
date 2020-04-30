@@ -67,6 +67,19 @@ public class ClientService {
         }
     }
 
+    public Client getClientById(Long id, String coach) {
+        Client client = clientRepository.getById(id);
+        if (client == null) {
+            throw new ClientNotFoundException("Client not found");
+        }
+
+        if (!client.getCoach().equals(coach)) {
+            throw new ClientNotFoundException("No clients found in your account");
+        }
+
+        return client;
+    }
+
     public Iterable<Client> getAllClients() {
         return clientRepository.findAll();
     }
