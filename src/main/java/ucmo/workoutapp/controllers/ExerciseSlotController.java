@@ -24,9 +24,6 @@ public class ExerciseSlotController {
     @Autowired
     private ExerciseSlotService exerciseSlotService;
 
-    @Autowired
-    private ExerciseService exerciseService;
-
     // @route   POST /api/exercise/{planId}/{dayId}/{weekId}
     // @desc    Create exercise Slot for day
     // @access  Private

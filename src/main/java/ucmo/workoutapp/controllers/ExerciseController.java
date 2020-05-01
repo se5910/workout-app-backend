@@ -23,7 +23,7 @@ public class ExerciseController {
     private ExerciseService exerciseService;
 
     @PostMapping("")
-    public ResponseEntity<?> createExercise(@Valid @RequestBody Exercise exercise, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal){
+    public ResponseEntity<?> createExercise(@Valid @RequestBody Exercise exercise, BindingResult result, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
         exerciseService.createExercise(exercise, principal.getName());

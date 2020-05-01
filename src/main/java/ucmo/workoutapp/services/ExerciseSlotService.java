@@ -20,6 +20,7 @@ public class ExerciseSlotService {
 
     public ExerciseSlot createExerciseSlotForDay(ExerciseSlot exerciseSlot, Long weekId, String username){
         Week week = weekRepository.getById(weekId);
+        exerciseSlot.setExercise(exerciseRepository.getById(Long.valueOf(1)));
         exerciseSlot.setWeek(week);
 
         return exerciseSlotRepository.save(exerciseSlot);
