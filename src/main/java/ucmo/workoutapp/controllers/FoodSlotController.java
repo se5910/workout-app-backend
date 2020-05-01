@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ucmo.workoutapp.entities.FoodSlot;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.FoodSlotService;
-
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -47,7 +46,7 @@ public class FoodSlotController {
         return new ResponseEntity<>("Meal slot with ID: '" + foodSlotId + "' was deleted.", HttpStatus.OK);
     }
 
-    @GetMapping("{mealId}")
+    @GetMapping("")
     public Iterable<FoodSlot> getAllFoodSlotsByMealId(@PathVariable Long mealId, Principal principal){
         return foodSlotService.getAllFoodSlotsByMealId(mealId, principal.getName());
     }

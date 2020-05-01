@@ -1,6 +1,5 @@
 package ucmo.workoutapp.services;
 
-import jdk.nashorn.internal.parser.Lexer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
@@ -44,13 +43,6 @@ public class MealPlanService {
         return mealPlanRepository.save(mealPlan);
     }
 
-    public Iterable<MealPlan> findAllMealPlans(String username) {
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
-
-        return mealPlanRepository.findAllByClient(client);
-    }
-
     public MealPlan getMealPlanById(Long id, String username) {
         MealPlan mealplan = mealPlanRepository.getByPlanId(id);
 
@@ -63,5 +55,12 @@ public class MealPlanService {
 
     public void deleteByMealPlanId(Long id, String username) {
         mealPlanRepository.delete(getMealPlanById(id, username));
+    }
+
+    public Iterable<MealPlan> findAllMealPlans(String username) {
+        User user = userRepository.findByUsername(username);
+        Client client = clientRepository.getByUser(user);
+
+        return mealPlanRepository.findAllByClient(client);
     }
 }

@@ -13,6 +13,7 @@ public class FoodSlotService {
     @Autowired
     private FoodSlotRepository foodSlotRepository;
 
+    @Autowired
     private MealRepository mealRepository;
 
     public FoodSlot createFoodSlotForMeal(FoodSlot foodSlot, Long mealId, String username){
@@ -26,11 +27,11 @@ public class FoodSlotService {
         return foodSlotRepository.getById(foodSlotId);
     }
 
-    public Iterable<FoodSlot> getAllFoodSlotsByMealId(Long mealId, String username){
-        return foodSlotRepository.getAllByMeal_Id(mealId);
-    }
-
     public void deleteFoodSlotById(Long foodSlotId, String username){
          foodSlotRepository.deleteById(foodSlotId);
+    }
+
+    public Iterable<FoodSlot> getAllFoodSlotsByMealId(Long mealId, String username){
+        return foodSlotRepository.getAllByMeal_Id(mealId);
     }
 }
