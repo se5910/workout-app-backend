@@ -52,7 +52,7 @@ public class ExerciseSlotController {
         return new ResponseEntity<>("Exercise slot with ID: '" + exerciseSlotId + "' was deleted.", HttpStatus.OK);
     }
 
-    @PutMapping("/{exerciseSlotId}/exercise/{exerciseId}")
+    @PostMapping("/{exerciseSlotId}/exercise/{exerciseId}")
     public ResponseEntity<?> createExerciseForExerciseSlot(@PathVariable Long exerciseSlotId, @PathVariable Long exerciseId, Principal principal){
         exerciseSlotService.createExerciseForExerciseSlot(exerciseSlotId, exerciseId, principal.getName());
 

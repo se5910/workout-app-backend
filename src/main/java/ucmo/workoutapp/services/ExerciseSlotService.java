@@ -20,7 +20,6 @@ public class ExerciseSlotService {
 
     public ExerciseSlot createExerciseSlotForDay(ExerciseSlot exerciseSlot, Long weekId, String username){
         Week week = weekRepository.getById(weekId);
-        exerciseSlot.setExercise(exerciseRepository.getById(Long.valueOf(1)));
         exerciseSlot.setWeek(week);
 
         return exerciseSlotRepository.save(exerciseSlot);
@@ -40,16 +39,15 @@ public class ExerciseSlotService {
     public ExerciseSlot createExerciseForExerciseSlot(Long exericseSlotId, Long exerciseId, String username){
         ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exericseSlotId);
 
-        exerciseSlot.setExercise(exerciseRepository.getById(exerciseId));
+        exerciseSlot.setExerciseId(exerciseId);
 
         return exerciseSlotRepository.save(exerciseSlot);
     }
 
     // Get the exercise from the exercise slot.
     public Exercise getExerciseFromExerciseSlotById(Long exerciseSlotId, String username){
-        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
+        return exerciseRepository.getById(exerciseSlotRepository.getById(exerciseSlotId).getExerciseId());
 
-        return exerciseSlot.getExercise();
     }
 
     // Set the exercise of the exercise slot to "null" to delete it
@@ -58,6 +56,6 @@ public class ExerciseSlotService {
         ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
 
         // "Delete" the exercise by setting the exercise in the slot to null
-        exerciseSlot.setExercise(null);
+        exerciseSlot.setExerciseId(null);
     }
 }

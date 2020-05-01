@@ -15,10 +15,7 @@ public class ExerciseSlot {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
     private List<ExerciseSet> sets = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exercise_id", updatable = false, nullable = false)
-    @JsonIgnore
-    private Exercise exercise;
+    private Long exerciseId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "week_id", updatable = false, nullable = false)
@@ -37,20 +34,20 @@ public class ExerciseSlot {
         this.id = id;
     }
 
-    public Exercise getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
-
     public List<ExerciseSet> getSets() {
         return sets;
     }
 
     public void setSets(List<ExerciseSet> sets) {
         this.sets = sets;
+    }
+
+    public Long getExerciseId() {
+        return exerciseId;
+    }
+
+    public void setExerciseId(Long exerciseId) {
+        this.exerciseId = exerciseId;
     }
 
     public Week getWeek() {
