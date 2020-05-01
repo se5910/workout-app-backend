@@ -41,7 +41,7 @@ public class MealPlanController {
     // @route   GET api/mealplan/all
     // @desc    Get all meal plans of user
     // @access  Private
-    @GetMapping("/all")
+    @GetMapping("")
     public  Iterable<MealPlan> getAllMealPlans(Principal principal) {
         return mealPlanService.findAllMealPlans(principal.getName());
     }

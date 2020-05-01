@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ucmo.workoutapp.entities.ExerciseSlot;
 import ucmo.workoutapp.entities.FoodSlot;
-import ucmo.workoutapp.entities.Meal;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.FoodSlotService;
 
@@ -36,23 +34,21 @@ public class FoodSlotController {
     }
 
     @GetMapping("/{foodSlotId}")
-    public ResponseEntity<?> getFoodSlotForMeal(@PathVariable Long mealId, @PathVariable Long foodSlotId, Principal principal){
-        FoodSlot foodSlot = foodSlotService.getFoodSlotById(mealId , principal.getName());
+    public ResponseEntity<?> getFoodSlotById(@PathVariable Long foodSlotId, Principal principal){
+        FoodSlot foodSlot = foodSlotService.getFoodSlotById(foodSlotId , principal.getName());
 
         return new ResponseEntity<>(foodSlot, HttpStatus.OK);
-    }
-
-    @GetMapping("{mealId}")
-    public Iterable<FoodSlot> getAllFoodSlotsByMealId(@PathVariable Long mealId, Principal principal){
-        return foodSlotService.getAllFoodSlotsByMealId(mealId, principal.getName());
     }
 
     @DeleteMapping("/{foodSlotId}")
     public ResponseEntity<?> deleteMealByMealPlanId(@PathVariable Long foodSlotId, Principal principal){
         foodSlotService.deleteFoodSlotById(foodSlotId,principal.getName());
 
-        return new ResponseEntity<>("Meal with ID: '" + foodSlotId + "' was deleted.", HttpStatus.OK);
+        return new ResponseEntity<>("Meal slot with ID: '" + foodSlotId + "' was deleted.", HttpStatus.OK);
     }
 
-
+    @GetMapping("{mealId}")
+    public Iterable<FoodSlot> getAllFoodSlotsByMealId(@PathVariable Long mealId, Principal principal){
+        return foodSlotService.getAllFoodSlotsByMealId(mealId, principal.getName());
+    }
 }

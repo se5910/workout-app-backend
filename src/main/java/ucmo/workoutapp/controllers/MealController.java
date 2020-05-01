@@ -38,14 +38,14 @@ public class MealController {
 
 
     @GetMapping("/{mealId}")
-    public ResponseEntity<?> findMealByMealPlanId(@PathVariable Long planId, @PathVariable Long mealId, Principal principal){
-        Iterable<Meal> meals = mealService.getMealsByMealPlanId(planId,mealId,principal.getName());
+    public ResponseEntity<?> getMealById(@PathVariable Long planId, @PathVariable Long mealId, Principal principal){
+        Meal meal = mealService.getMealById(planId,mealId,principal.getName());
 
-        return new ResponseEntity<>(meals, HttpStatus.OK);
+        return new ResponseEntity<>(meal, HttpStatus.OK);
     }
 
     @DeleteMapping("/{mealId}")
-    public ResponseEntity<?> deleteMealByMealPlanId(@PathVariable Long mealId, Principal principal){
+    public ResponseEntity<?> deleteMealById(@PathVariable Long mealId, Principal principal){
          mealService.deleteMealById(mealId,principal.getName());
 
         return new ResponseEntity<>("Meal with ID: '" + mealId + "' was deleted.", HttpStatus.OK);

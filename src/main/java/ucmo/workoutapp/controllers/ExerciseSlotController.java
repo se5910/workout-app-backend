@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ucmo.workoutapp.entities.Day;
 import ucmo.workoutapp.entities.Exercise;
 import ucmo.workoutapp.entities.ExerciseSlot;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
@@ -47,7 +46,7 @@ public class ExerciseSlotController {
     }
 
     @DeleteMapping("/{exerciseSlotId}")
-    public ResponseEntity<?> deleteExerciesSlotById(@PathVariable Long exerciseSlotId, Principal principal){
+    public ResponseEntity<?> deleteExercisesSlotById(@PathVariable Long exerciseSlotId, Principal principal){
         exerciseSlotService.deleteExerciseSlotById(exerciseSlotId, principal.getName());
 
         return new ResponseEntity<>("Exercise slot with ID: '" + exerciseSlotId + "' was deleted.", HttpStatus.OK);
@@ -68,11 +67,10 @@ public class ExerciseSlotController {
     }
 
 
-    @DeleteMapping("/{exerciseSlotId}/exercise")
+    @DeleteMapping("/{exerciseSlotId}/exercise/")
     public ResponseEntity<?> deleteExerciseForExerciseSlot(@PathVariable Long exerciseSlotId, Principal principal){
         exerciseSlotService.deleteExerciseFromExerciseSlotById(exerciseSlotId, principal.getName());
 
         return new ResponseEntity<>("The exercise was removed from ExerciseSlot(ID): '" + exerciseSlotId + "'.", HttpStatus.OK);
     }
-
 }
