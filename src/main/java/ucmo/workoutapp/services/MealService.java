@@ -32,13 +32,8 @@ public class MealService {
         return mealRepository.save(meal);
     }
 
-    //get all the meals for a given plan
-    public Iterable<Meal> getMealsByMealPlanId(Long planId, Long mealId, String username){
-        return mealRepository.getMealsByMealPlan(planId);
-    }
-
-    //get one meal
-    public Meal getOneMealById(Long planId, Long mealId, String username) {
+    //get meal for a plan
+    public Meal getMealById(Long planId, Long mealId, String username){
         return mealRepository.getById(mealId);
     }
 
