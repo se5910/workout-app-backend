@@ -44,7 +44,6 @@ public class ExercisePlanController {
     // @access  Private
     @GetMapping("")
     public Iterable<ExercisePlan> getAllExercisePlans(Principal principal) {
-
         return exercisePlanService.findAllExercisePlans(principal.getName());
     }
 
@@ -61,5 +60,10 @@ public class ExercisePlanController {
         exercisePlanService.deleteByExercisePlanId(planId, principal.getName());
 
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
+    }
+
+    @GetMapping("/client/{clientId}")
+    public Iterable<ExercisePlan> getAllExercisePlansByClient(@PathVariable Long clientId, Principal coach) {
+        return exercisePlanService.findAllExercisePlansOfClient(clientId, coach.getName());
     }
 }

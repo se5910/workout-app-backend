@@ -3,6 +3,7 @@ package ucmo.workoutapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
+import ucmo.workoutapp.exceptions.ClientNotFoundException;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.ExercisePlanRepository;
@@ -45,6 +46,20 @@ public class ExercisePlanService {
     public Iterable<ExercisePlan> findAllExercisePlans(String username) {
         User user = userRepository.findByUsername(username);
         Client client = clientRepository.getByUser(user);
+
+        return exercisePlanRepository.findAllByClient(client);
+    }
+
+    public Iterable<ExercisePlan> findAllExercisePlansOfClient(Long id, String coach) {
+        Client client = clientRepository.getById(id);
+        if (client == null) {
+            throw new ClientNotFoundException("Client not found");
+        }
+
+        if (!client.getCoach().equals(coach)) {
+            throw new ClientNotFoundException("No clients found in your account");
+        }
+
 
         return exercisePlanRepository.findAllByClient(client);
     }
