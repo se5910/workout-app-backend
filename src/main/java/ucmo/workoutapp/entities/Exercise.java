@@ -1,7 +1,12 @@
 package ucmo.workoutapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Exercise {
@@ -9,9 +14,8 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
-    private ExerciseSlot exerciseSlot;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exercise")
+    private List<ExerciseSlot> exerciseSlot = new ArrayList<>();
 
     @NotBlank(message = "Exercise name is required")
     private String exerciseName;
@@ -39,11 +43,11 @@ public class Exercise {
         this.id = id;
     }
 
-    public ExerciseSlot getExerciseSlot() {
+    public List<ExerciseSlot> getExerciseSlot() {
         return exerciseSlot;
     }
 
-    public void setExerciseSlot(ExerciseSlot exerciseSlot) {
+    public void setExerciseSlot(List<ExerciseSlot> exerciseSlot) {
         this.exerciseSlot = exerciseSlot;
     }
 

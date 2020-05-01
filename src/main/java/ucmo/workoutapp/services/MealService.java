@@ -16,13 +16,13 @@ public class MealService {
     private MealPlanRepository mealPlanRepository;
 
     @Autowired
-    MealRepository mealRepository;
+    private MealRepository mealRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     public Meal createMealForMealPlan(Meal meal, Long planId, String username){
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
@@ -30,5 +30,19 @@ public class MealService {
         meal.setName(meal.getName());
 
         return mealRepository.save(meal);
+    }
+
+    //get all the meals for a given plan
+    public Iterable<Meal> getMealsByMealPlanId(Long planId, Long mealId, String username){
+        return mealRepository.getMealsByMealPlan(planId);
+    }
+
+    //get one meal
+    public Meal getOneMealById(Long planId, Long mealId, String username) {
+        return mealRepository.getById(mealId);
+    }
+
+    public void deleteMealById(Long mealId,String username){
+         mealRepository.deleteById(mealId);
     }
 }

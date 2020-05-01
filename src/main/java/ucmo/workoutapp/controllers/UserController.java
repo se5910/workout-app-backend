@@ -54,6 +54,9 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    // @route   POST api/users/login
+    // @desc    Login a user
+    // @access  Public
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -72,6 +75,9 @@ public class UserController {
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 
+    // @route   POST api/users/register
+    // @desc    Register a user
+    // @access  Public
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -83,6 +89,7 @@ public class UserController {
 
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
+
 
     @PostMapping("/client")
     public ResponseEntity<?> createClient(@Valid @RequestBody Client client, BindingResult result, Principal principal) {
@@ -118,4 +125,5 @@ public class UserController {
 //    public @ResponseBody List<User> getAllUsers(){
 //        return userRepository.findAll();
 //    }
+
 }

@@ -14,62 +14,65 @@ import static ucmo.workoutapp.security.SecurityConstants.SECRET;
 
 @Component
 public class JwtTokenProvider {
-  // Generate the token
-  public String generateToken(Authentication authentication) {
-    User user = (User)authentication.getPrincipal();
-    Date now = new Date(System.currentTimeMillis());
+    // Generate the token
+    public String generateToken(Authentication authentication) {
+        // Current logged in user
+        User user = (User)authentication.getPrincipal();
+        String userId = Long.toString(user.getId());
 
-    Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
+        // Set expiration
+        Date now = new Date(System.currentTimeMillis());
+        Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
 
-    String userId = Long.toString(user.getId());
+        // Set Claims for token
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", (Long.toString(user.getId())));
+        claims.put("username", user.getUsername());
+        claims.put("fullName", user.getFullName());
 
-    Map<String, Object> claims = new HashMap<>();
-    claims.put("id", (Long.toString(user.getId())));
-    claims.put("username", user.getUsername());
-    claims.put("fullName", user.getFullName());
-    claims.put("isCoach", user.isCoach());
-
-    return Jwts.builder()
-            .setSubject(userId)
-            .setClaims(claims)
-            .setIssuedAt(now)
-            .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, SECRET)
-            .compact();
-  }
-
-  // Validate the token
-  public boolean validateToken(String token) {
-    try {
-      Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
-      return true;
-    } catch (SignatureException ex) {
-      System.out.println("Invalid JWT Signature");
-    } catch (MalformedJwtException ex) {
-      System.out.println("Invalid JWT token");
-    } catch (ExpiredJwtException ex) {
-      System.out.println("Expired JWT token");
-    } catch (UnsupportedJwtException ex) {
-      System.out.println("Unsupported JWT token");
-    } catch (IllegalArgumentException ex) {
-      System.out.println("JWT claims string is empty");
+        // Build token
+        return Jwts.builder()
+                .setSubject(userId)
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, SECRET) // Set encryption algorithm
+                .compact();
     }
-    return false;
-  }
 
-  // Get user id from token
-  public Long getUserIdFromJWT(String token) {
-    Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
-    String id = (String)claims.get("id");
+    // Validate the token
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+            return true;
+        } catch (SignatureException ex) {
+            System.out.println("Invalid JWT Signature");
+        } catch (MalformedJwtException ex) {
+            System.out.println("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            System.out.println("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            System.out.println("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            System.out.println("JWT claims string is empty");
+        }
+        return false;
+    }
 
-    return Long.parseLong(id);
-  }
-  // Get user role from token
-  public String getRoleFromJWT(String token) {
-    Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+    // Get user id from token
+    public Long getUserIdFromJWT(String token) {
+        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+        String id = (String)claims.get("id");
 
-    String role = (String)claims.get("role");
+        return Long.parseLong(id);
+    }
 
-    return role;
-  }
+    // Get user role from token
+    public String getRoleFromJWT(String token) {
+        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+
+        String role = (String)claims.get("role");
+
+        return role;
+    }
 }

@@ -1,5 +1,7 @@
 package ucmo.workoutapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -10,6 +12,7 @@ public class Food {
     private Long id;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(name = "food_slot_id", updatable = false, nullable = false)
     private FoodSlot foodSlot;
 
@@ -31,6 +34,18 @@ public class Food {
     private Double fat;
 
     private Double fiber;
+
+    public Food(String name, Double servings, String qty, String unit, Double calories, Double protein, Double carbs, Double fat, Double fiber){
+        this.name = name;
+        this.servings = servings;
+        this.qty = qty;
+        this.unit = unit;
+        this.calories = calories;
+        this.protein = protein;
+        this.carbs = carbs;
+        this.fat = fat;
+        this.fiber = fiber;
+    }
 
     public Food(){}
 

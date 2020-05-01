@@ -37,7 +37,6 @@ public class ExercisePlanService {
         Client client = clientRepository.getByUser(user);
 
         exercisePlan.setClient(client);
-        exercisePlan.setName(exercisePlan.getName());
 
         return exercisePlanRepository.save(exercisePlan);
 
@@ -64,12 +63,13 @@ public class ExercisePlanService {
             }
             return exercisePlan;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new PlanNotFoundException("Bitch");
         }
-        return null;
     }
 
     public void deleteByExercisePlanId(Long planId, String username) {
+        System.out.println(planId);
         exercisePlanRepository.delete(findExercisePlanById(planId, username));
+
     }
 }

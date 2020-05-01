@@ -3,11 +3,13 @@ package ucmo.workoutapp.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+
 @Entity
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
     @Column(nullable = false, unique = true)
     @NotEmpty

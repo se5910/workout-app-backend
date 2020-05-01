@@ -17,7 +17,6 @@ public class FoodSlot {
     private Meal meal;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "foodSlot")
-    @JsonIgnore
     private Food food;
 
     public Long getId() {
