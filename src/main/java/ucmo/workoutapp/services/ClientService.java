@@ -87,6 +87,7 @@ public class ClientService {
     public Iterable<Client> getAllClientsByCoach(String username) {
         System.out.println(username);
         return clientRepository.findAllByCoach(username);
+
     }
 
 }

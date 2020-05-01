@@ -15,7 +15,9 @@ public class ExerciseSlot {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
     private List<ExerciseSet> sets = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exercise_id", updatable = false, nullable = false)
+    @JsonIgnore
     private Exercise exercise;
 
     @ManyToOne(fetch = FetchType.LAZY)

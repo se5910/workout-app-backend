@@ -23,6 +23,7 @@ import ucmo.workoutapp.services.ClientService;
 import ucmo.workoutapp.services.UserService;
 import ucmo.workoutapp.validator.UserValidator;
 
+import javax.naming.Binding;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashSet;
@@ -43,6 +44,9 @@ public class UserController {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -85,4 +89,41 @@ public class UserController {
 
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
+
+
+    @PostMapping("/client")
+    public ResponseEntity<?> createClient(@Valid @RequestBody Client client, BindingResult result, Principal principal) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Client newClient = clientService.SaveOrUpdateClient(client, principal.getName());
+        return new ResponseEntity<>(newClient, HttpStatus.OK);
+    }
+
+//    @PostMapping("/register")
+//    public @ResponseBody
+//    User create(@RequestParam String username, @RequestParam String password) {
+//        Role authority = new Role(2);
+//        Set<Role> authorities = new HashSet<Role>();
+//        authorities.add(authority);
+//
+//        User user = new User(username,bCryptPasswordEncoder.encode(password),true,authorities);
+//        return userRepository.save(user);
+//    }
+//
+//    @GetMapping("/addUser")
+//    public String addNewProctor() {
+//        return "addUser";
+//    }
+//
+//    @GetMapping("/getUsers")
+//    public @ResponseBody List<User> getProctors() {
+//        return userRepository.findByRoles_Id(2);
+//    }
+//
+//    @GetMapping("/all")
+//    public @ResponseBody List<User> getAllUsers(){
+//        return userRepository.findAll();
+//    }
+
 }
