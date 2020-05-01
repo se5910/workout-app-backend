@@ -14,7 +14,6 @@ public class Plan {
     private Long planId;
 
     // Each plan has one client
-    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     private Client client;
 
