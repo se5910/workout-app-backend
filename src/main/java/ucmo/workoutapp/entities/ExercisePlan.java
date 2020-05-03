@@ -1,7 +1,5 @@
 package ucmo.workoutapp.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -13,7 +11,7 @@ public class ExercisePlan extends Plan {
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exercisePlan")
-    private List<Day> days;
+    private List<Template> templates;
 
     public ExercisePlan(){
 
@@ -27,11 +25,11 @@ public class ExercisePlan extends Plan {
         this.name = name;
     }
 
-    public List<Day> getDays() {
-        return days;
+    public List<Template> getTemplates() {
+        return templates;
     }
 
-    public void setDays(List<Day> days) {
-        this.days = days;
+    public void setTemplates(List<Template> templates) {
+        this.templates = templates;
     }
 }

@@ -18,7 +18,7 @@ public class ExerciseSlotService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    public ExerciseSlot createExerciseSlotForDay(ExerciseSlot exerciseSlot, Long weekId, String username){
+    public ExerciseSlot createExerciseSlotForWeek(ExerciseSlot exerciseSlot, Long weekId, String username){
         Week week = weekRepository.getById(weekId);
         exerciseSlot.setWeek(week);
 

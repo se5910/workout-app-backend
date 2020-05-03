@@ -5,12 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ucmo.workoutapp.entities.ExerciseSlot;
 import ucmo.workoutapp.entities.Week;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
-import ucmo.workoutapp.services.DayService;
-import ucmo.workoutapp.services.ExercisePlanService;
-import ucmo.workoutapp.services.ExerciseSlotService;
 import ucmo.workoutapp.services.WeekService;
 
 import javax.validation.Valid;
@@ -18,7 +14,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/day/{dayId}/week")
+@RequestMapping("/api/exercisePlan/{planId}/template/{templateId}/week")
 public class WeekController {
 
     @Autowired
@@ -27,20 +23,20 @@ public class WeekController {
     @Autowired
     private WeekService weekService;
 
-    // @route   POST api/exercise/:planId/:dayId/week
-    // @desc    Create week for day
+    // @route   POST api/exercise/:planId/:templateId/week
+    // @desc    Create week for template
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createWeekForDay(@Valid @RequestBody Week week, BindingResult result, @PathVariable Long dayId, Principal principal) {
+    public ResponseEntity<?> createWeekForTemplate(@Valid @RequestBody Week week, BindingResult result, @PathVariable Long templateId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        weekService.createWeekForDay(week, dayId, principal.getName());
+        weekService.createWeekForTemplate(week, templateId, principal.getName());
 
         return new ResponseEntity<>(week, HttpStatus.CREATED);
     }
 
-    // @route   GET api/exercise/:planId/:dayId/:weekId
-    // @desc    Get all weeks from day
+    // @route   GET api/exercise/:planId/:templateId/:weekId
+    // @desc    Get all weeks from template
     // @access  Private
     @GetMapping("/{weekId}")
     public ResponseEntity<?> getWeekById(@PathVariable Long weekId, Principal principal){
@@ -50,7 +46,7 @@ public class WeekController {
     }
 
     @DeleteMapping("/{weekId}")
-    public ResponseEntity<?> deleteWeekFromDay(@PathVariable Long weekId, Principal principal){
+    public ResponseEntity<?> deleteWeekFromTemplate(@PathVariable Long weekId, Principal principal){
         weekService.deleteWeekById(weekId, principal.getName());
 
         return new ResponseEntity<>("Week with ID: '" + weekId + "' was deleted.", HttpStatus.OK);

@@ -15,7 +15,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/day/{daId}/week/{weekId}/exerciseSlot")
+@RequestMapping("/api/exercisePlan/{planId}/template/{templateId}/week/{weekId}/exerciseSlot")
 public class ExerciseSlotController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -23,20 +23,20 @@ public class ExerciseSlotController {
     @Autowired
     private ExerciseSlotService exerciseSlotService;
 
-    // @route   POST /api/exercise/{planId}/{dayId}/{weekId}
-    // @desc    Create exercise Slot for day
+    // @route   POST /api/exercise/{planId}/{templateId}/{weekId}
+    // @desc    Create exercise Slot for template
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createExerciseSlotForDay(@Valid @RequestBody ExerciseSlot exerciseSlot, BindingResult result, @PathVariable Long weekId, Principal principal) {
+    public ResponseEntity<?> createExerciseSlotForWeek(@Valid @RequestBody ExerciseSlot exerciseSlot, BindingResult result, @PathVariable Long weekId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        exerciseSlotService.createExerciseSlotForDay(exerciseSlot, weekId, principal.getName());
+        exerciseSlotService.createExerciseSlotForWeek(exerciseSlot, weekId, principal.getName());
 
         return new ResponseEntity<>(exerciseSlot, HttpStatus.CREATED);
     }
 
-    // @route   POST api/exercise/{planId}/{dayId}/{weekId}/{exerciseSlotId}
-    // @desc    Get all exercise slots from day
+    // @route   POST api/exercise/{planId}/{templateId}/{weekId}/{exerciseSlotId}
+    // @desc    Get all exercise slots from template
     // @access  Private
     @GetMapping("/{exerciseSlotId}")
     public ResponseEntity<?> getExerciseSlotById(@PathVariable Long exerciseSlotId, Principal principal){
@@ -45,8 +45,8 @@ public class ExerciseSlotController {
         return new ResponseEntity<>(exerciseSlot, HttpStatus.OK);
     }
 
-    // @route   POST api/exercise/{planId}/{dayId}/{weekId}/{exerciseSlotId}
-    // @desc    Get all exercise slots from day
+    // @route   POST api/exercise/{planId}/{templateId}/{weekId}/{exerciseSlotId}
+    // @desc    Get all exercise slots from template
     // @access  Private
     @DeleteMapping("/{exerciseSlotId}")
     public ResponseEntity<?> deleteExercisesSlotById(@PathVariable Long exerciseSlotId, Principal principal){

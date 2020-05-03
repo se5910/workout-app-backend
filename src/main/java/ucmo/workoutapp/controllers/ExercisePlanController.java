@@ -1,18 +1,13 @@
 package ucmo.workoutapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.SpringCacheAnnotationParser;
-import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
-import ucmo.workoutapp.services.DayService;
 import ucmo.workoutapp.services.ExercisePlanService;
-import ucmo.workoutapp.services.ExerciseSlotService;
-import ucmo.workoutapp.services.WeekService;
 
 import javax.validation.Valid;
 import java.security.Principal;

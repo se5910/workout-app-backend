@@ -18,7 +18,7 @@ public class Week {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "day_id", updatable = false, nullable = false)
     @JsonIgnore
-    private Day day;
+    private Template template;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "week")
     private List<ExerciseSlot> exerciseSlots;
@@ -43,12 +43,12 @@ public class Week {
         this.name = name;
     }
 
-    public Day getDay() {
-        return day;
+    public Template getTemplate() {
+        return template;
     }
 
-    public void setDay(Day day) {
-        this.day = day;
+    public void setTemplate(Template template) {
+        this.template = template;
     }
 
     public List<ExerciseSlot> getExerciseSlots() {

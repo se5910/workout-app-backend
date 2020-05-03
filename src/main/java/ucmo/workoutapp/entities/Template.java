@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Day {
+public class Template {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Day name is required")
+    @NotBlank(message = "Template name is required")
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -21,8 +21,8 @@ public class Day {
     @JsonIgnore
     private ExercisePlan exercisePlan;
 
-    // Each day has many exercises, but each exercise cannot be duplicated inside a day (hopefully lol)
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "day")
+    // Each Template has many exercises, but each exercise cannot be duplicated inside a Template (hopefully lol)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "template")
     private List<Week> weeks = new ArrayList<>();
 
     @NotBlank(message = "Workout type is required")
@@ -31,7 +31,7 @@ public class Day {
     @NotBlank(message = "Workout phase is required")
     private String phase;
 
-    public Day() {
+    public Template() {
 
     }
 
