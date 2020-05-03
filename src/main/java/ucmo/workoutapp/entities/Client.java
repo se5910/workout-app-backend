@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Client {
@@ -16,6 +18,14 @@ public class Client {
 
     @NotBlank(message = "Name is required")
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
+    @JsonIgnore
+    private List<ExercisePlan> exercisePlans;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
+    @JsonIgnore
+    private List<MealPlan> mealPlans;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
@@ -59,6 +69,22 @@ public class Client {
 
     @PreUpdate
     protected void onUpdate() {this.updated_At = new Date();}
+
+    public List<ExercisePlan> getExercisePlans() {
+        return exercisePlans;
+    }
+
+    public void setExercisePlans(List<ExercisePlan> exercisePlans) {
+        this.exercisePlans = exercisePlans;
+    }
+
+    public List<MealPlan> getMealPlans() {
+        return mealPlans;
+    }
+
+    public void setMealPlans(List<MealPlan> mealPlans) {
+        this.mealPlans = mealPlans;
+    }
 
     public Long getId() {
         return id;

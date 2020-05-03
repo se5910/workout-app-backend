@@ -45,6 +45,9 @@ public class ExerciseSlotController {
         return new ResponseEntity<>(exerciseSlot, HttpStatus.OK);
     }
 
+    // @route   POST api/exercise/{planId}/{dayId}/{weekId}/{exerciseSlotId}
+    // @desc    Get all exercise slots from day
+    // @access  Private
     @DeleteMapping("/{exerciseSlotId}")
     public ResponseEntity<?> deleteExercisesSlotById(@PathVariable Long exerciseSlotId, Principal principal){
         exerciseSlotService.deleteExerciseSlotById(exerciseSlotId, principal.getName());

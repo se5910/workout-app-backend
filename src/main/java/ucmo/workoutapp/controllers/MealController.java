@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/mealplan/{planId}/meal")
+@RequestMapping("/api/mealPlan/{planId}/meal")
 public class MealController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;

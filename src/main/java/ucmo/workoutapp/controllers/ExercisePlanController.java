@@ -27,7 +27,7 @@ public class ExercisePlanController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    // @route   POST api/exercise
+    // @route   POST api/exercisePlan
     // @desc    Register a user
     // @access  Private
     @PostMapping("")
@@ -39,7 +39,7 @@ public class ExercisePlanController {
 
     }
 
-    // @route   GET api/exercise/all
+    // @route   GET api/exercisePlan/all
     // @desc    Get all exercise plans of user
     // @access  Private
     @GetMapping("")
@@ -47,6 +47,9 @@ public class ExercisePlanController {
         return exercisePlanService.findAllExercisePlans(principal.getName());
     }
 
+    // @route   GET api/exercisePlan/:planId
+    // @desc    Get exercise plan by id
+    // @access  Private
     @GetMapping("/{planId}")
     public ResponseEntity<?> getExercisePlanById(@PathVariable Long planId, Principal principal){
         ExercisePlan exercisePlan = exercisePlanService.findExercisePlanById(planId, principal.getName());
@@ -55,6 +58,9 @@ public class ExercisePlanController {
 
     }
 
+    // @route   DELETE api/exercisePlan/:planId
+    // @desc    Delete exercise plan by id
+    // @access  Private
     @DeleteMapping("/{planId}")
     public ResponseEntity<?> deleteExercisePlanById(@PathVariable Long planId, Principal principal){
         exercisePlanService.deleteByExercisePlanId(planId, principal.getName());
@@ -62,6 +68,9 @@ public class ExercisePlanController {
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
     }
 
+    // @route   GET api/exercisePlan/client/:cliendId
+    // @desc    Get all exercise plans of client
+    // @access  Private
     @GetMapping("/client/{clientId}")
     public Iterable<ExercisePlan> getAllExercisePlansByClient(@PathVariable Long clientId, Principal coach) {
         return exercisePlanService.findAllExercisePlansOfClient(clientId, coach.getName());

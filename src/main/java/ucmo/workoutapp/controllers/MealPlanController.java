@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ucmo.workoutapp.entities.ExercisePlan;
 import ucmo.workoutapp.entities.MealPlan;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.MealPlanService;
@@ -15,7 +16,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/mealplan")
+@RequestMapping("/api/mealPlan")
 public class MealPlanController {
     @Autowired
     private MealPlanService mealPlanService;
@@ -23,10 +24,7 @@ public class MealPlanController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    @Autowired
-    private MealService mealService;
-
-    // @route   POST api/mealplan
+    // @route   POST api/mealPlan
     // @desc    Create New meal plan
     // @access  Private
     @PostMapping("")
@@ -38,7 +36,7 @@ public class MealPlanController {
 
     }
 
-    // @route   GET api/mealplan/all
+    // @route   GET api/mealPlan
     // @desc    Get all meal plans of user
     // @access  Private
     @GetMapping("")
@@ -46,17 +44,16 @@ public class MealPlanController {
         return mealPlanService.findAllMealPlans(principal.getName());
     }
 
-    // @route   GET api/mealplan/:planId
+    // @route   GET api/mealPlan/:planId
     // @desc    Get meal plan by id
     // @access  Private
     @GetMapping("/{planId}")
-    public ResponseEntity<?> getMealPlanById(@PathVariable Long planId, Principal principal) {
-        MealPlan plan = mealPlanService.getMealPlanById(planId, principal.getName());
+    public MealPlan getMealPlanById(@PathVariable Long planId, Principal principal) {
+       return mealPlanService.getMealPlanById(planId, principal.getName());
 
-        return new ResponseEntity<>(plan, HttpStatus.OK);
     }
 
-    // @route   DELETE api/mealplan/:planId
+    // @route   DELETE api/mealPlan/:planId
     // @desc    Delete meal plan by id
     // @access  Private
     @DeleteMapping("/{planId}")
@@ -66,6 +63,11 @@ public class MealPlanController {
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
     }
 
-
-
+    // @route   GET api/mealPlan/client/:cliendId
+    // @desc    Get all exercise plans of client
+    // @access  Private
+    @GetMapping("/client/{clientId}")
+    public Iterable<MealPlan> findAllMealPlansOfClient(@PathVariable Long clientId, Principal coach) {
+        return mealPlanService.findAllMealPlansOfClient(clientId, coach.getName());
+    }
 }

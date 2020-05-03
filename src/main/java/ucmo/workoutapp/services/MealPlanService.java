@@ -3,11 +3,14 @@ package ucmo.workoutapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
+import ucmo.workoutapp.exceptions.ClientNotFoundException;
+import ucmo.workoutapp.exceptions.ItemNotFoundException;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.MealPlanRepository;
 import ucmo.workoutapp.repositories.UserRepository;
 
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class MealPlanService {
@@ -43,23 +46,51 @@ public class MealPlanService {
         return mealPlanRepository.save(mealPlan);
     }
 
-    public MealPlan getMealPlanById(Long id, String username) {
-        MealPlan mealplan = mealPlanRepository.getByPlanId(id);
+    public Iterable<MealPlan> findAllMealPlans(String username) {
+        User user = userRepository.findByUsername(username);
+        Client client = clientRepository.getByUser(user);
 
-        if(mealplan == null) {
-            throw new PlanNotFoundException("Plan not found");
+        return mealPlanRepository.findAllByClient(client);
+    }
+
+    public MealPlan getMealPlanById(Long planId, String username) {
+        MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
+        User user = userRepository.findByUsername(username);
+        Client client = clientRepository.getByUser(user);
+
+
+        if (mealPlan == null) {
+            throw new PlanNotFoundException("Meal Plan does not exist");
         }
 
-        return mealplan;
+        if (user == null) {
+            throw new EntityNotFoundException("User not found");
+        }
+
+        if (client == null) {
+            throw new EntityNotFoundException("Client not found");
+        }
+
+        if (!mealPlan.getClient().equals(client)) {
+            throw new PlanNotFoundException("No record of this client in DB");
+        }
+
+        return mealPlan;
     }
 
     public void deleteByMealPlanId(Long id, String username) {
         mealPlanRepository.delete(getMealPlanById(id, username));
     }
 
-    public Iterable<MealPlan> findAllMealPlans(String username) {
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
+    public Iterable<MealPlan> findAllMealPlansOfClient(Long clientId, String coach) {
+        Client client = clientRepository.getById(clientId);
+        if (client == null) {
+            throw new ClientNotFoundException("Client not found");
+        }
+
+        if (!client.getCoach().equals(coach)) {
+            throw new ClientNotFoundException("No clients found in your account");
+        }
 
         return mealPlanRepository.findAllByClient(client);
     }
