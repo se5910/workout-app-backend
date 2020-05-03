@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/template/{templateId}/week")
+@RequestMapping("/api/exercisePlan/{planId}/template/{templateId}/exerciseSlot/{exerciseSlotId}/week")
 public class WeekController {
 
     @Autowired
@@ -27,10 +27,10 @@ public class WeekController {
     // @desc    Create week for template
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createWeekForTemplate(@Valid @RequestBody Week week, BindingResult result, @PathVariable Long templateId, Principal principal) {
+    public ResponseEntity<?> createWeekForExerciseSlot(@Valid @RequestBody Week week, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        weekService.createWeekForTemplate(week, templateId, principal.getName());
+        weekService.createWeekForExerciseSlot(week, exerciseSlotId, principal.getName());
 
         return new ResponseEntity<>(week, HttpStatus.CREATED);
     }

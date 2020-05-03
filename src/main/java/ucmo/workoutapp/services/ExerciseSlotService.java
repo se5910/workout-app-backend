@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.Exercise;
 import ucmo.workoutapp.entities.ExerciseSlot;
+import ucmo.workoutapp.entities.Template;
 import ucmo.workoutapp.entities.Week;
 import ucmo.workoutapp.repositories.*;
 
 @Service
 public class ExerciseSlotService {
     @Autowired
-    private WeekRepository weekRepository;
+    private TemplateRepository templateRepository;
 
     @Autowired
     private ExerciseSlotRepository exerciseSlotRepository;
@@ -18,9 +19,9 @@ public class ExerciseSlotService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    public ExerciseSlot createExerciseSlotForWeek(ExerciseSlot exerciseSlot, Long weekId, String username){
-        Week week = weekRepository.getById(weekId);
-        exerciseSlot.setWeek(week);
+    public ExerciseSlot createExerciseSlotForTemplate(ExerciseSlot exerciseSlot, Long templateId, String username){
+        Template template = templateRepository.getById(templateId);
+        exerciseSlot.setTemplate(template);
 
         return exerciseSlotRepository.save(exerciseSlot);
     }

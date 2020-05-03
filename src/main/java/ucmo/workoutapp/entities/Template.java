@@ -23,7 +23,7 @@ public class Template {
 
     // Each Template has many exercises, but each exercise cannot be duplicated inside a Template (hopefully lol)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "template")
-    private List<Week> weeks = new ArrayList<>();
+    private List<ExerciseSlot> exerciseSlots = new ArrayList<>();
 
     @NotBlank(message = "Workout type is required")
     private String workoutType;
@@ -59,12 +59,12 @@ public class Template {
         this.exercisePlan = exercisePlan;
     }
 
-    public List<Week> getWeeks() {
-        return weeks;
+    public List<ExerciseSlot> getExerciseSlots() {
+        return exerciseSlots;
     }
 
-    public void setWeeks(List<Week> weeks) {
-        this.weeks = weeks;
+    public void setExerciseSlots(List<ExerciseSlot> exerciseSlots) {
+        this.exerciseSlots = exerciseSlots;
     }
 
     public String getWorkoutType() {
