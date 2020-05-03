@@ -51,10 +51,8 @@ public class ExercisePlanController {
     // @desc    Get exercise plan by id
     // @access  Private
     @GetMapping("/{planId}")
-    public ResponseEntity<?> getExercisePlanById(@PathVariable Long planId, Principal principal){
-        ExercisePlan exercisePlan = exercisePlanService.findExercisePlanById(planId, principal.getName());
-
-        return new ResponseEntity<>(planId, HttpStatus.OK);
+    public ExercisePlan getExercisePlanById(@PathVariable Long planId, Principal principal){
+        return exercisePlanService.getExercisePlanById(planId, principal.getName());
 
     }
 

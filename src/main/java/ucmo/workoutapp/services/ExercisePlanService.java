@@ -41,6 +41,10 @@ public class ExercisePlanService {
         User user = userRepository.findByUsername(username);
         Client client = clientRepository.getByUser(user);
 
+        if (client == null){
+            throw new EntityNotFoundException("There is no client to associate this Exercise Plan with.");
+        }
+
         exercisePlan.setClient(client);
 
         return exercisePlanRepository.save(exercisePlan);
@@ -54,17 +58,12 @@ public class ExercisePlanService {
         return exercisePlanRepository.findAllByClient(client);
     }
 
-    public ExercisePlan findExercisePlanById(Long planId, String username) {
+    public ExercisePlan getExercisePlanById(Long planId, String username) {
         ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
+        Client client = clientRepository.getByUser(userRepository.findByUsername(username));
 
         if (exercisePlan == null) {
             throw new PlanNotFoundException("Exercise Plan does not exist");
-        }
-
-        if (user == null) {
-            throw new EntityNotFoundException("User not found");
         }
 
         if (client == null) {
@@ -80,7 +79,7 @@ public class ExercisePlanService {
 
     public void deleteByExercisePlanId(Long planId, String username) {
         System.out.println(planId);
-        exercisePlanRepository.delete(findExercisePlanById(planId, username));
+        exercisePlanRepository.delete(getExercisePlanById(planId, username));
 
     }
 

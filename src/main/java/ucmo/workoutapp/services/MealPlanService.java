@@ -40,8 +40,11 @@ public class MealPlanService {
         User user = userRepository.findByUsername(username);
         Client client = clientRepository.getByUser(user);
 
+        if (client == null){
+            throw new EntityNotFoundException("There is no client to associate this MealPlan with.");
+        }
+
         mealPlan.setClient(client);
-        mealPlan.setName(mealPlan.getName());
 
         return mealPlanRepository.save(mealPlan);
     }
@@ -56,7 +59,6 @@ public class MealPlanService {
     public MealPlan getMealPlanById(Long planId, String username) {
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
         Client client = clientRepository.getByUser(userRepository.findByUsername(username));
-
 
         if (mealPlan == null) {
             throw new PlanNotFoundException("Meal Plan does not exist");
