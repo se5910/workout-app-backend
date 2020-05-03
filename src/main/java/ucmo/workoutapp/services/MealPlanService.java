@@ -55,24 +55,22 @@ public class MealPlanService {
 
     public MealPlan getMealPlanById(Long planId, String username) {
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
+        Client client = clientRepository.getByUser(userRepository.findByUsername(username));
 
 
         if (mealPlan == null) {
             throw new PlanNotFoundException("Meal Plan does not exist");
         }
 
-        if (user == null) {
-            throw new EntityNotFoundException("User not found");
-        }
-
         if (client == null) {
             throw new EntityNotFoundException("Client not found");
         }
 
+        if (mealPlan.getClient() == null){
+            throw new EntityNotFoundException("This plan does not belong to any client.");
+        }
         if (!mealPlan.getClient().equals(client)) {
-            throw new PlanNotFoundException("No record of this client in DB");
+            throw new PlanNotFoundException("This plan does not belong to " + client.getName());
         }
 
         return mealPlan;
