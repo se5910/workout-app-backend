@@ -10,8 +10,8 @@ import ucmo.workoutapp.entities.Food;
 import ucmo.workoutapp.exceptions.ItemNotFoundException;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.FoodService;
-
 import javax.validation.Valid;
+import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -23,29 +23,30 @@ public class FoodController {
     @Autowired
     private FoodService foodService;
 
+    @PostMapping
+    public ResponseEntity<?> createFood(@Valid @RequestBody Food food, BindingResult result, Principal principal){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+        foodService.createFood(food, principal.getName());
+        return new ResponseEntity<>(food, HttpStatus.CREATED);
+    }
+
     @GetMapping("/{foodId}")
     public ResponseEntity<?> getFoodById(@PathVariable Long foodId){
         Food food = foodService.getFoodById(foodId);
         return new ResponseEntity<>(food, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
-    public Iterable<Food> getAllFood(){
-        return foodService.findAllFood();
-    }
-
     @DeleteMapping("/{foodId}")
-    public ResponseEntity<?> deleteFoodById(@PathVariable Long foodId){
-        foodService.deleteFoodById(foodId);
+    public ResponseEntity<?> deleteFoodById(@PathVariable Long foodId, Principal principal){
+        foodService.deleteFoodById(foodId, principal.getName());
         return new ResponseEntity<>("Food with ID: " + foodId + " was deleted.",HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<?> createFood(@Valid @RequestBody Food food, BindingResult result){
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if (errorMap != null) return errorMap;
-        foodService.createFood(food);
-        return new ResponseEntity<>(food, HttpStatus.CREATED);
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllFood(Principal principal){
+        Iterable<Food> foods = foodService.findAllFood(principal.getName());
+        return new ResponseEntity<>(foods, HttpStatus.OK);
     }
 
     @PutMapping("/{foodId}")
@@ -66,5 +67,4 @@ public class FoodController {
 
         return new ResponseEntity<>(food,HttpStatus.OK);
     }
-
 }

@@ -16,12 +16,12 @@ public class Week {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "day_id", updatable = false, nullable = false)
+    @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
     @JsonIgnore
-    private Day day;
+    private ExerciseSlot exerciseSlot;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "week")
-    private List<ExerciseSlot> exerciseSlots;
+    private List<ExerciseSet> exerciseSets;
 
     public Week() {
 
@@ -43,19 +43,19 @@ public class Week {
         this.name = name;
     }
 
-    public Day getDay() {
-        return day;
+    public ExerciseSlot getExerciseSlot() {
+        return exerciseSlot;
     }
 
-    public void setDay(Day day) {
-        this.day = day;
+    public void setExerciseSlot(ExerciseSlot exerciseSlot) {
+        this.exerciseSlot = exerciseSlot;
     }
 
-    public List<ExerciseSlot> getExerciseSlots() {
-        return exerciseSlots;
+    public List<ExerciseSet> getExerciseSets() {
+        return exerciseSets;
     }
 
-    public void setExerciseSlots(List<ExerciseSlot> exerciseSlots) {
-        this.exerciseSlots = exerciseSlots;
+    public void setExerciseSets(List<ExerciseSet> exerciseSets) {
+        this.exerciseSets = exerciseSets;
     }
 }

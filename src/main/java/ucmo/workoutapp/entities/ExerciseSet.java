@@ -15,11 +15,11 @@ public class ExerciseSet {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
+    @JoinColumn(name = "week_id", updatable = false, nullable = false)
     @JsonIgnore
-    private ExerciseSlot exerciseSlot;
+    private Week week;
 
-    private Integer setNumber = 0;
+    private Integer exerciseSetNumber = 0;
 
     private Integer weight;
 
@@ -37,20 +37,20 @@ public class ExerciseSet {
         this.id = id;
     }
 
-    public ExerciseSlot getExerciseSlot() {
-        return exerciseSlot;
+    public Week getWeek() {
+        return week;
     }
 
-    public void setExerciseSlot(ExerciseSlot exerciseSlot) {
-        this.exerciseSlot = exerciseSlot;
+    public void setWeek(Week week) {
+        this.week = week;
     }
 
-    public Integer getSetNumber() {
-        return setNumber;
+    public Integer getExerciseSetNumber() {
+        return exerciseSetNumber;
     }
 
-    public void setSetNumber(Integer setNumber) {
-        this.setNumber = setNumber;
+    public void setExerciseSetNumber(Integer exerciseSetNumber) {
+        this.exerciseSetNumber = exerciseSetNumber;
     }
 
     public Integer getWeight() {

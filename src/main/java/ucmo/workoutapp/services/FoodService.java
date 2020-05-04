@@ -19,15 +19,15 @@ public class FoodService {
         return foodRepository.getById(FoodId);
     }
 
-    public Iterable<Food> findAllFood() {
+    public Iterable<Food> findAllFood(String username) {
         return foodRepository.findAll();
     }
 
-    public void deleteFoodById(Long foodId){
+    public void deleteFoodById(Long foodId, String username){
         foodRepository.deleteById(foodId);
     }
 
-    public Food createFood(Food food){
+    public Food createFood(Food food, String username){
         return foodRepository.save(food);
     }
 

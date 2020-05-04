@@ -9,14 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import ucmo.workoutapp.entities.Meal;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.MealService;
-
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/mealplan/{planId}/meal")
+@RequestMapping("/api/mealPlan/{planId}/meal")
 public class MealController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -49,5 +47,12 @@ public class MealController {
          mealService.deleteMealById(mealId,principal.getName());
 
         return new ResponseEntity<>("Meal with ID: '" + mealId + "' was deleted.", HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllMealsByPlanId(@PathVariable Long planId, Principal principal){
+        Iterable<Meal> meals = mealService.getallMealsForMealPlanById(planId, principal.getName());
+
+        return new ResponseEntity<>(meals, HttpStatus.OK);
     }
 }

@@ -1,13 +1,18 @@
 package ucmo.workoutapp.services;
 
+import org.omg.CORBA.portable.UnknownException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.ClientNotFoundException;
+import ucmo.workoutapp.exceptions.CoachNotFoundException;
+import ucmo.workoutapp.exceptions.ItemNotFoundException;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.ExercisePlanRepository;
 import ucmo.workoutapp.repositories.UserRepository;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class ExercisePlanService {
@@ -32,10 +37,16 @@ public class ExercisePlanService {
             } else if (existingPlan == null) {
                 throw new PlanNotFoundException("Plan with ID: '" + exercisePlan.getPlanId() + "' cannot be updated because it doesn't exist");
             }
+
+            return exercisePlanRepository.save(exercisePlan);
         }
 
         User user = userRepository.findByUsername(username);
         Client client = clientRepository.getByUser(user);
+
+        if (client == null){
+            throw new EntityNotFoundException("There is no client to associate this Exercise Plan with.");
+        }
 
         exercisePlan.setClient(client);
 
@@ -50,41 +61,44 @@ public class ExercisePlanService {
         return exercisePlanRepository.findAllByClient(client);
     }
 
-    public Iterable<ExercisePlan> findAllExercisePlansOfClient(Long id, String coach) {
-        Client client = clientRepository.getById(id);
+    public ExercisePlan getExercisePlanById(Long planId, String username) {
+        ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
+        Client client = clientRepository.getByUser(userRepository.findByUsername(username));
+
+        if (exercisePlan == null) {
+            throw new PlanNotFoundException("Exercise Plan does not exist");
+        }
+
+        if (client == null) {
+            throw new EntityNotFoundException("Client not found");
+        }
+
+        if (!exercisePlan.getClient().equals(client)) {
+            throw new PlanNotFoundException("Exercise Plan not found in your account");
+        }
+
+        return exercisePlan;
+    }
+
+    public void deleteByExercisePlanId(Long planId, String username) {
+        exercisePlanRepository.delete(getExercisePlanById(planId, username));
+
+    }
+
+    public Iterable<ExercisePlan> findAllExercisePlansOfClient(Long clientId, String coach) {
+        Client client = clientRepository.getById(clientId);
         if (client == null) {
             throw new ClientNotFoundException("Client not found");
         }
 
-        if (!client.getCoach().equals(coach)) {
-            throw new ClientNotFoundException("No clients found in your account");
+        if (coach == null) {
+            throw new CoachNotFoundException("You are not a coach");
         }
 
+        if (!client.getCoach().equals(coach)) {
+            throw new ClientNotFoundException("Client coach mismatch. You are not the coach of this client.\nClient coach: '" + client.getCoach() + "' \nCoach given: '" + coach + "'");
+        }
 
         return exercisePlanRepository.findAllByClient(client);
-    }
-
-    public ExercisePlan findExercisePlanById(Long planId, String username) {
-        try {
-            ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
-            Client client = clientRepository.getByUser(userRepository.findByUsername(username));
-
-            if (exercisePlan == null) {
-                throw new PlanNotFoundException("Plan doesn't not exist");
-            }
-
-            if (!exercisePlan.getClient().equals(client)) {
-                throw new PlanNotFoundException("Exercise Plan not found in your account");
-            }
-            return exercisePlan;
-        } catch (Exception e) {
-            throw new PlanNotFoundException("Bitch");
-        }
-    }
-
-    public void deleteByExercisePlanId(Long planId, String username) {
-        System.out.println(planId);
-        exercisePlanRepository.delete(findExercisePlanById(planId, username));
-
     }
 }

@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import ucmo.workoutapp.entities.FoodSlot;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.FoodSlotService;
-
 import javax.validation.Valid;
 import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/mealplan/{planId}/meal/{mealId}/foodslot")
+@RequestMapping("/api/mealPlan/{planId}/meal/{mealId}/foodSlot")
 public class FoodSlotController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -33,6 +32,11 @@ public class FoodSlotController {
         return new ResponseEntity<>(foodSlot, HttpStatus.CREATED);
     }
 
+    @GetMapping("")
+    public Iterable<FoodSlot> getAllFoodSlotsByMealId(@PathVariable Long mealId, Principal principal){
+        return foodSlotService.getAllFoodSlotsByMealId(mealId, principal.getName());
+    }
+
     @GetMapping("/{foodSlotId}")
     public ResponseEntity<?> getFoodSlotById(@PathVariable Long foodSlotId, Principal principal){
         FoodSlot foodSlot = foodSlotService.getFoodSlotById(foodSlotId , principal.getName());
@@ -41,14 +45,16 @@ public class FoodSlotController {
     }
 
     @DeleteMapping("/{foodSlotId}")
-    public ResponseEntity<?> deleteMealByMealPlanId(@PathVariable Long foodSlotId, Principal principal){
+    public ResponseEntity<?> deleteFoodSlotById(@PathVariable Long foodSlotId, Principal principal){
         foodSlotService.deleteFoodSlotById(foodSlotId,principal.getName());
 
         return new ResponseEntity<>("Meal slot with ID: '" + foodSlotId + "' was deleted.", HttpStatus.OK);
     }
 
-    @GetMapping("{mealId}")
-    public Iterable<FoodSlot> getAllFoodSlotsByMealId(@PathVariable Long mealId, Principal principal){
-        return foodSlotService.getAllFoodSlotsByMealId(mealId, principal.getName());
+    @PostMapping("/{foodSlotId}/food/{foodId}")
+    public ResponseEntity<?> putFoodIntoFoodSlot(@PathVariable Long foodSlotId, @PathVariable Long foodId, Principal principal){
+        foodSlotService.putFoodIntoFoodSlot(foodSlotId, foodId, principal.getName());
+
+        return new ResponseEntity<>("Food with ID: '" + foodId + "' was added to FoodSlot with ID: '" + foodSlotId + "'.", HttpStatus.CREATED);
     }
 }

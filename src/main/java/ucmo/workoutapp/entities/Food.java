@@ -11,11 +11,6 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
-    @JoinColumn(name = "food_slot_id", updatable = false, nullable = false)
-    private FoodSlot foodSlot;
-
     @NotBlank(message = "Food name is required")
     private String name;
 
@@ -55,14 +50,6 @@ public class Food {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public FoodSlot getFoodSlot() {
-        return foodSlot;
-    }
-
-    public void setFoodSlot(FoodSlot foodSlot) {
-        this.foodSlot = foodSlot;
     }
 
     public String getName() {

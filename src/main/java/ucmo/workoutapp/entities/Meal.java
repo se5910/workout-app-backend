@@ -19,7 +19,6 @@ public class Meal {
 
     // Each meal can have many foods, but each food cannot be duplicated inside a meal (hopefully lol)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "meal")
-    @JsonIgnore
     private List<FoodSlot> foodSlots = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)

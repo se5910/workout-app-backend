@@ -14,9 +14,6 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exercise")
-    private List<ExerciseSlot> exerciseSlot = new ArrayList<>();
-
     @NotBlank(message = "Exercise name is required")
     private String exerciseName;
 
@@ -43,13 +40,6 @@ public class Exercise {
         this.id = id;
     }
 
-    public List<ExerciseSlot> getExerciseSlot() {
-        return exerciseSlot;
-    }
-
-    public void setExerciseSlot(List<ExerciseSlot> exerciseSlot) {
-        this.exerciseSlot = exerciseSlot;
-    }
 
     public String getExerciseName() {
         return exerciseName;

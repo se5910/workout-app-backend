@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/day/{dayId}/week/{weekId}/exerciseSlot/{exerciseSlotId}/exerciseSet")
+@RequestMapping("/api/exercisePlan/{planId}/template/{templateId}/exerciseSlot/{exerciseSlotId}/week/{weekId}/exerciseSet")
 public class ExerciseSetController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -23,10 +23,10 @@ public class ExerciseSetController {
     private ExerciseSetService exerciseSetService;
     
     @PostMapping("")
-    public ResponseEntity<?> createSetForExerciseSlot(@Valid @RequestBody ExerciseSet exerciseSet, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal){
+    public ResponseEntity<?> createSetForWeek(@Valid @RequestBody ExerciseSet exerciseSet, BindingResult result, @PathVariable Long weekId, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        exerciseSetService.createExerciseSetForExerciseSlot(exerciseSet, exerciseSlotId, principal.getName());
+        exerciseSetService.createExerciseSetForWeek(exerciseSet, weekId, principal.getName());
 
         return new ResponseEntity<>(exerciseSet, HttpStatus.CREATED);
     }

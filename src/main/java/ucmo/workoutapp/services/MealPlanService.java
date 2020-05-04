@@ -1,14 +1,16 @@
 package ucmo.workoutapp.services;
 
-import jdk.nashorn.internal.parser.Lexer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
+import ucmo.workoutapp.exceptions.ClientNotFoundException;
+import ucmo.workoutapp.exceptions.ItemNotFoundException;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.MealPlanRepository;
 import ucmo.workoutapp.repositories.UserRepository;
 
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class MealPlanService {
@@ -38,8 +40,11 @@ public class MealPlanService {
         User user = userRepository.findByUsername(username);
         Client client = clientRepository.getByUser(user);
 
+        if (client == null){
+            throw new EntityNotFoundException("There is no client to associate this MealPlan with.");
+        }
+
         mealPlan.setClient(client);
-        mealPlan.setName(mealPlan.getName());
 
         return mealPlanRepository.save(mealPlan);
     }
@@ -51,17 +56,42 @@ public class MealPlanService {
         return mealPlanRepository.findAllByClient(client);
     }
 
-    public MealPlan getMealPlanById(Long id, String username) {
-        MealPlan mealplan = mealPlanRepository.getByPlanId(id);
+    public MealPlan getMealPlanById(Long planId, String username) {
+        MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
+        Client client = clientRepository.getByUser(userRepository.findByUsername(username));
 
-        if(mealplan == null) {
-            throw new PlanNotFoundException("Plan not found");
+        if (mealPlan == null) {
+            throw new PlanNotFoundException("Meal Plan does not exist");
         }
 
-        return mealplan;
+        if (client == null) {
+            throw new EntityNotFoundException("Client not found");
+        }
+
+        if (mealPlan.getClient() == null){
+            throw new EntityNotFoundException("This plan does not belong to any client.");
+        }
+        if (!mealPlan.getClient().equals(client)) {
+            throw new PlanNotFoundException("This plan does not belong to " + client.getName());
+        }
+
+        return mealPlan;
     }
 
     public void deleteByMealPlanId(Long id, String username) {
         mealPlanRepository.delete(getMealPlanById(id, username));
+    }
+
+    public Iterable<MealPlan> findAllMealPlansOfClient(Long clientId, String coach) {
+        Client client = clientRepository.getById(clientId);
+        if (client == null) {
+            throw new ClientNotFoundException("Client not found");
+        }
+
+        if (!client.getCoach().equals(coach)) {
+            throw new ClientNotFoundException("No clients found in your account");
+        }
+
+        return mealPlanRepository.findAllByClient(client);
     }
 }

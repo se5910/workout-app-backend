@@ -14,10 +14,10 @@ public class FoodSlot {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "meal_id", updatable = false, nullable = false)
+    @JsonIgnore
     private Meal meal;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "foodSlot")
-    private Food food;
+    private Long foodId;
 
     public Long getId() {
         return id;
@@ -43,11 +43,11 @@ public class FoodSlot {
         this.meal = meal;
     }
 
-    public Food getFood() {
-        return food;
+    public Long getFoodId() {
+        return foodId;
     }
 
-    public void setFood(Food food) {
-        this.food = food;
+    public void setFoodId(Long foodId) {
+        this.foodId = foodId;
     }
 }
