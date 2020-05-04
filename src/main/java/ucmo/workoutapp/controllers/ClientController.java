@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ucmo.workoutapp.entities.Client;
+import ucmo.workoutapp.entities.Questionnaire;
 import ucmo.workoutapp.entities.User;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.ClientService;
+import ucmo.workoutapp.services.QuestionnaireService;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -47,9 +49,9 @@ public class ClientController {
         return new ResponseEntity<>(currentClient, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public Client getClientById(@PathVariable Long id, Principal principal) {
-        return clientService.getClientById(id, principal.getName());
+    @GetMapping("/{clientId}")
+    public Client getClientById(@PathVariable Long clientId, Principal principal) {
+        return clientService.getClientById(clientId, principal.getName());
     }
 
 

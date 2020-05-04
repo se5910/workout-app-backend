@@ -26,6 +26,12 @@ public class ExerciseSlotService {
         return exerciseSlotRepository.save(exerciseSlot);
     }
 
+    public Iterable<ExerciseSlot> getAllExerciseSlotsByTemplateId(Long templateId, String username){
+        Template template = templateRepository.getById(templateId);
+
+        return template.getExerciseSlots();
+    }
+
     public ExerciseSlot getExerciseSlotById(Long exerciseSlotId, String username){
         return exerciseSlotRepository.getById(exerciseSlotId);
 
@@ -36,7 +42,7 @@ public class ExerciseSlotService {
 
     }
 
-    // Returns exercise slot because we are actually changing the exercise slot
+    // Returns exercise slot because we are actually changing the exercise slot by adding an exercise to it
     public ExerciseSlot createExerciseForExerciseSlot(Long exericseSlotId, Long exerciseId, String username){
         ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exericseSlotId);
 
@@ -45,7 +51,7 @@ public class ExerciseSlotService {
         return exerciseSlotRepository.save(exerciseSlot);
     }
 
-    // Get the exercise from the exercise slot.
+    // Get the exercise from the exercise slot by id
     public Exercise getExerciseFromExerciseSlotById(Long exerciseSlotId, String username){
         return exerciseRepository.getById(exerciseSlotRepository.getById(exerciseSlotId).getExerciseId());
 

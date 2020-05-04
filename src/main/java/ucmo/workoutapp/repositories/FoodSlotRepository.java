@@ -5,5 +5,5 @@ import ucmo.workoutapp.entities.FoodSlot;
 
 public interface FoodSlotRepository extends CrudRepository<FoodSlot, Long> {
     FoodSlot getById(Long id);
-    Iterable<FoodSlot> getAllByMeal_Id(Long mealId);
+
 }

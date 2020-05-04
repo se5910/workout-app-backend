@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.ClientNotFoundException;
+import ucmo.workoutapp.exceptions.CoachNotFoundException;
 import ucmo.workoutapp.exceptions.ItemNotFoundException;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
@@ -36,6 +37,8 @@ public class ExercisePlanService {
             } else if (existingPlan == null) {
                 throw new PlanNotFoundException("Plan with ID: '" + exercisePlan.getPlanId() + "' cannot be updated because it doesn't exist");
             }
+
+            return exercisePlanRepository.save(exercisePlan);
         }
 
         User user = userRepository.findByUsername(username);
@@ -78,7 +81,6 @@ public class ExercisePlanService {
     }
 
     public void deleteByExercisePlanId(Long planId, String username) {
-        System.out.println(planId);
         exercisePlanRepository.delete(getExercisePlanById(planId, username));
 
     }
@@ -89,10 +91,13 @@ public class ExercisePlanService {
             throw new ClientNotFoundException("Client not found");
         }
 
-        if (!client.getCoach().equals(coach)) {
-            throw new ClientNotFoundException("No clients found in your account");
+        if (coach == null) {
+            throw new CoachNotFoundException("You are not a coach");
         }
 
+        if (!client.getCoach().equals(coach)) {
+            throw new ClientNotFoundException("Client coach mismatch. You are not the coach of this client.\nClient coach: '" + client.getCoach() + "' \nCoach given: '" + coach + "'");
+        }
 
         return exercisePlanRepository.findAllByClient(client);
     }

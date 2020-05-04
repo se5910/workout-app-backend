@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +39,11 @@ public class User implements UserDetails {
     private Date updated_At;
 
     private boolean isCoach;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    private Questionnaire questionnaire;
+
+    private String coachRequested;
 
     @PrePersist
     protected void onCreate() {
@@ -74,26 +78,6 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public boolean isCoach() {
-        return isCoach;
-    }
-
-    public void setCoach(boolean coach) {
-        isCoach = coach;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public Long getId() {
         return id;
     }
@@ -102,6 +86,7 @@ public class User implements UserDetails {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
@@ -110,6 +95,15 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    @Override
     public String getPassword() {
         return password;
     }
@@ -118,12 +112,8 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getFullName() {
-    return fullName;
-  }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getConfirmPassword() {
@@ -148,6 +138,38 @@ public class User implements UserDetails {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public boolean isCoach() {
+        return isCoach;
+    }
+
+    public void setCoach(boolean coach) {
+        isCoach = coach;
+    }
+
+    public Questionnaire getQuestionnaire() {
+        return questionnaire;
+    }
+
+    public void setQuestionnaire(Questionnaire questionnaire) {
+        this.questionnaire = questionnaire;
+    }
+
+    public String getCoachRequested() {
+        return coachRequested;
+    }
+
+    public void setCoachRequested(String coachRequested) {
+        this.coachRequested = coachRequested;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     /* UserDetails interface methods */

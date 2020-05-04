@@ -67,8 +67,8 @@ public class ClientService {
         }
     }
 
-    public Client getClientById(Long id, String coach) {
-        Client client = clientRepository.getById(id);
+    public Client getClientById(Long clientId, String coach) {
+        Client client = clientRepository.getById(clientId);
         if (client == null) {
             throw new ClientNotFoundException("Client not found");
         }

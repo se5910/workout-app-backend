@@ -14,6 +14,7 @@ public class FoodSlot {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "meal_id", updatable = false, nullable = false)
+    @JsonIgnore
     private Meal meal;
 
     private Long foodId;

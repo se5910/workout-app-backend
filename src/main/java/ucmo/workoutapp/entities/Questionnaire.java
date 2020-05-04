@@ -1,37 +1,27 @@
 package ucmo.workoutapp.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
-public class Client {
+public class Questionnaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", updatable = false, nullable = false)
+    @JsonIgnore
+    private User user;
+
+    @NotBlank(message = "Coach username is required")
+    private String coachUsername;
 
     @NotBlank(message = "Name is required")
     private String name;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
-    @JsonIgnore
-    private List<ExercisePlan> exercisePlans;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
-    @JsonIgnore
-    private List<MealPlan> mealPlans;
-
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER)
-    private User user;
-
-    private String coach;
 
     @NotNull(message = "Height is required")
     private Integer height;
@@ -54,36 +44,7 @@ public class Client {
     @NotBlank(message = "Health History is required")
     private String healthHistory;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
-    @Column(updatable = false)
-    private Date created_At;
-
-    @JsonFormat(pattern = "yyyy-mm-dd")
-    private Date updated_At;
-
-    public Client() {
-    }
-
-    @PrePersist
-    protected void onCreate() {this.created_At = new Date();}
-
-    @PreUpdate
-    protected void onUpdate() {this.updated_At = new Date();}
-
-    public List<ExercisePlan> getExercisePlans() {
-        return exercisePlans;
-    }
-
-    public void setExercisePlans(List<ExercisePlan> exercisePlans) {
-        this.exercisePlans = exercisePlans;
-    }
-
-    public List<MealPlan> getMealPlans() {
-        return mealPlans;
-    }
-
-    public void setMealPlans(List<MealPlan> mealPlans) {
-        this.mealPlans = mealPlans;
+    public Questionnaire() {
     }
 
     public Long getId() {
@@ -94,20 +55,28 @@ public class Client {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getCoachUsername() {
+        return coachUsername;
+    }
+
+    public void setCoachUsername(String coachUsername) {
+        this.coachUsername = coachUsername;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getHeight() {
@@ -172,28 +141,5 @@ public class Client {
 
     public void setHealthHistory(String healthHistory) {
         this.healthHistory = healthHistory;
-    }
-
-    public Date getCreated_At() {
-        return created_At;
-    }
-
-    public void setCreated_At(Date created_At) {
-        this.created_At = created_At;
-    }
-
-    public Date getUpdated_At() {
-        return updated_At;
-    }
-
-    public void setUpdated_At(Date updated_At) {
-        this.updated_At = updated_At;
-    }
-
-    public String getCoach() {
-        return coach;
-    }
-    public void setCoach(String coach) {
-        this.coach = coach;
     }
 }

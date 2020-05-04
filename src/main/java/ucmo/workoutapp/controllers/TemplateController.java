@@ -5,8 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ucmo.workoutapp.entities.ExercisePlan;
 import ucmo.workoutapp.entities.Template;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
+import ucmo.workoutapp.repositories.ExercisePlanRepository;
+import ucmo.workoutapp.services.ExercisePlanService;
 import ucmo.workoutapp.services.TemplateService;
 
 import javax.validation.Valid;
@@ -22,7 +25,10 @@ public class TemplateController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    // @route   POST api/exercise/template/:planId
+    @Autowired
+    private ExercisePlanService exercisePlanService;
+
+    // @route   POST api/exercisePlan/:planId/template
     // @desc    Create template on exercise plan
     // @access  Private
     @PostMapping("")
@@ -34,8 +40,17 @@ public class TemplateController {
         return new ResponseEntity<>(template, HttpStatus.CREATED);
     }
 
-    // @route   GET api/exercise/template/:planId/:templateId
+    // @route   GET api/exercisePlan/:planId/template
     // @desc    Get all templates from planId
+    // @access  Private
+    @GetMapping("")
+    public Iterable<Template> getAllTemplatesById(@PathVariable Long planId, Principal principal){
+
+        return templateService.getAllTemplatesById(planId, principal.getName());
+    }
+
+    // @route   GET api/exercise/template/:planId/template/:templateId
+    // @desc    Get template by template id
     // @access  Private
     @GetMapping("/{templateId}")
     public ResponseEntity<?> getTemplateById(@PathVariable Long templateId, Principal principal){
@@ -44,6 +59,9 @@ public class TemplateController {
         return new ResponseEntity<>(template, HttpStatus.OK);
     }
 
+    // @route   DELETE api/exercise/template/:planId/template/:templateId
+    // @desc    Delete template by template id
+    // @access  Private
     @DeleteMapping("/{templateId}")
     public ResponseEntity<?> deleteTemplateFromExercisePlan(@PathVariable Long templateId, Principal principal){
         templateService.deleteTemplateFromExercisePlan(templateId, principal.getName());

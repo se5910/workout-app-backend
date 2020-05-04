@@ -6,7 +6,6 @@ import java.util.List;
 
 @Entity
 public class ExercisePlan extends Plan {
-
     @NotBlank(message = "Exercise Plan name is required")
     private String name;
 
