@@ -41,6 +41,13 @@ public class CoachController {
 
     }
 
+    @PostMapping("/approve/client/{clientId}")
+    public ResponseEntity<?> approveClient(@PathVariable Long clientId, Principal principal) {
+        Client approvedClient = clientService.approveClient(clientId, principal.getName());
+
+        return new ResponseEntity<>(approvedClient, HttpStatus.OK);
+    }
+
     @GetMapping("/clients")
     public Iterable<?> getAllClientsByCoach(Principal principal) {
         return clientService.getAllClients();
