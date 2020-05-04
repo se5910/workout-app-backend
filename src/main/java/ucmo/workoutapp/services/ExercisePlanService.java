@@ -54,7 +54,7 @@ public class ExercisePlanService {
 
         return exercisePlanRepository.save(exercisePlan);
 }
-    
+
 
     public Iterable<ExercisePlan> findAllExercisePlans(String username) {
         User user = userRepository.findByUsername(username);

@@ -93,8 +93,9 @@ public class ClientService {
 
     public Client approveClient(Long clientId, String coach) {
         Client client = clientRepository.getById(clientId);
+        User request = userRepository.findByUsername(coach);
 
-        if (!client.getUser().isCoach()) {
+        if (!request.isCoach()) {
             throw new CoachNotFoundException("You are not authorized.");
         }
 
