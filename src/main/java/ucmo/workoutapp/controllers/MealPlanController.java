@@ -38,16 +38,16 @@ public class MealPlanController {
     // @desc    Get all meal plans of user
     // @access  Private
     @GetMapping("")
-    public  Iterable<MealPlan> getAllMealPlans(Principal principal) {
-        return mealPlanService.findAllMealPlans(principal.getName());
+    public  Iterable<MealPlan> getAllMealPlans(@PathVariable Long clientId, Principal principal) {
+        return mealPlanService.findAllMealPlans(clientId, principal.getName());
     }
 
     // @route   GET api/mealPlan/:planId
     // @desc    Get meal plan by id
     // @access  Private
     @GetMapping("/{planId}")
-    public MealPlan getMealPlanById(@PathVariable Long planId, Principal principal) {
-       return mealPlanService.getMealPlanById(planId, principal.getName());
+    public MealPlan getMealPlanById(@PathVariable Long clientId,@PathVariable Long planId, Principal principal) {
+       return mealPlanService.getMealPlanById(clientId, planId, principal.getName());
 
     }
 
@@ -55,8 +55,8 @@ public class MealPlanController {
     // @desc    Delete meal plan by id
     // @access  Private
     @DeleteMapping("/{planId}")
-    public ResponseEntity<?> deleteMealPlanById(@PathVariable Long planId, Principal principal) {
-        mealPlanService.deleteByMealPlanId(planId, principal.getName());
+    public ResponseEntity<?> deleteMealPlanById(@PathVariable Long clientId, @PathVariable Long planId, Principal principal) {
+        mealPlanService.deleteByMealPlanId(clientId, planId, principal.getName());
 
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
     }
@@ -64,8 +64,8 @@ public class MealPlanController {
     // @route   GET api/mealPlan/client/:cliendId
     // @desc    Get all exercise plans of client
     // @access  Private
-    @GetMapping("/client/{clientId}")
-    public Iterable<MealPlan> findAllMealPlansOfClient(@PathVariable Long clientId, Principal coach) {
-        return mealPlanService.findAllMealPlansOfClient(clientId, coach.getName());
-    }
+//    @GetMapping("")
+//    public Iterable<MealPlan> findAllMealPlansOfClient(@PathVariable Long clientId, @PathVariable Long planId, Principal coach) {
+//        return mealPlanService.findAllMealPlansOfClient(clientId, coach.getName());
+//    }
 }

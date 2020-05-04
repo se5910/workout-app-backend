@@ -55,16 +55,33 @@ public class MealPlanService {
         return mealPlanRepository.save(mealPlan);
     }
 
-    public Iterable<MealPlan> findAllMealPlans(String username) {
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
+    public Iterable<MealPlan> findAllMealPlans(Long clientId, String username) {
+        User request = userRepository.findByUsername(username);
+        Client client = clientRepository.getById(clientId);
+
+        if((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (client == null) {
+            throw new EntityNotFoundException("Client not found");
+        }
+
+        if (!request.isCoach() && !request.getUsername().equals(client.getUser().getUsername())){
+            throw new ClientNotFoundException("You are not the client of this plan");
+        }
 
         return mealPlanRepository.findAllByClient(client);
     }
 
-    public MealPlan getMealPlanById(Long planId, String username) {
+    public MealPlan getMealPlanById(Long clientId, Long planId, String username) {
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
-        Client client = clientRepository.getByUser(userRepository.findByUsername(username));
+        Client client = clientRepository.getById(clientId);
+        User request = userRepository.findByUsername(username);
+
+        if ((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
 
         if (mealPlan == null) {
             throw new PlanNotFoundException("Meal Plan does not exist");
@@ -75,30 +92,13 @@ public class MealPlanService {
         }
 
         if (!mealPlan.getClient().equals(client)) {
-            throw new PlanNotFoundException("This plan does not belong to " + client.getName());
+            throw new PlanNotFoundException("This plan does not belong to your account");
         }
 
         return mealPlan;
     }
 
-    public void deleteByMealPlanId(Long planId, String username) {
-        mealPlanRepository.delete(getMealPlanById(planId, username));
-    }
-
-    public Iterable<MealPlan> findAllMealPlansOfClient(Long clientId, String coach) {
-        Client client = clientRepository.getById(clientId);
-        if (client == null) {
-            throw new ClientNotFoundException("Client not found");
-        }
-
-        if (coach == null) {
-            throw new CoachNotFoundException("You are not a coach");
-        }
-
-        if (!client.getCoach().equals(coach)) {
-            throw new ClientNotFoundException("Client coach mismatch. You are not the coach of this client.\nClient coach: '" + client.getCoach() + "' \nCoach given: '" + coach + "'");
-        }
-
-        return mealPlanRepository.findAllByClient(client);
+    public void deleteByMealPlanId(Long clientId, Long planId, String username) {
+        mealPlanRepository.delete(getMealPlanById(clientId, planId, username));
     }
 }
