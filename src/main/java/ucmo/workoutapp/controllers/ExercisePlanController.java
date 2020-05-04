@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan")
+@RequestMapping("/api/client/{clientId}/exercisePlan")
 public class ExercisePlanController {
     @Autowired
     private ExercisePlanService exercisePlanService;
@@ -26,10 +26,10 @@ public class ExercisePlanController {
     // @desc    Register a user
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createNewExercisePlan(@Valid @RequestBody ExercisePlan exercisePlan, BindingResult result, Principal principal) {
+    public ResponseEntity<?> createNewExercisePlan(@Valid @RequestBody ExercisePlan exercisePlan, @PathVariable Long clientId, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        exercisePlanService.SaveOrUpdateExercisePlan(exercisePlan, principal.getName());
+        exercisePlanService.SaveOrUpdateExercisePlan(clientId, exercisePlan, principal.getName());
         return new ResponseEntity<>(exercisePlan, HttpStatus.CREATED);
 
     }

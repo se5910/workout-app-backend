@@ -1,12 +1,10 @@
 package ucmo.workoutapp.services;
 
-import org.omg.CORBA.portable.UnknownException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.ClientNotFoundException;
 import ucmo.workoutapp.exceptions.CoachNotFoundException;
-import ucmo.workoutapp.exceptions.ItemNotFoundException;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.ExercisePlanRepository;
@@ -25,15 +23,26 @@ public class ExercisePlanService {
     @Autowired
     private UserRepository userRepository;
 
-    public ExercisePlan SaveOrUpdateExercisePlan(ExercisePlan exercisePlan, String username){
+    public ExercisePlan SaveOrUpdateExercisePlan(Long clientId, ExercisePlan exercisePlan, String coach){
+        Client client = clientRepository.getById(clientId);
+
+        User request = userRepository.findByUsername(coach);
+        if(!request.isCoach()) {
+            throw new CoachNotFoundException("The account is not a coach account");
+        }
+        if (client == null) {
+            throw new ClientNotFoundException("Client not found");
+        }
+
+        if (!client.getCoach().equals(coach)) {
+            throw new CoachNotFoundException("Client not associated with this coach");
+        }
+
         if (exercisePlan.getPlanId() != null) {
             ExercisePlan existingPlan = exercisePlanRepository.getByPlanId(exercisePlan.getPlanId());
 
-            User user = userRepository.findByUsername(username);
-            Client client = clientRepository.getByUser(user);
-
             if (existingPlan != null && (!existingPlan.getClient().equals(client))) {
-                throw new PlanNotFoundException("Exercise Plan not found in your account");
+                throw new PlanNotFoundException("Exercise Plan not found for this client");
             } else if (existingPlan == null) {
                 throw new PlanNotFoundException("Plan with ID: '" + exercisePlan.getPlanId() + "' cannot be updated because it doesn't exist");
             }
@@ -41,17 +50,10 @@ public class ExercisePlanService {
             return exercisePlanRepository.save(exercisePlan);
         }
 
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
-
-        if (client == null){
-            throw new EntityNotFoundException("There is no client to associate this Exercise Plan with.");
-        }
-
         exercisePlan.setClient(client);
 
         return exercisePlanRepository.save(exercisePlan);
-
+}
     }
 
     public Iterable<ExercisePlan> findAllExercisePlans(String username) {
