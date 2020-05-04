@@ -95,7 +95,7 @@ public class ClientService {
         Client client = clientRepository.getById(clientId);
 
         if (!client.getUser().isCoach()) {
-            throw new CoachNotFoundException("You are not authorized.")
+            throw new CoachNotFoundException("You are not authorized.");
         }
 
         if (!client.getCoach().equals(coach)) {
