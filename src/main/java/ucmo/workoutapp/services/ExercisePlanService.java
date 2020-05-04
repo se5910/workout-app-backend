@@ -69,7 +69,7 @@ public class ExercisePlanService {
             throw new EntityNotFoundException("Client not found");
         }
 
-        if (!request.getUsername().equals(client.getUser().getUsername())){
+        if (!request.isCoach() && !request.getUsername().equals(client.getUser().getUsername())){
             throw new ClientNotFoundException("You are not the client of this plan");
         }
 
