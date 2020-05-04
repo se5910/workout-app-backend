@@ -46,8 +46,8 @@ public class ExercisePlanController {
     // @desc    Get exercise plan by id
     // @access  Private
     @GetMapping("/{planId}")
-    public ExercisePlan getExercisePlanById(@PathVariable Long planId, Principal principal){
-        return exercisePlanService.getExercisePlanById(planId, principal.getName());
+    public ExercisePlan getExercisePlanById(@PathVariable Long clientId, @PathVariable Long planId, Principal principal){
+        return exercisePlanService.getExercisePlanById(clientId, planId, principal.getName());
 
     }
 

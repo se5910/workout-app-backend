@@ -63,9 +63,14 @@ public class ExercisePlanService {
         return exercisePlanRepository.findAllByClient(client);
     }
 
-    public ExercisePlan getExercisePlanById(Long planId, String username) {
+    public ExercisePlan getExercisePlanById(Long clientId, Long planId, String username) {
         ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
-        Client client = clientRepository.getByUser(userRepository.findByUsername(username));
+        Client client = clientRepository.getById(clientId);
+        User request = userRepository.findByUsername(username);
+
+        if ((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
 
         if (exercisePlan == null) {
             throw new PlanNotFoundException("Exercise Plan does not exist");
