@@ -56,9 +56,22 @@ public class ExercisePlanService {
 }
 
 
-    public Iterable<ExercisePlan> findAllExercisePlans(String username) {
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
+    public Iterable<ExercisePlan> getAllExercisePlans(Long clientId, String username) {
+        User request = userRepository.findByUsername(username);
+        Client client = clientRepository.getById(clientId);
+
+        if ((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        // Client is null
+        if (client == null) {
+            throw new EntityNotFoundException("Client not found");
+        }
+
+        if (!request.getUsername().equals(client.getUser().getUsername())){
+            throw new ClientNotFoundException("You are not the client of this plan");
+        }
 
         return exercisePlanRepository.findAllByClient(client);
     }
@@ -68,18 +81,22 @@ public class ExercisePlanService {
         Client client = clientRepository.getById(clientId);
         User request = userRepository.findByUsername(username);
 
+        // You are a coach but not this client's coach
         if ((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
             throw new CoachNotFoundException("You are not the coach of this client");
         }
 
+        // Exercise plan is null
         if (exercisePlan == null) {
             throw new PlanNotFoundException("Exercise Plan does not exist");
         }
 
+        // Client is null
         if (client == null) {
             throw new EntityNotFoundException("Client not found");
         }
 
+        // You are a client but this plan does not belong to you
         if (!exercisePlan.getClient().equals(client)) {
             throw new PlanNotFoundException("Exercise Plan not found in your account");
         }
@@ -87,25 +104,8 @@ public class ExercisePlanService {
         return exercisePlan;
     }
 
-    public void deleteByExercisePlanId(Long planId, String username) {
-        exercisePlanRepository.delete(getExercisePlanById(planId, username));
+    public void deleteByExercisePlanId(Long clientId, Long planId, String username) {
+        exercisePlanRepository.delete(getExercisePlanById(clientId, planId, username));
 
-    }
-
-    public Iterable<ExercisePlan> findAllExercisePlansOfClient(Long clientId, String coach) {
-        Client client = clientRepository.getById(clientId);
-        if (client == null) {
-            throw new ClientNotFoundException("Client not found");
-        }
-
-        if (coach == null) {
-            throw new CoachNotFoundException("You are not a coach");
-        }
-
-        if (!client.getCoach().equals(coach)) {
-            throw new ClientNotFoundException("Client coach mismatch. You are not the coach of this client.\nClient coach: '" + client.getCoach() + "' \nCoach given: '" + coach + "'");
-        }
-
-        return exercisePlanRepository.findAllByClient(client);
     }
 }
