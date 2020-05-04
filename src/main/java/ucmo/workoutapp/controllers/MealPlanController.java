@@ -5,18 +5,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ucmo.workoutapp.entities.ExercisePlan;
 import ucmo.workoutapp.entities.MealPlan;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.MealPlanService;
-import ucmo.workoutapp.services.MealService;
 
 import javax.validation.Valid;
 import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/mealPlan")
+@RequestMapping("/api/client/{clientId}/mealPlan")
 public class MealPlanController {
     @Autowired
     private MealPlanService mealPlanService;
@@ -28,10 +26,10 @@ public class MealPlanController {
     // @desc    Create New meal plan
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createNewMealPlan(@Valid @RequestBody MealPlan mealPlan, BindingResult result, Principal principal) {
+    public ResponseEntity<?> createNewMealPlan(@Valid @RequestBody MealPlan mealPlan, @PathVariable Long clientId, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        mealPlanService.SaveOrUpdateMealPlan(mealPlan, principal.getName());
+        mealPlanService.SaveOrUpdateMealPlan(clientId, mealPlan, principal.getName());
         return new ResponseEntity<>(mealPlan, HttpStatus.CREATED);
 
     }

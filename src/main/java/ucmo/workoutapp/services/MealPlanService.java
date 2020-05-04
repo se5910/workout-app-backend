@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.ClientNotFoundException;
-import ucmo.workoutapp.exceptions.ItemNotFoundException;
+import ucmo.workoutapp.exceptions.CoachNotFoundException;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.MealPlanRepository;
@@ -23,25 +23,31 @@ public class MealPlanService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public MealPlan SaveOrUpdateMealPlan(MealPlan mealPlan, String username) {
+    public MealPlan SaveOrUpdateMealPlan(Long clientId, MealPlan mealPlan, String coach) {
+        Client client = clientRepository.getById(clientId);
+
+        User request = userRepository.findByUsername(coach);
+        if(!request.isCoach()) {
+            throw new CoachNotFoundException("The account is not a coach account");
+        }
+        if (client == null) {
+            throw new ClientNotFoundException("Client not found");
+        }
+
+        if (!client.getCoach().equals(coach)) {
+            throw new CoachNotFoundException("Client not associated with this coach");
+        }
+
         if (mealPlan.getPlanId() != null) {
             MealPlan existingPlan = mealPlanRepository.getByPlanId(mealPlan.getPlanId());
-
-            User user = userRepository.findByUsername(username);
-            Client client = clientRepository.getByUser(user);
 
             if (existingPlan != null && (!existingPlan.getClient().equals(client))) {
                 throw new PlanNotFoundException("Meal Plan not found in your account");
             } else if (existingPlan == null) {
                 throw new PlanNotFoundException("Plan with ID: '" + mealPlan.getPlanId() + "' cannot be updated because it doesn't exist");
             }
-        }
 
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
-
-        if (client == null){
-            throw new EntityNotFoundException("There is no client to associate this MealPlan with.");
+            return mealPlanRepository.save(mealPlan);
         }
 
         mealPlan.setClient(client);
@@ -68,9 +74,6 @@ public class MealPlanService {
             throw new EntityNotFoundException("Client not found");
         }
 
-        if (mealPlan.getClient() == null){
-            throw new EntityNotFoundException("This plan does not belong to any client.");
-        }
         if (!mealPlan.getClient().equals(client)) {
             throw new PlanNotFoundException("This plan does not belong to " + client.getName());
         }
@@ -78,8 +81,8 @@ public class MealPlanService {
         return mealPlan;
     }
 
-    public void deleteByMealPlanId(Long id, String username) {
-        mealPlanRepository.delete(getMealPlanById(id, username));
+    public void deleteByMealPlanId(Long planId, String username) {
+        mealPlanRepository.delete(getMealPlanById(planId, username));
     }
 
     public Iterable<MealPlan> findAllMealPlansOfClient(Long clientId, String coach) {
@@ -88,8 +91,12 @@ public class MealPlanService {
             throw new ClientNotFoundException("Client not found");
         }
 
+        if (coach == null) {
+            throw new CoachNotFoundException("You are not a coach");
+        }
+
         if (!client.getCoach().equals(coach)) {
-            throw new ClientNotFoundException("No clients found in your account");
+            throw new ClientNotFoundException("Client coach mismatch. You are not the coach of this client.\nClient coach: '" + client.getCoach() + "' \nCoach given: '" + coach + "'");
         }
 
         return mealPlanRepository.findAllByClient(client);
