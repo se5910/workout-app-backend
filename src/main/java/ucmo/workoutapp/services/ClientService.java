@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.Client;
 import ucmo.workoutapp.entities.User;
 import ucmo.workoutapp.exceptions.ClientNotFoundException;
+import ucmo.workoutapp.exceptions.CoachNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.UserRepository;
 
@@ -34,7 +35,7 @@ public class ClientService {
         } else {
 
             clientObject.setUser(user);
-            clientObject.setCoach("irlejohn@gmail.com");
+            clientObject.setCoach("test");
             return clientRepository.save(clientObject);
         }
     }
@@ -88,6 +89,25 @@ public class ClientService {
         System.out.println(username);
         return clientRepository.findAllByCoach(username);
 
+    }
+
+    public Client approveClient(Long clientId, String coach) {
+        Client client = clientRepository.getById(clientId);
+
+        if (!client.getUser().isCoach()) {
+            throw new CoachNotFoundException("You are not authorized.")
+        }
+
+        if (!client.getCoach().equals(coach)) {
+            throw new ClientNotFoundException("This client does not exist in your account");
+        }
+
+        client.setApproved(true);
+        client.setCoach(coach);
+
+        clientRepository.save(client);
+
+        return client;
     }
 
 }

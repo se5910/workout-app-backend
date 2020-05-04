@@ -61,6 +61,8 @@ public class Client {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
+    private boolean isApproved = false;
+
     public Client() {
     }
 
@@ -195,5 +197,13 @@ public class Client {
     }
     public void setCoach(String coach) {
         this.coach = coach;
+    }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved) {
+        isApproved = approved;
     }
 }
