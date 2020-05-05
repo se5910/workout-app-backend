@@ -23,10 +23,10 @@ public class MealPlanService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public MealPlan SaveOrUpdateMealPlan(Long clientId, MealPlan mealPlan, String coach) {
+    public MealPlan SaveOrUpdateMealPlan(Long clientId, MealPlan mealPlan, String username) {
         Client client = clientRepository.getById(clientId);
+        User request = userRepository.findByUsername(username);
 
-        User request = userRepository.findByUsername(coach);
         if(!request.isCoach()) {
             throw new CoachNotFoundException("The account is not a coach account");
         }
@@ -34,7 +34,11 @@ public class MealPlanService {
             throw new ClientNotFoundException("Client not found");
         }
 
-        if (!client.getCoach().equals(coach)) {
+        if (mealPlan == null) {
+            throw new EntityNotFoundException("Meal plan not found");
+        }
+
+        if (!client.getCoach().equals(username)) {
             throw new CoachNotFoundException("Client not associated with this coach");
         }
 
@@ -47,7 +51,7 @@ public class MealPlanService {
                 throw new PlanNotFoundException("Plan with ID: '" + mealPlan.getPlanId() + "' cannot be updated because it doesn't exist");
             }
 
-            return mealPlanRepository.save(mealPlan);
+            return mealPlanRepository.save(existingPlan);
         }
 
         mealPlan.setClient(client);

@@ -31,19 +31,19 @@ public class MealService {
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
 
-        if (meal == null){
-            throw new EntityNotFoundException("Template is null");
+        if (!request.isCoach()){
+            throw new CoachNotFoundException("You are not a coach");
         }
 
         if (mealPlan == null) {
             throw new PlanNotFoundException("Exercise Plan does not exist");
         }
 
-        if (!request.isCoach()){
-            throw new CoachNotFoundException("You are not a coach");
+        if (meal == null) {
+            throw new EntityNotFoundException("Template is null");
         }
 
-        if(!mealPlan.getClient().getUser().getUsername().equals(username) || !mealPlan.getClient().getCoach().equals(request.getUsername())){
+        if (!mealPlan.getClient().getUser().getUsername().equals(username) || !mealPlan.getClient().getCoach().equals(request.getUsername())) {
             throw new CoachNotFoundException("You are no the client or you are not the client's coach");
         }
 

@@ -47,6 +47,18 @@ public class TemplateService {
             throw new CoachNotFoundException("Wrong client or coach permissions!");
         }
 
+        if (template.getId() != null){
+            Template existingTemplate = templateRepository.getById(template.getId());
+
+            if (existingTemplate != null && !existingTemplate.getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
+                throw new PlanNotFoundException("Exercise Plan not found in your account");
+            } else if (existingTemplate == null){
+                throw new PlanNotFoundException("Plan with ID: " + exercisePlan.getPlanId() + "' cannot be updated because it doesn't exist");
+            }
+
+            return templateRepository.save(existingTemplate);
+        }
+
         template.setExercisePlan(exercisePlan);
 
         return templateRepository.save(template);
