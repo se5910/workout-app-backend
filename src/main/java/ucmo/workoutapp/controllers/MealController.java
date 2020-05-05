@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/mealPlan/{planId}/meal")
+@RequestMapping("/api/client/{clientId}/mealPlan/{planId}/meal")
 public class MealController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -43,15 +43,15 @@ public class MealController {
     }
 
     @DeleteMapping("/{mealId}")
-    public ResponseEntity<?> deleteMealById(@PathVariable Long mealId, Principal principal){
-         mealService.deleteMealById(mealId,principal.getName());
+    public ResponseEntity<?> deleteMealById(@PathVariable Long planId,@PathVariable Long mealId, Principal principal){
+         mealService.deleteMealById(planId, mealId, principal.getName());
 
         return new ResponseEntity<>("Meal with ID: '" + mealId + "' was deleted.", HttpStatus.OK);
     }
 
     @GetMapping("")
     public ResponseEntity<?> getAllMealsByPlanId(@PathVariable Long planId, Principal principal){
-        Iterable<Meal> meals = mealService.getallMealsForMealPlanById(planId, principal.getName());
+        Iterable<Meal> meals = mealService.getAllMealsForMealPlanById(planId, principal.getName());
 
         return new ResponseEntity<>(meals, HttpStatus.OK);
     }
