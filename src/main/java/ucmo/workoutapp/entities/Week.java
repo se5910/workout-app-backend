@@ -13,7 +13,6 @@ public class Week {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Week name cannot be blank")
     private Integer week = 0;
 
     @ManyToOne(fetch = FetchType.EAGER)
