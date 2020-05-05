@@ -31,7 +31,7 @@ public class Client {
     @OneToOne(fetch = FetchType.EAGER)
     private User user;
 
-    @NotBlank
+    @NotBlank(message = "Coach is required")
     private String coach;
 
     @NotNull(message = "Height is required")
