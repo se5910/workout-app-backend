@@ -1,7 +1,4 @@
 package ucmo.workoutapp.exceptions;
-// 
-// John Irle
-// 23 April 2020
 
 public class CoachNotFoundExceptionResponse {
 

@@ -1,7 +1,4 @@
 package ucmo.workoutapp.payload;
-// 
-// John Irle
-// 08 April 2020
 
 import javax.validation.constraints.NotBlank;
 
