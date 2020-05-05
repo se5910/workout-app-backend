@@ -43,7 +43,7 @@ public class MealController {
     }
 
     @DeleteMapping("/{mealId}")
-    public ResponseEntity<?> deleteMealById(@PathVariable Long planId,@PathVariable Long mealId, Principal principal){
+    public ResponseEntity<?> deleteMealById(@PathVariable Long planId, @PathVariable Long mealId, Principal principal){
          mealService.deleteMealById(planId, mealId, principal.getName());
 
         return new ResponseEntity<>("Meal with ID: '" + mealId + "' was deleted.", HttpStatus.OK);
