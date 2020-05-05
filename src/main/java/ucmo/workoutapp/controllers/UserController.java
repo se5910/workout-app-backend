@@ -88,7 +88,7 @@ public class UserController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
 
-        Client newClient = clientService.SaveOrUpdateClient(client, principal.getName());
+        Client newClient = clientService.createOrUpdateClient(client, principal.getName());
         return new ResponseEntity<>(newClient, HttpStatus.OK);
     }
 
