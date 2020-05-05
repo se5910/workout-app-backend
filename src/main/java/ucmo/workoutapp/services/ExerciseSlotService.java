@@ -125,10 +125,6 @@ public class ExerciseSlotService {
             throw new EntityNotFoundException("Exercise Slot not found");
         }
 
-        if (exercise == null) {
-            throw new EntityNotFoundException("Exercise not found.");
-        }
-
         if (!request.isCoach()) {
             throw new CoachNotFoundException("You are not a coach you cannot create or update a template");
         }
@@ -137,10 +133,12 @@ public class ExerciseSlotService {
             throw new CoachNotFoundException("You are not the coach of this client or you are not a coach at all.");
         }
 
-        if (exercise != null) {
-            Exercise newExercise = exerciseRepository.getById(exerciseId);
+        if (exerciseSlot != null) {
+            ExerciseSlot existingExerciseSlot = exerciseSlotRepository.getById(exerciseId);
 
-            exerciseSlot.setExerciseId(newExercise.getId());
+            existingExerciseSlot.setWeeks(exerciseSlot.getWeeks());
+            existingExerciseSlot.setTemplate(exerciseSlot.getTemplate());
+            existingExerciseSlot.setExerciseId(exerciseSlot.getExerciseId());
 
             return exerciseSlotRepository.save(exerciseSlot);
         }
