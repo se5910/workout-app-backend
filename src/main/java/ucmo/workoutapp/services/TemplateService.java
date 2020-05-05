@@ -56,7 +56,26 @@ public class TemplateService {
 
     public Template getTemplateById(Long planId, Long templateId, String username){
         ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
-        return templateRepository.getById(templateId);
+        User request = userRepository.findByUsername(username);
+        Template template = templateRepository.getById(templateId);
+
+        if (exercisePlan == null){
+            throw new PlanNotFoundException("Exercise Plan does not exist");
+        }
+
+        if (template == null) {
+            throw new EntityNotFoundException("Template Not found");
+        }
+
+        if ((request.isCoach() && !exercisePlan.getClient().getCoach().equals(request.getUsername()))){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (!exercisePlan.getClient().equals(clientRepository.getByUser(request))) {
+            throw new PlanNotFoundException("Exercise Plan not found in your account");
+        }
+
+        return template;
 
     }
 

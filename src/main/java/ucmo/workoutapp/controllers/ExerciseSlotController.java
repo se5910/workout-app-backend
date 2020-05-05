@@ -29,7 +29,9 @@ public class ExerciseSlotController {
     // @access  Private
     @PostMapping("")
     public ResponseEntity<?> createExerciseSlotForTemplate(@Valid @RequestBody ExerciseSlot exerciseSlot, BindingResult result, @PathVariable Long templateId, Principal principal) {
-        exerciseSlotService.createExerciseSlotForTemplate(exerciseSlot, templateId, principal.getName());
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+        exerciseSlotService.createOrUpdateExerciseSlot(exerciseSlot, templateId, principal.getName());
 
         return new ResponseEntity<>(exerciseSlot, HttpStatus.CREATED);
     }

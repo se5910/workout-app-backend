@@ -2,11 +2,11 @@ package ucmo.workoutapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ucmo.workoutapp.entities.Exercise;
-import ucmo.workoutapp.entities.ExerciseSlot;
-import ucmo.workoutapp.entities.Template;
-import ucmo.workoutapp.entities.Week;
+import ucmo.workoutapp.entities.*;
+import ucmo.workoutapp.exceptions.CoachNotFoundException;
 import ucmo.workoutapp.repositories.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class ExerciseSlotService {
@@ -19,8 +19,31 @@ public class ExerciseSlotService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    public ExerciseSlot createExerciseSlotForTemplate(ExerciseSlot exerciseSlot, Long templateId, String username){
+    @Autowired
+    private UserRepository userRepository;
+
+    public ExerciseSlot createOrUpdateExerciseSlot(ExerciseSlot exerciseSlot, Long templateId, String username){
         Template template = templateRepository.getById(templateId);
+        User request = userRepository.findByUsername(username);
+
+        if (exerciseSlot == null) {
+            throw new EntityNotFoundException("ExerciseSlot is null");
+        }
+
+        if (template == null) {
+            throw new EntityNotFoundException("Template does not exist");
+        }
+
+        if (!request.isCoach() || !template.getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+            throw new CoachNotFoundException("You are not the coach of this client or you are not a coach at all.");
+        }
+
+        if (exerciseSlot.getId() != null){
+            ExerciseSlot existingExerciseSlot = exerciseSlotRepository.getById(exerciseSlot.getId());
+
+            return exerciseSlotRepository.save(existingExerciseSlot);
+        }
+
         exerciseSlot.setTemplate(template);
 
         return exerciseSlotRepository.save(exerciseSlot);
