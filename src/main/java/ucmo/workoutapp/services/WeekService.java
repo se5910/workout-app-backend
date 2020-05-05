@@ -7,6 +7,7 @@ import ucmo.workoutapp.entities.Template;
 import ucmo.workoutapp.entities.User;
 import ucmo.workoutapp.entities.Week;
 import ucmo.workoutapp.exceptions.CoachNotFoundException;
+import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -92,5 +93,24 @@ public class WeekService {
         Week week = getWeekById(weekId, username);
 
         weekRepository.delete(week);
+    }
+
+    public Iterable<Week> getAllWeeksByExerciseSlotId(Long exerciseSlotId, String username) {
+        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
+        User request = userRepository.findByUsername(username);
+
+        if (exerciseSlot == null) {
+            throw new PlanNotFoundException("Template does not exist");
+        }
+
+        if (request.isCoach() && !exerciseSlot.getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (!request.isCoach() && !exerciseSlot.getTemplate().getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
+            throw new PlanNotFoundException("Exercise Plan not found in your account");
+        }
+
+        return exerciseSlot.getWeeks();
     }
 }

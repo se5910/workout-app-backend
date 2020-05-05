@@ -65,7 +65,7 @@ public class ExerciseSlotService {
             throw new PlanNotFoundException("Template does not exist");
         }
 
-        if (request.isCoach() && !template.getExercisePlan().getClient().equals(request.getUsername())) {
+        if (request.isCoach() && !template.getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
             throw new CoachNotFoundException("You are not the coach of this client");
         }
 

@@ -58,8 +58,8 @@ public class MealService {
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
 
-        if(!mealPlan.getClient().getUser().getUsername().equals(username) || !mealPlan.getClient().getCoach().equals(request.getUsername())){
-            throw new CoachNotFoundException("You are no the client or you are not the client's coach");
+        if(!mealPlan.getClient().getUser().equals(request) || !mealPlan.getClient().getCoach().equals(request.getUsername())){
+            throw new CoachNotFoundException("You are not the client or you are not the client's coach");
         }
 
         return mealRepository.getAllByMealPlan(planId);
@@ -70,7 +70,7 @@ public class MealService {
         User request = userRepository.findByUsername(username);
 
         if(!mealPlan.getClient().getUser().getUsername().equals(username) || !mealPlan.getClient().getCoach().equals(request.getUsername())){
-            throw new CoachNotFoundException("You are no the client or you are not the client's coach");
+            throw new CoachNotFoundException("You are not the client or you are not the client's coach");
         }
 
         return mealRepository.getById(mealId);

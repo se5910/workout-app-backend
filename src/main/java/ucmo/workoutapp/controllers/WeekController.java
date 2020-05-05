@@ -35,6 +35,13 @@ public class WeekController {
         return new ResponseEntity<>(week, HttpStatus.CREATED);
     }
 
+    @GetMapping("")
+    public ResponseEntity<?> getAllWeeksByExerciseSlotId(@PathVariable Long exerciseSlotId, Principal principal) {
+        Iterable<Week> weeks = weekService.getAllWeeksByExerciseSlotId(exerciseSlotId, principal.getName());
+
+        return new ResponseEntity<>(weeks, HttpStatus.OK);
+    }
+
     // @route   GET api/exercise/:planId/:templateId/:weekId
     // @desc    Get all weeks from template
     // @access  Private
