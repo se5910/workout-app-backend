@@ -26,7 +26,7 @@ public class MealPlanController {
     // @desc    Create New meal plan
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createNewMealPlan(@Valid @RequestBody MealPlan mealPlan, @PathVariable Long clientId, BindingResult result, Principal principal) {
+    public ResponseEntity<?> saveOrUpdateMealPlan(@Valid @RequestBody MealPlan mealPlan, @PathVariable Long clientId, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
         mealPlanService.SaveOrUpdateMealPlan(clientId, mealPlan, principal.getName());

@@ -26,10 +26,10 @@ public class MealController {
     // @desc    Create meal for meal plan
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createMealForMealPlan(@Valid @RequestBody Meal meal, BindingResult result, @PathVariable Long planId, Principal principal){
+    public ResponseEntity<?> saveOrUpdateMeal(@Valid @RequestBody Meal meal, BindingResult result, @PathVariable Long planId, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        mealService.createMealForMealPlan(meal, planId, principal.getName());
+        mealService.saveOrUpdateMeal(meal, planId, principal.getName());
 
         return new ResponseEntity<>(meal, HttpStatus.CREATED);
     }
