@@ -67,11 +67,11 @@ public class TemplateService {
             throw new EntityNotFoundException("Template Not found");
         }
 
-        if ((request.isCoach() && !exercisePlan.getClient().getCoach().equals(request.getUsername()))){
+        if (request.isCoach() && !exercisePlan.getClient().getCoach().equals(request.getUsername())){
             throw new CoachNotFoundException("You are not the coach of this client");
         }
 
-        if (!exercisePlan.getClient().equals(clientRepository.getByUser(request))) {
+        if (!request.isCoach() && !exercisePlan.getClient().equals(clientRepository.getByUser(request))) {
             throw new PlanNotFoundException("Exercise Plan not found in your account");
         }
 
@@ -82,19 +82,31 @@ public class TemplateService {
     public void deleteTemplateFromExercisePlan(Long planId, Long templateId, String username){
         User request = userRepository.findByUsername(username);
 
+        // Prevent !coach from going any further
         if (!request.isCoach()) {
             throw new CoachNotFoundException("You are not a coach. You cannot delete a plan");
         }
 
-        templateRepository.delete(getTemplateById(planId, templateId, username));
+        // Utilize getTemplateById checks to ensure coach username matches client username from plan
+        Template template = getTemplateById(planId, templateId, username);
+
+        templateRepository.delete(template);
     }
 
     public Iterable<Template> getAllTemplatesById(Long planId, String username){
         ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
 
-        if(!exercisePlan.getClient().getUser().getUsername().equals(username) || !exercisePlan.getClient().getCoach().equals(request.getUsername())){
-            throw new CoachNotFoundException("Wrong client or coach permissions!");
+        if (exercisePlan == null){
+            throw new PlanNotFoundException("Exercise Plan does not exist");
+        }
+
+        if (request.isCoach() && !exercisePlan.getClient().getCoach().equals(request.getUsername())){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (!request.isCoach() && !exercisePlan.getClient().equals(clientRepository.getByUser(request))) {
+            throw new PlanNotFoundException("Exercise Plan not found in your account. Unable to locate templates.");
         }
 
         return exercisePlan.getTemplates();

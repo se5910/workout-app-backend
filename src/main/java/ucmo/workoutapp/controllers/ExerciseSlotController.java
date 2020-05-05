@@ -28,7 +28,7 @@ public class ExerciseSlotController {
     // @desc    Create exercise Slot for template
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createExerciseSlotForTemplate(@Valid @RequestBody ExerciseSlot exerciseSlot, BindingResult result, @PathVariable Long templateId, Principal principal) {
+    public ResponseEntity<?> createOrUpdateExerciseSlot(@Valid @RequestBody ExerciseSlot exerciseSlot, @PathVariable Long templateId, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
         exerciseSlotService.createOrUpdateExerciseSlot(exerciseSlot, templateId, principal.getName());
@@ -40,7 +40,7 @@ public class ExerciseSlotController {
     // @desc    Create exercise Slot for template
     // @access  Private
     @GetMapping("")
-    public Iterable<ExerciseSlot> getAllExerciseSlotsByTemplateId(@PathVariable Long templateId, Principal principal){
+    public Iterable<ExerciseSlot> getAllExerciseSlotsById(@PathVariable Long templateId, Principal principal){
         return exerciseSlotService.getAllExerciseSlotsByTemplateId(templateId, principal.getName());
     }
 
@@ -48,8 +48,8 @@ public class ExerciseSlotController {
     // @desc    Get all exercise slots from template
     // @access  Private
     @GetMapping("/{exerciseSlotId}")
-    public ResponseEntity<?> getExerciseSlotById(@PathVariable Long exerciseSlotId, Principal principal){
-       ExerciseSlot exerciseSlot = exerciseSlotService.getExerciseSlotById(exerciseSlotId, principal.getName());
+    public ResponseEntity<?> getExerciseSlotById(@PathVariable Long templateId, @PathVariable Long exerciseSlotId, Principal principal){
+       ExerciseSlot exerciseSlot = exerciseSlotService.getExerciseSlotById(templateId, exerciseSlotId, principal.getName());
 
         return new ResponseEntity<>(exerciseSlot, HttpStatus.OK);
     }
@@ -58,7 +58,7 @@ public class ExerciseSlotController {
     // @desc    Get all exercise slots from template
     // @access  Private
     @DeleteMapping("/{exerciseSlotId}")
-    public ResponseEntity<?> deleteExercisesSlotById(@PathVariable Long exerciseSlotId, Principal principal){
+    public ResponseEntity<?> deleteExercisesSlotById(@PathVariable Long exerciseSlotId, @PathVariable Long templateId, Principal principal){
         exerciseSlotService.deleteExerciseSlotById(exerciseSlotId, principal.getName());
 
         return new ResponseEntity<>("Exercise slot with ID: '" + exerciseSlotId + "' was deleted.", HttpStatus.OK);

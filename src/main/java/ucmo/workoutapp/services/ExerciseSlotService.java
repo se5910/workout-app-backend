@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.CoachNotFoundException;
+import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -21,6 +22,9 @@ public class ExerciseSlotService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     public ExerciseSlot createOrUpdateExerciseSlot(ExerciseSlot exerciseSlot, Long templateId, String username){
         Template template = templateRepository.getById(templateId);
@@ -51,22 +55,64 @@ public class ExerciseSlotService {
 
     public Iterable<ExerciseSlot> getAllExerciseSlotsByTemplateId(Long templateId, String username){
         Template template = templateRepository.getById(templateId);
+        User request = userRepository.findByUsername(username);
+
+        if (template == null) {
+            throw new PlanNotFoundException("Template does not exist");
+        }
+
+        if (request.isCoach() && !template.getExercisePlan().getClient().equals(request.getUsername())) {
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (!request.isCoach() && !template.getExercisePlan().getClient().equals(request.getUsername())) {
+            throw new PlanNotFoundException("Exercise Plan not found in your account");
+        }
 
         return template.getExerciseSlots();
     }
 
-    public ExerciseSlot getExerciseSlotById(Long exerciseSlotId, String username){
-        return exerciseSlotRepository.getById(exerciseSlotId);
+    public ExerciseSlot getExerciseSlotById(Long templateId, Long exerciseSlotId, String username) {
+        Template template = templateRepository.getById(templateId);
+        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
+        User request = userRepository.findByUsername(username);
 
+        if (template == null){
+            throw new PlanNotFoundException("Exercise Plan does not exist");
+        }
+
+        if (exerciseSlot == null) {
+            throw new EntityNotFoundException("Template Not found");
+        }
+
+        if (request.isCoach() && !template.getExercisePlan().getClient().getCoach().equals(request.getUsername())){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (!request.isCoach() && !template.getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
+            throw new PlanNotFoundException("Exercise Plan not found in your account");
+        }
+
+        return exerciseSlot;
     }
 
-    public void deleteExerciseSlotById(Long exerciseSlotId, String username){
-        exerciseSlotRepository.delete(getExerciseSlotById(exerciseSlotId, username));
+    public void deleteExerciseSlotById(Long templateId, Long exerciseSlotId, String username) {
+        User request = userRepository.findByUsername(username);
+
+        // Prevent !coach from going any further
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach. You cannot delete a plan");
+        }
+
+        // Utilize getExerciseSlot checks to ensure coach username matches client username from plan
+        ExerciseSlot exerciseSlot = getExerciseSlotById(templateId, exerciseSlotId, username);
+
+        exerciseSlotRepository.delete(exerciseSlot);
 
     }
 
     // Returns exercise slot because we are actually changing the exercise slot by adding an exercise to it
-    public ExerciseSlot createExerciseForExerciseSlot(Long exericseSlotId, Long exerciseId, String username){
+    public ExerciseSlot createExerciseForExerciseSlot(Long exericseSlotId, Long exerciseId, String username) {
         ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exericseSlotId);
 
         exerciseSlot.setExerciseId(exerciseId);

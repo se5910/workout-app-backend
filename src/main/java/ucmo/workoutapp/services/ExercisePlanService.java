@@ -54,13 +54,13 @@ public class ExercisePlanService {
         User request = userRepository.findByUsername(username);
         Client client = clientRepository.getById(clientId);
 
-        if ((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
-            throw new CoachNotFoundException("You are not the coach of this client");
-        }
-
         // Client is null
         if (client == null) {
             throw new EntityNotFoundException("Client not found");
+        }
+
+        if ((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
+            throw new CoachNotFoundException("You are not the coach of this client");
         }
 
         if (!request.isCoach() && !request.getUsername().equals(client.getUser().getUsername())){
@@ -75,11 +75,6 @@ public class ExercisePlanService {
         Client client = clientRepository.getById(clientId);
         User request = userRepository.findByUsername(username);
 
-        // You are a coach but not this client's coach
-        if ((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
-            throw new CoachNotFoundException("You are not the coach of this client");
-        }
-
         // Exercise plan is null
         if (exercisePlan == null) {
             throw new PlanNotFoundException("Exercise Plan does not exist");
@@ -90,8 +85,13 @@ public class ExercisePlanService {
             throw new EntityNotFoundException("Client not found");
         }
 
+        // You are a coach but not this client's coach
+        if ((request.isCoach() && !client.getCoach().equals(request.getUsername()))){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
         // You are a client but this plan does not belong to you
-        if (!exercisePlan.getClient().equals(client)) {
+        if (request.isCoach() && !exercisePlan.getClient().equals(client)) {
             throw new PlanNotFoundException("Exercise Plan not found in your account");
         }
 
@@ -99,8 +99,16 @@ public class ExercisePlanService {
     }
 
     public void deleteByExercisePlanId(Long clientId, Long planId, String username) {
-        exercisePlanRepository.delete(getExercisePlanById(clientId, planId, username));
+        User request = userRepository.findByUsername(username);
 
+        // Prevent !coach from going any further
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach. You cannot delete a plan");
+        }
 
+        // Utilize getTemplateById checks to ensure coach username matches client username from plan
+        ExercisePlan exercisePlan = getExercisePlanById(clientId, planId, username);
+
+        exercisePlanRepository.delete(exercisePlan);
     }
 }
