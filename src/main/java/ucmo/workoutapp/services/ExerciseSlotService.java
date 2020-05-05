@@ -108,7 +108,7 @@ public class ExerciseSlotService {
             throw new CoachNotFoundException("You are not a coach. You cannot delete a plan");
         }
 
-        // Utilize getExerciseSlot checks to ensure coach username matches client username from plan
+        // Utilize getExerciseSlot checks to insure coach username matches client username from plan
         ExerciseSlot exerciseSlot = getExerciseSlotById(templateId, exerciseSlotId, username);
 
         exerciseSlotRepository.delete(exerciseSlot);

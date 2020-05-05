@@ -111,7 +111,7 @@ public class ExercisePlanService {
             throw new CoachNotFoundException("You are not a coach. You cannot delete a plan");
         }
 
-        // Utilize getTemplateById checks to ensure coach username matches client username from plan
+        // Utilize getTemplateById checks to insure coach username matches client username from plan
         ExercisePlan exercisePlan = getExercisePlanById(clientId, planId, username);
 
         exercisePlanRepository.delete(exercisePlan);

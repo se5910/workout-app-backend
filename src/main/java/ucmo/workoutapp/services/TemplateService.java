@@ -31,7 +31,7 @@ public class TemplateService {
         ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
 
-        if (template == null){
+        if (template == null) {
             throw new EntityNotFoundException("Template is null");
         }
 
@@ -95,7 +95,7 @@ public class TemplateService {
             throw new CoachNotFoundException("You are not a coach. You cannot delete a plan");
         }
 
-        // Utilize getTemplateById checks to ensure coach username matches client username from plan
+        // Utilize getTemplateById checks to insure coach username matches client username from plan
         Template template = getTemplateById(planId, templateId, username);
 
         templateRepository.delete(template);

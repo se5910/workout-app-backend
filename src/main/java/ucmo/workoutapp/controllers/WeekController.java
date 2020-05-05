@@ -27,7 +27,7 @@ public class WeekController {
     // @desc    Create week for template
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createWeekForExerciseSlot(@Valid @RequestBody Week week, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal) {
+    public ResponseEntity<?> createOrUpdateWeek(@Valid @RequestBody Week week, BindingResult result, @PathVariable Long exerciseSlotId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
         weekService.createWeekForExerciseSlot(week, exerciseSlotId, principal.getName());
@@ -46,7 +46,7 @@ public class WeekController {
     }
 
     @DeleteMapping("/{weekId}")
-    public ResponseEntity<?> deleteWeekFromTemplate(@PathVariable Long weekId, Principal principal){
+    public ResponseEntity<?> deleteWeekFromExerciseSlot(@PathVariable Long weekId, Principal principal){
         weekService.deleteWeekById(weekId, principal.getName());
 
         return new ResponseEntity<>("Week with ID: '" + weekId + "' was deleted.", HttpStatus.OK);
