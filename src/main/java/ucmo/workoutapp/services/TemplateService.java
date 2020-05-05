@@ -39,8 +39,12 @@ public class TemplateService {
             throw new PlanNotFoundException("Exercise Plan does not exist");
         }
 
-        if (!request.isCoach() || !exercisePlan.getClient().getCoach().equals(request.getUsername())) {
-            throw new CoachNotFoundException("You are not the coach of this client or you are not a coach at all.");
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach you cannot create or update a template");
+        }
+
+        if (request.isCoach() && !exercisePlan.getClient().getCoach().equals(request.getUsername())){
+            throw new CoachNotFoundException("You are not the coach of this client");
         }
 
         if (template.getId() != null){

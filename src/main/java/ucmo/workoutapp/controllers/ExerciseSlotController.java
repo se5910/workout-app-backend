@@ -68,8 +68,8 @@ public class ExerciseSlotController {
     // @desc    Create an exercise for exercise slot
     // @access  Private
     @PostMapping("/{exerciseSlotId}/exercise/{exerciseId}")
-    public ResponseEntity<?> createExerciseForExerciseSlot(@PathVariable Long exerciseSlotId, @PathVariable Long exerciseId, Principal principal){
-        exerciseSlotService.createExerciseForExerciseSlot(exerciseSlotId, exerciseId, principal.getName());
+    public ResponseEntity<?> createOrUpdateExerciseForExerciseSlot(@PathVariable Long exerciseSlotId, @PathVariable Long exerciseId, Principal principal){
+        exerciseSlotService.createOrUpdateExerciseForExerciseSlot(exerciseSlotId, exerciseId, principal.getName());
 
         return new ResponseEntity<>("Exercise with ID: '" + exerciseId + "' was added to ExerciseSlot with ID: '" + exerciseSlotId + "'.", HttpStatus.CREATED);
     }

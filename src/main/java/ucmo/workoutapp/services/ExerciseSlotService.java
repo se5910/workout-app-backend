@@ -112,8 +112,26 @@ public class ExerciseSlotService {
     }
 
     // Returns exercise slot because we are actually changing the exercise slot by adding an exercise to it
-    public ExerciseSlot createExerciseForExerciseSlot(Long exericseSlotId, Long exerciseId, String username) {
-        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exericseSlotId);
+    public ExerciseSlot createOrUpdateExerciseForExerciseSlot(Long exerciseSlotId, Long exerciseId, String username) {
+        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
+        Exercise exercise = exerciseRepository.getById(exerciseSlot.getExerciseId());
+        User request = userRepository.findByUsername(username);
+
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach you cannot create or update a template");
+        }
+
+        if (request.isCoach() || !exerciseSlot.getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+            throw new CoachNotFoundException("You are not the coach of this client or you are not a coach at all.");
+        }
+
+        if (exercise != null) {
+            Exercise newExercise = exerciseRepository.getById(exerciseId);
+
+            exerciseSlot.setExerciseId(newExercise.getId());
+
+            return exerciseSlotRepository.save(exerciseSlot);
+        }
 
         exerciseSlot.setExerciseId(exerciseId);
 
@@ -122,7 +140,22 @@ public class ExerciseSlotService {
 
     // Get the exercise from the exercise slot by id
     public Exercise getExerciseFromExerciseSlotById(Long exerciseSlotId, String username){
-        return exerciseRepository.getById(exerciseSlotRepository.getById(exerciseSlotId).getExerciseId());
+        User request = userRepository.findByUsername(username);
+        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
+
+        if (exerciseSlot == null){
+            throw new PlanNotFoundException("Exercise Plan does not exist");
+        }
+
+        if (request.isCoach() && !exerciseSlot.getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (!request.isCoach() && !exerciseSlot.getTemplate().getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
+            throw new PlanNotFoundException("Exercise Plan not found in your account");
+        }
+
+        return exerciseRepository.getById(exerciseSlot.getExerciseId());
 
     }
 
