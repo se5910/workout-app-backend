@@ -2,13 +2,9 @@ package ucmo.workoutapp.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ucmo.workoutapp.entities.Day;
-
-import java.util.List;
+import ucmo.workoutapp.entities.Week;
 
 @Repository
-public interface DayRepository extends CrudRepository<Day, Long> {
-    Day getById(Long id);
-
-
+public interface WeekRepository extends CrudRepository<Week, Long> {
+    Week getById(Long id);
 }

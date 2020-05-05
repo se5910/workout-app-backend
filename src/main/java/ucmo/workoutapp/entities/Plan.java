@@ -14,7 +14,7 @@ public class Plan {
     private Long planId;
 
     // Each plan has one client
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Client client;
 
     @JsonFormat(pattern = "yyyy-mm-dd")

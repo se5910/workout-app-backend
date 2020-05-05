@@ -13,16 +13,17 @@ public class ExerciseSlot {
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
-    @JsonIgnore
-    private List<Sets> sets = new ArrayList<>();
+    private List<Week> weeks = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
-    @JsonIgnore
-    private Exercise exercise;
+    // Might want to make this muscleGroup and exerciseName
+    // Reasoning: Drop down list selection like in google docs & displaying the information to the client when they look at the exercise
+    // but I guess we can do that by just pulling the information via this id *idk*
+    private Long exerciseId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "week_id", updatable = false, nullable = false)
-    private Week week;
+    @JoinColumn(name = "template_id", updatable = false, nullable = false)
+    @JsonIgnore
+    private Template template;
 
     public ExerciseSlot(){
 
@@ -36,27 +37,27 @@ public class ExerciseSlot {
         this.id = id;
     }
 
-    public Exercise getExercise() {
-        return exercise;
+    public List<Week> getWeeks() {
+        return weeks;
     }
 
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
+    public void setWeeks(List<Week> weeks) {
+        this.weeks = weeks;
     }
 
-    public List<Sets> getSets() {
-        return sets;
+    public Long getExerciseId() {
+        return exerciseId;
     }
 
-    public void setSets(List<Sets> sets) {
-        this.sets = sets;
+    public void setExerciseId(Long exerciseId) {
+        this.exerciseId = exerciseId;
     }
 
-    public Week getWeek() {
-        return week;
+    public Template getTemplate() {
+        return template;
     }
 
-    public void setWeek(Week week) {
-        this.week = week;
+    public void setTemplate(Template template) {
+        this.template = template;
     }
 }

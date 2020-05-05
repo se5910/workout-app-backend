@@ -1,17 +1,12 @@
 package ucmo.workoutapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.SpringCacheAnnotationParser;
-import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ucmo.workoutapp.entities.Day;
-import ucmo.workoutapp.entities.Exercise;
-import ucmo.workoutapp.entities.ExercisePlan;
+import ucmo.workoutapp.entities.*;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
-import ucmo.workoutapp.services.DayService;
 import ucmo.workoutapp.services.ExercisePlanService;
 
 import javax.validation.Valid;
@@ -19,72 +14,50 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercise")
+@RequestMapping("/api/client/{clientId}/exercisePlan")
 public class ExercisePlanController {
     @Autowired
     private ExercisePlanService exercisePlanService;
 
     @Autowired
-    private DayService dayService;
-
-    @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
+    // @route   POST api/exercisePlan
+    // @desc    Register a user
+    // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createNewExercisePlan(@Valid @RequestBody ExercisePlan exercisePlan, BindingResult result, Principal principal) {
+    public ResponseEntity<?> createOrUpdateExercisePlan(@Valid @RequestBody ExercisePlan exercisePlan, @PathVariable Long clientId, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        exercisePlanService.SaveOrUpdateExercisePlan(exercisePlan, principal.getName());
+        exercisePlanService.createOrUpdateExercisePlan(clientId, exercisePlan, principal.getName());
         return new ResponseEntity<>(exercisePlan, HttpStatus.CREATED);
 
     }
 
-    @GetMapping("/all")
-    public  Iterable<ExercisePlan> getAllExercisePlans(Principal principal) {
-
-        return exercisePlanService.findAllExercisePlans(principal.getName());
+    // @route   GET api/exercisePlan/all
+    // @desc    Get all exercise plans of user
+    // @access  Private
+    @GetMapping("")
+    public Iterable<ExercisePlan> getAllExercisePlans(@PathVariable Long clientId, Principal principal) {
+        return exercisePlanService.getAllExercisePlans(clientId, principal.getName());
     }
-    /*
-     api/exercise/1234
-     export const getPlan = (id, history) => async dispatch => {
-        try {
-            await axios.get(`/api/exercise/${id}`)
-            .then(res =>
-                dispatch({
-                            type: GET_PROJECT,
-                    payload: res.data
-        }))
-        } catch (err) {
-            history.push('/dashboard')
-        }
-    } */
+
+    // @route   GET api/exercisePlan/:planId
+    // @desc    Get exercise plan by id
+    // @access  Private
     @GetMapping("/{planId}")
-    public ResponseEntity<?> getPlanById(@PathVariable Long planId, Principal principal) {
-        ExercisePlan plan = exercisePlanService.findExercisePlanById(planId, principal.getName());
+    public ExercisePlan getExercisePlanById(@PathVariable Long clientId, @PathVariable Long planId, Principal principal){
+        return exercisePlanService.getExercisePlanById(clientId, planId, principal.getName());
 
-        return new ResponseEntity<>(plan, HttpStatus.OK);
     }
 
+    // @route   DELETE api/exercisePlan/:planId
+    // @desc    Delete exercise plan by id
+    // @access  Private
     @DeleteMapping("/{planId}")
-    public ResponseEntity<?> deletePlan(@PathVariable Long planId, Principal principal) {
-        exercisePlanService.deleteByExercisePlanId(planId, principal.getName());
+    public ResponseEntity<?> deleteExercisePlanById(@PathVariable Long clientId, @PathVariable Long planId, Principal principal){
+        exercisePlanService.deleteByExercisePlanId(clientId, planId, principal.getName());
 
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
-    }
-
-    @PostMapping("/{planId}/day")
-    public ResponseEntity<?> createDayForExercisePlan(@Valid @RequestBody Day day, BindingResult result, @PathVariable Long planId, Principal principal) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if (errorMap != null) return errorMap;
-        dayService.createDayForExercisePlan(day, planId, principal.getName());
-
-        return new ResponseEntity<>(day, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{planId}/{dayId}")
-    public ResponseEntity<?> getAllDaysFromExercisePlan(@PathVariable Long planId, @PathVariable Long dayId, Principal principal){
-        Day day = dayService.getDayById(planId, dayId, principal.getName());
-
-        return new ResponseEntity<>(day, HttpStatus.OK);
     }
 }

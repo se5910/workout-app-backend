@@ -5,20 +5,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ucmo.workoutapp.entities.ExercisePlan;
-import ucmo.workoutapp.entities.Meal;
 import ucmo.workoutapp.entities.MealPlan;
 import ucmo.workoutapp.exceptions.MapValidationErrorService;
 import ucmo.workoutapp.services.MealPlanService;
-import ucmo.workoutapp.services.MealService;
 
-import javax.naming.Binding;
 import javax.validation.Valid;
 import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/mealplan")
+@RequestMapping("/api/client/{clientId}/mealPlan")
 public class MealPlanController {
     @Autowired
     private MealPlanService mealPlanService;
@@ -26,43 +22,50 @@ public class MealPlanController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    @Autowired
-    private MealService mealService;
-
+    // @route   POST api/mealPlan
+    // @desc    Create New meal plan
+    // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createNewMealPlan(@Valid @RequestBody MealPlan mealPlan, BindingResult result, Principal principal) {
+    public ResponseEntity<?> createOrUpdateMealPlan(@Valid @RequestBody MealPlan mealPlan, @PathVariable Long clientId, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        mealPlanService.SaveOrUpdateMealPlan(mealPlan, principal.getName());
+        mealPlanService.createOrUpdateMealPlan(clientId, mealPlan, principal.getName());
         return new ResponseEntity<>(mealPlan, HttpStatus.CREATED);
 
     }
 
-    @GetMapping("/all")
-    public  Iterable<MealPlan> getAllMealPlans(Principal principal) {
-        return mealPlanService.findAllMealPlans(principal.getName());
+    // @route   GET api/mealPlan
+    // @desc    Get all meal plans of user
+    // @access  Private
+    @GetMapping("")
+    public  Iterable<MealPlan> getAllMealPlans(@PathVariable Long clientId, Principal principal) {
+        return mealPlanService.findAllMealPlans(clientId, principal.getName());
     }
 
+    // @route   GET api/mealPlan/:planId
+    // @desc    Get meal plan by id
+    // @access  Private
     @GetMapping("/{planId}")
-    public ResponseEntity<?> getMealPlanById(@PathVariable Long planId, Principal principal) {
-        MealPlan plan = mealPlanService.getMealPlanById(planId, principal.getName());
+    public MealPlan getMealPlanById(@PathVariable Long clientId, @PathVariable Long planId, Principal principal) {
+       return mealPlanService.getMealPlanById(clientId, planId, principal.getName());
 
-        return new ResponseEntity<>(plan, HttpStatus.OK);
     }
 
+    // @route   DELETE api/mealPlan/:planId
+    // @desc    Delete meal plan by id
+    // @access  Private
     @DeleteMapping("/{planId}")
-    public ResponseEntity<?> deleteMealPlanById(@PathVariable Long planId, Principal principal) {
-        mealPlanService.deleteByExercisePlanId(planId, principal.getName());
+    public ResponseEntity<?> deleteMealPlanById(@PathVariable Long clientId, @PathVariable Long planId, Principal principal) {
+        mealPlanService.deleteByMealPlanId(clientId, planId, principal.getName());
 
         return new ResponseEntity<>("Plan with ID: '" + planId + "' was deleted.", HttpStatus.OK);
     }
 
-    @PostMapping("/{planId}/meal")
-    public ResponseEntity<?> createMealForMealPlan(@Valid @RequestBody Meal meal, BindingResult result, @PathVariable Long planId, Principal principal){
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if (errorMap != null) return errorMap;
-        mealService.createMealForMealPlan(meal, planId, principal.getName());
-
-        return new ResponseEntity<>(meal, HttpStatus.CREATED);
-    }
+    // @route   GET api/mealPlan/client/:cliendId
+    // @desc    Get all exercise plans of client
+    // @access  Private
+//    @GetMapping("")
+//    public Iterable<MealPlan> findAllMealPlansOfClient(@PathVariable Long clientId, @PathVariable Long planId, Principal coach) {
+//        return mealPlanService.findAllMealPlansOfClient(clientId, coach.getName());
+//    }
 }

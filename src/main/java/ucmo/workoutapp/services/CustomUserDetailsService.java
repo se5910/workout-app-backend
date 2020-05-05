@@ -13,10 +13,7 @@ import ucmo.workoutapp.entities.Role;
 import ucmo.workoutapp.entities.User;
 import ucmo.workoutapp.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -45,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   }
 
 
-  private List<GrantedAuthority> getUserAuthority(Set<Role> userRoles) {
+  private List<GrantedAuthority> getUserAuthority(Collection<Role> userRoles) {
     Set<GrantedAuthority> roles = new HashSet<>();
     for (Role role : userRoles) {
       roles.add(new SimpleGrantedAuthority(role.getRole()));

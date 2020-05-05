@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Client {
@@ -18,9 +19,20 @@ public class Client {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    private List<ExercisePlan> exercisePlans;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
+    @JsonIgnore
+    private List<MealPlan> mealPlans;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.EAGER)
     private User user;
+
+    @NotBlank(message = "Coach is required")
+    private String coach;
 
     @NotNull(message = "Height is required")
     private Integer height;
@@ -50,8 +62,9 @@ public class Client {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
-    public Client() {
+    private boolean isApproved = false;
 
+    public Client() {
     }
 
     @PrePersist
@@ -60,11 +73,27 @@ public class Client {
     @PreUpdate
     protected void onUpdate() {this.updated_At = new Date();}
 
-    public Long getID() {
+    public List<ExercisePlan> getExercisePlans() {
+        return exercisePlans;
+    }
+
+    public void setExercisePlans(List<ExercisePlan> exercisePlans) {
+        this.exercisePlans = exercisePlans;
+    }
+
+    public List<MealPlan> getMealPlans() {
+        return mealPlans;
+    }
+
+    public void setMealPlans(List<MealPlan> mealPlans) {
+        this.mealPlans = mealPlans;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setID(Long ID) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -162,5 +191,20 @@ public class Client {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public String getCoach() {
+        return coach;
+    }
+    public void setCoach(String coach) {
+        this.coach = coach;
+    }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved) {
+        isApproved = approved;
     }
 }
