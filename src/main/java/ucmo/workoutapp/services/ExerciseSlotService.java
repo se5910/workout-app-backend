@@ -121,11 +121,19 @@ public class ExerciseSlotService {
         Exercise exercise = exerciseRepository.getById(exerciseSlot.getExerciseId());
         User request = userRepository.findByUsername(username);
 
+        if (exerciseSlot == null) {
+            throw new EntityNotFoundException("Exercise Slot not found");
+        }
+
+        if (exercise == null) {
+            throw new EntityNotFoundException("Exercise not found.");
+        }
+
         if (!request.isCoach()) {
             throw new CoachNotFoundException("You are not a coach you cannot create or update a template");
         }
 
-        if (request.isCoach() || !exerciseSlot.getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+        if (request.isCoach() && !exerciseSlot.getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
             throw new CoachNotFoundException("You are not the coach of this client or you are not a coach at all.");
         }
 
