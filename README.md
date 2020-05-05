@@ -45,12 +45,11 @@ Upon login with example coach, you will have a client you can approve and begin 
 ## Running the tests
 
 Using PostMan, API routes can be hit with dummy data to test for errors.
+The included PostmanCollections.zip file, contains files that can be imported into postman that contain premade request.
 
-1. Register a user, login, and create client. -> Copy login authentication token and paste it into Authentication under each successive client test (Click on 'Headers(*num*)' and replace authentication).
-2. Login coach (default, josh@hype4fitness.com) -> Copy login authenitcation token and paste it into Authentication udner each successive coach test. (Click on 'Headers(*num*)' and replace authentication).
-3. Approve newly registered clients using authenitcation token from coach login.
-4. Once client is approved, follow exercise plan creation path using coach authentication.
+1. Register a user, login, and create a client. -> Copy login authentication token and paste it into Authentication under each successive client test (Click on 'Headers(*num*)' and replace authentication).
+2. Login coach (default, josh@hype4fitness.com) -> Copy login authentication token and paste it into the Authentication header on each successive coach test. (Click on 'Headers(*num*)' and replace authentication).
+3. Approve newly registered clients using authentication token from coach login.
+4. Once a client is approved, follow exercise plan creation path using coach authentication.
 
 ** Note : Client can only utilize GET Methods (try with client authentication token). Coach -> GET, POST, DELETE ***
-
-## Deployment
