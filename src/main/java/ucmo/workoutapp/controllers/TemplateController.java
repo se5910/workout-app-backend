@@ -53,8 +53,8 @@ public class TemplateController {
     // @desc    Get template by template id
     // @access  Private
     @GetMapping("/{templateId}")
-    public ResponseEntity<?> getTemplateById(@PathVariable Long templateId, Principal principal){
-        Template template = templateService.getTemplateById(templateId, principal.getName());
+    public ResponseEntity<?> getTemplateById(@PathVariable Long planId, @PathVariable Long templateId, Principal principal){
+        Template template = templateService.getTemplateById(planId, templateId, principal.getName());
 
         return new ResponseEntity<>(template, HttpStatus.OK);
     }
@@ -63,8 +63,8 @@ public class TemplateController {
     // @desc    Delete template by template id
     // @access  Private
     @DeleteMapping("/{templateId}")
-    public ResponseEntity<?> deleteTemplateFromExercisePlan(@PathVariable Long templateId, Principal principal){
-        templateService.deleteTemplateFromExercisePlan(templateId, principal.getName());
+    public ResponseEntity<?> deleteTemplateFromExercisePlan(@PathVariable Long planId, @PathVariable Long templateId, Principal principal){
+        templateService.deleteTemplateFromExercisePlan(planId, templateId, principal.getName());
 
         return new ResponseEntity<>("Template with ID: '" + templateId + "' was deleted.", HttpStatus.OK);
     }
