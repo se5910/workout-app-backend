@@ -44,7 +44,7 @@ public class ExerciseSetService {
             throw new ClientNotFoundException("You are not a coach and you are not this client. Unable to make changes to 'Set'.");
         }
 
-        if (exerciseSet.getId() == null) {
+        if (exerciseSet.getId() != null) {
             ExerciseSet existingExerciseSet = exerciseSetRepository.getById(exerciseSet.getId());
 
             existingExerciseSet.setExerciseSetNumber(exerciseSet.getExerciseSetNumber());
