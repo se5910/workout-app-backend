@@ -16,31 +16,30 @@ public class ExerciseSetService {
     private ExerciseSetRepository exerciseSetRepository;
 
     @Autowired
-    private WeekRepository weekRepository;
-
+    private ExerciseSlotRepository exerciseSlotRepository;
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private ClientRepository clientRepository;
 
-    public ExerciseSet createOrUpdateExerciseForSet(ExerciseSet exerciseSet, Long weekId, String username){
-        Week week = weekRepository.getById(weekId);
+    public ExerciseSet createOrUpdateExerciseSet(ExerciseSet exerciseSet, Long exerciseSlotId, String username){
+        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
         User request = userRepository.findByUsername(username);
 
         if (exerciseSet == null) {
             throw new EntityNotFoundException("Exercise Set is null");
         }
 
-        if (week == null) {
-            throw new EntityNotFoundException("Week is null");
+        if (exerciseSlotId == null) {
+            throw new EntityNotFoundException("exerciseSlotId is null");
         }
 
-        if (!request.isCoach() && exerciseSet.getWeek().getExerciseSlot().getTemplate().getExercisePlan().getClient().getUser().equals(request)) {
+        if (!request.isCoach() && exerciseSet.getExerciseSlot().getTemplate().getExercisePlan().getClient().getUser().equals(request)) {
             throw new ClientNotFoundException("You are not a coach and you are not this client. Unable to make changes to 'Set'.");
         }
 
-        if (request.isCoach() && exerciseSet.getWeek().getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+        if (request.isCoach() && exerciseSet.getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
             throw new ClientNotFoundException("You are not the coach of this client. Unable to make changes to 'Set'.");
         }
 
@@ -56,10 +55,10 @@ public class ExerciseSetService {
             return exerciseSetRepository.save(existingExerciseSet);
         }
 
-        exerciseSet.setWeek(week);
+        exerciseSet.setExerciseSlot(exerciseSlot);
 
         // Get the number of sets belonging to the week
-        Integer exerciseSetNumber = week.getExerciseSets().size();
+        Integer exerciseSetNumber = exerciseSlot.getExerciseSets().size();
 
         // Increment to represent which set this is locally (separate from the ID. It will not be unique in the db).
         // e.g. if there are 0, this will now be set 1. If there are 4, this will now be set 5.
@@ -73,23 +72,23 @@ public class ExerciseSetService {
         //**************** There's probably a better way to name this ****************************//
     }
 
-    public Iterable<ExerciseSet> getAllExerciseSetsForWeek(Long weekId, String username) {
-        Week week = weekRepository.getById(weekId);
+    public Iterable<ExerciseSet> getAllExerciseSetsForExerciseSlot(Long exerciseSlotId, String username) {
+        ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
         User request = userRepository.findByUsername(username);
 
-        if (week == null) {
+        if (exerciseSlot == null) {
             throw new PlanNotFoundException("Template does not exist");
         }
 
-        if (request.isCoach() && !week.getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+        if (request.isCoach() && !exerciseSlot.getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
             throw new CoachNotFoundException("You are not the coach of this client");
         }
 
-        if (!request.isCoach() && !week.getExerciseSlot().getTemplate().getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
+        if (!request.isCoach() && !exerciseSlot.getTemplate().getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
             throw new PlanNotFoundException("Exercise Plan not found in your account");
         }
 
-        return week.getExerciseSets();
+        return exerciseSlot.getExerciseSets();
 
     }
 
@@ -101,11 +100,11 @@ public class ExerciseSetService {
             throw new EntityNotFoundException("Week not found");
         }
 
-        if (request.isCoach() && !exerciseSet.getWeek().getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())){
+        if (request.isCoach() && !exerciseSet.getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())){
             throw new CoachNotFoundException("You are not the coach of this client");
         }
 
-        if (!request.isCoach() && !exerciseSet.getWeek().getExerciseSlot().getTemplate().getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
+        if (!request.isCoach() && !exerciseSet.getExerciseSlot().getTemplate().getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
             throw new CoachNotFoundException("Exercise Plan not found in your account");
         }
 

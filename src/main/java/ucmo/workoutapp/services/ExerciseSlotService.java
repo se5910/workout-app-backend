@@ -47,7 +47,7 @@ public class ExerciseSlotService {
 
             existingExerciseSlot.setExerciseId(exerciseSlot.getExerciseId());
             existingExerciseSlot.setTemplate(exerciseSlot.getTemplate());
-            existingExerciseSlot.setWeeks(exerciseSlot.getWeeks());
+            existingExerciseSlot.setExerciseSets(exerciseSlot.getExerciseSets());
 
             return exerciseSlotRepository.save(existingExerciseSlot);
         }

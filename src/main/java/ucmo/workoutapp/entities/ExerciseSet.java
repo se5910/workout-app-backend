@@ -15,9 +15,12 @@ public class ExerciseSet {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "week_id", updatable = false, nullable = false)
+    @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
     @JsonIgnore
-    private Week week;
+    private ExerciseSlot exerciseSlot;
+
+    @NotBlank
+    private Integer week;
 
     private Integer exerciseSetNumber = 0;
 
@@ -37,11 +40,19 @@ public class ExerciseSet {
         this.id = id;
     }
 
-    public Week getWeek() {
+    public ExerciseSlot getExerciseSlot() {
+        return exerciseSlot;
+    }
+
+    public void setExerciseSlot(ExerciseSlot exerciseSlot) {
+        this.exerciseSlot = exerciseSlot;
+    }
+
+    public Integer getWeek() {
         return week;
     }
 
-    public void setWeek(Week week) {
+    public void setWeek(Integer week) {
         this.week = week;
     }
 

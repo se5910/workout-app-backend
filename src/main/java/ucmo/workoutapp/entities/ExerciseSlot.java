@@ -13,7 +13,7 @@ public class ExerciseSlot {
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "exerciseSlot")
-    private List<Week> weeks = new ArrayList<>();
+    private List<ExerciseSet> exerciseSets = new ArrayList<>();
 
     // Might want to make this muscleGroup and exerciseName
     // Reasoning: Drop down list selection like in google docs & displaying the information to the client when they look at the exercise
@@ -37,12 +37,12 @@ public class ExerciseSlot {
         this.id = id;
     }
 
-    public List<Week> getWeeks() {
-        return weeks;
+    public List<ExerciseSet> getExerciseSets() {
+        return exerciseSets;
     }
 
-    public void setWeeks(List<Week> weeks) {
-        this.weeks = weeks;
+    public void setExerciseSets(List<ExerciseSet> exerciseSets) {
+        this.exerciseSets = exerciseSets;
     }
 
     public Long getExerciseId() {
