@@ -40,10 +40,6 @@ public class ClientService {
             return clientRepository.save(client);
         }
 
-        if (!request.isCoach()) {
-            throw new CoachNotFoundException("You are not a coach. You cannot create a client.");
-        }
-
         clientObject.setUser(request);
 
         return clientRepository.save(clientObject);
@@ -58,7 +54,7 @@ public class ClientService {
         }
 
         if (request.isCoach()) {
-            throw new CoachNotFoundException("You are a coch not a client. Cannot get current client.");
+            throw new CoachNotFoundException("You are a coach not a client. Cannot get current client.");
         }
 
         if (client == null) {
