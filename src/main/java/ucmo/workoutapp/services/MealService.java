@@ -27,28 +27,39 @@ public class MealService {
     @Autowired
     private UserRepository userRepository;
 
-    public Meal createMealForMealPlan(Meal meal, Long planId, String username){
+    public Meal createMealForMealPlan(Meal meal, Long planId, String username) {
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
 
-        if (!request.isCoach()){
+        if (!request.isCoach()) {
             throw new CoachNotFoundException("You are not a coach");
-        }
-
-        if (mealPlan == null) {
-            throw new PlanNotFoundException("Exercise Plan does not exist");
         }
 
         if (meal == null) {
             throw new EntityNotFoundException("Template is null");
         }
 
+        if (mealPlan == null) {
+            throw new PlanNotFoundException("Exercise Plan does not exist");
+        }
+
         if (!mealPlan.getClient().getUser().getUsername().equals(username) || !mealPlan.getClient().getCoach().equals(request.getUsername())) {
-            throw new CoachNotFoundException("You are no the client or you are not the client's coach");
+            throw new CoachNotFoundException("You are not the client or you are not the client's coach");
+        }
+
+        if (meal.getId() != null) {
+            Meal existingMeal = mealRepository.getById(meal.getId());
+
+            if (existingMeal != null && (!existingMeal.getMealPlan().getClient().equals(request.getUsername()))) {
+                throw new PlanNotFoundException("Cannot update Meal in this Meal Plan");
+            } else if (existingMeal == null) {
+                throw new PlanNotFoundException("Meal with ID: " + meal.getId() + "' cannot be updated because it doesn't exist");
+            }
+
+            return mealRepository.save(existingMeal);
         }
 
         meal.setMealPlan(mealPlan);
-        meal.setName(meal.getName());
 
         return mealRepository.save(meal);
     }
