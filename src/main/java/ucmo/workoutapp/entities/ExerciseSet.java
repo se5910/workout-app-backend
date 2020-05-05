@@ -25,7 +25,7 @@ public class ExerciseSet {
 
     private Integer reps;
 
-    private Integer rpe;
+    private Double rpe;
 
     public ExerciseSet() {}
 
@@ -69,11 +69,11 @@ public class ExerciseSet {
         this.reps = reps;
     }
 
-    public Integer getRpe() {
+    public Double getRpe() {
         return rpe;
     }
 
-    public void setRpe(Integer rpe) {
+    public void setRpe(Double rpe) {
         this.rpe = rpe;
     }
 }
