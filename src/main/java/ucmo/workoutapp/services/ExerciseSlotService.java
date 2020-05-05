@@ -45,6 +45,10 @@ public class ExerciseSlotService {
         if (exerciseSlot.getId() != null){
             ExerciseSlot existingExerciseSlot = exerciseSlotRepository.getById(exerciseSlot.getId());
 
+            existingExerciseSlot.setExerciseId(exerciseSlot.getExerciseId());
+            existingExerciseSlot.setTemplate(exerciseSlot.getTemplate());
+            existingExerciseSlot.setWeeks(exerciseSlot.getWeeks());
+
             return exerciseSlotRepository.save(existingExerciseSlot);
         }
 

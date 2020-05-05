@@ -42,6 +42,11 @@ public class ExercisePlanService {
         if (exercisePlan.getPlanId() != null) {
             ExercisePlan existingPlan = exercisePlanRepository.getByPlanId(exercisePlan.getPlanId());
 
+            existingPlan.setName(exercisePlan.getName());
+            existingPlan.setClient(exercisePlan.getClient());
+            existingPlan.setTemplates(exercisePlan.getTemplates());
+            existingPlan.setPlanId(exercisePlan.getPlanId());
+
             return exercisePlanRepository.save(existingPlan);
         }
 
