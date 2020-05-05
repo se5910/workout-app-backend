@@ -13,7 +13,7 @@ public class Week {
     private Long id;
 
     @NotBlank(message = "Week name cannot be blank")
-    private String name;
+    private Integer week;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
@@ -35,12 +35,12 @@ public class Week {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getWeek() {
+        return week;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setWeek(Integer week) {
+        this.week = week;
     }
 
     public ExerciseSlot getExerciseSlot() {

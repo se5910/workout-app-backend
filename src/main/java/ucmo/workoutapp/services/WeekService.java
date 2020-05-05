@@ -50,15 +50,24 @@ public class WeekService {
         if (week.getId() != null) {
             Week existingWeek = weekRepository.getById(week.getId());
 
-            existingWeek.setExerciseSlot(week.getExerciseSlot());
-            existingWeek.setName(week.getName());
+            existingWeek.setWeek(week.getWeek());
             existingWeek.setExerciseSets(week.getExerciseSets());
             existingWeek.setExerciseSlot(week.getExerciseSlot());
 
             return weekRepository.save(existingWeek);
         }
 
+        // Get the number of weeks belonging to the set
         week.setExerciseSlot(exerciseSlot);
+
+        // Increment to represent which week this is locally (separate from the ID. It will not be unique in the db).
+        // e.g. if there are 0, this will now be set 1. If there are 4, this will now be set 5.
+        Integer weekNumber = exerciseSlot.getWeeks().size();
+
+        // Set the ExerciseSet number to this new number
+        weekNumber++;
+
+        week.setWeek(weekNumber);
 
         return weekRepository.save(week);
     }
