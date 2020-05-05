@@ -23,7 +23,7 @@ public class MealPlanService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public MealPlan SaveOrUpdateMealPlan(Long clientId, MealPlan mealPlan, String username) {
+    public MealPlan createOrUpdateMealPlan(Long clientId, MealPlan mealPlan, String username) {
         Client client = clientRepository.getById(clientId);
         User request = userRepository.findByUsername(username);
 

@@ -26,10 +26,10 @@ public class ExercisePlanController {
     // @desc    Register a user
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createNewExercisePlan(@Valid @RequestBody ExercisePlan exercisePlan, @PathVariable Long clientId, BindingResult result, Principal principal) {
+    public ResponseEntity<?> createOrUpdateExercisePlan(@Valid @RequestBody ExercisePlan exercisePlan, @PathVariable Long clientId, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        exercisePlanService.SaveOrUpdateExercisePlan(clientId, exercisePlan, principal.getName());
+        exercisePlanService.createOrUpdateExercisePlan(clientId, exercisePlan, principal.getName());
         return new ResponseEntity<>(exercisePlan, HttpStatus.CREATED);
 
     }

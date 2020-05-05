@@ -23,7 +23,7 @@ public class ExercisePlanService {
     @Autowired
     private UserRepository userRepository;
 
-    public ExercisePlan SaveOrUpdateExercisePlan(Long clientId, ExercisePlan exercisePlan, String coach){
+    public ExercisePlan createOrUpdateExercisePlan(Long clientId, ExercisePlan exercisePlan, String coach){
         Client client = clientRepository.getById(clientId);
 
         User request = userRepository.findByUsername(coach);

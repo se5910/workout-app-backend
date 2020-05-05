@@ -32,10 +32,10 @@ public class TemplateController {
     // @desc    Create template on exercise plan
     // @access  Private
     @PostMapping("")
-    public ResponseEntity<?> createNewTemplateForExercisePlan(@Valid @RequestBody Template template, BindingResult result, @PathVariable Long planId, Principal principal) {
+    public ResponseEntity<?> createOrUpdateTemplate(@Valid @RequestBody Template template, BindingResult result, @PathVariable Long planId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        templateService.createNewTemplateForExercisePlan(template, planId, principal.getName());
+        templateService.createOrUpdateTemplate(template, planId, principal.getName());
 
         return new ResponseEntity<>(template, HttpStatus.CREATED);
     }

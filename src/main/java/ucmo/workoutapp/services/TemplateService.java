@@ -27,7 +27,7 @@ public class TemplateService {
     @Autowired
     ClientRepository clientRepository;
 
-    public Template createNewTemplateForExercisePlan(Template template, Long planId, String username){
+    public Template createOrUpdateTemplate(Template template, Long planId, String username){
         ExercisePlan exercisePlan = exercisePlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
 

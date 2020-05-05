@@ -21,7 +21,7 @@ public class FoodSlotService {
     @Autowired
     private FoodRepository foodRepository;
 
-    public FoodSlot createFoodSlotForMeal(FoodSlot foodSlot, Long mealId, String username){
+    public FoodSlot createOrUpdateFoodSlot(FoodSlot foodSlot, Long mealId, String username){
         Meal meal = mealRepository.getById(mealId);
         foodSlot.setMeal(meal);
 

@@ -27,7 +27,7 @@ public class MealService {
     @Autowired
     private UserRepository userRepository;
 
-    public Meal saveOrUpdateMeal(Meal meal, Long planId, String username) {
+    public Meal createOrUpdateMeal(Meal meal, Long planId, String username) {
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
 

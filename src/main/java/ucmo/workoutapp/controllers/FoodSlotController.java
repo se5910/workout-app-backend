@@ -13,7 +13,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/mealPlan/{planId}/meal/{mealId}/foodSlot")
+@RequestMapping("/api/client/{clientId}/mealPlan/{planId}/meal/{mealId}/foodSlot")
 public class FoodSlotController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -23,11 +23,11 @@ public class FoodSlotController {
 
 
     @PostMapping("")
-    public ResponseEntity<?> createFoodSlotForMeal(@Valid @RequestBody FoodSlot foodSlot, BindingResult result, @PathVariable Long mealId, Principal principal) {
+    public ResponseEntity<?> createOrUpdateFoodSlot(@Valid @RequestBody FoodSlot foodSlot, BindingResult result, @PathVariable Long mealId, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
 
-        foodSlotService.createFoodSlotForMeal(foodSlot, mealId, principal.getName());
+        foodSlotService.createOrUpdateFoodSlot(foodSlot, mealId, principal.getName());
 
         return new ResponseEntity<>(foodSlot, HttpStatus.CREATED);
     }
