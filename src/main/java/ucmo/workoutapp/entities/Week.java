@@ -13,7 +13,7 @@ public class Week {
     private Long id;
 
     @NotBlank(message = "Week name cannot be blank")
-    private Integer week;
+    private Integer week = 0;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_slot_id", updatable = false, nullable = false)
