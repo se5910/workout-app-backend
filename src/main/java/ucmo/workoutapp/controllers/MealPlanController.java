@@ -46,7 +46,7 @@ public class MealPlanController {
     // @desc    Get meal plan by id
     // @access  Private
     @GetMapping("/{planId}")
-    public MealPlan getMealPlanById(@PathVariable Long clientId,@PathVariable Long planId, Principal principal) {
+    public MealPlan getMealPlanById(@PathVariable Long clientId, @PathVariable Long planId, Principal principal) {
        return mealPlanService.getMealPlanById(clientId, planId, principal.getName());
 
     }

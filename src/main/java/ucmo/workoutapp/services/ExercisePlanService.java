@@ -53,7 +53,7 @@ public class ExercisePlanService {
         exercisePlan.setClient(client);
 
         return exercisePlanRepository.save(exercisePlan);
-}
+    }
 
 
     public Iterable<ExercisePlan> getAllExercisePlans(Long clientId, String username) {
