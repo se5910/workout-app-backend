@@ -2,12 +2,12 @@ package ucmo.workoutapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ucmo.workoutapp.entities.ExerciseSet;
-import ucmo.workoutapp.entities.ExerciseSlot;
-import ucmo.workoutapp.entities.Week;
-import ucmo.workoutapp.repositories.ExerciseSetRepository;
-import ucmo.workoutapp.repositories.ExerciseSlotRepository;
-import ucmo.workoutapp.repositories.WeekRepository;
+import ucmo.workoutapp.entities.*;
+import ucmo.workoutapp.exceptions.CoachNotFoundException;
+import ucmo.workoutapp.exceptions.PlanNotFoundException;
+import ucmo.workoutapp.repositories.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class ExerciseSetService {
@@ -16,6 +16,12 @@ public class ExerciseSetService {
 
     @Autowired
     private WeekRepository weekRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     public ExerciseSet createExerciseSetForWeek(ExerciseSet exerciseSet, Long weekId, String username){
         Week week = weekRepository.getById(weekId);
@@ -36,13 +42,57 @@ public class ExerciseSetService {
         //**************** There's probably a better way to name this ****************************//
     }
 
+    public Iterable<ExerciseSet> getAllExerciseSetsForWeek(Long weekId, String username) {
+        Week week = weekRepository.getById(weekId);
+        User request = userRepository.findByUsername(username);
+
+        if (week == null) {
+            throw new PlanNotFoundException("Template does not exist");
+        }
+
+        if (request.isCoach() && !week.getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (!request.isCoach() && !week.getExerciseSlot().getTemplate().getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
+            throw new PlanNotFoundException("Exercise Plan not found in your account");
+        }
+
+        return week.getExerciseSets();
+
+    }
+
     public ExerciseSet getExerciseSetById(Long exerciseSetId, String username){
-        return exerciseSetRepository.getById(exerciseSetId);
+        User request = userRepository.findByUsername(username);
+        ExerciseSet exerciseSet = exerciseSetRepository.getById(exerciseSetId);
+
+        if (exerciseSet == null) {
+            throw new EntityNotFoundException("Week not found");
+        }
+
+        if (request.isCoach() && !exerciseSet.getWeek().getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())){
+            throw new CoachNotFoundException("You are not the coach of this client");
+        }
+
+        if (!request.isCoach() && !exerciseSet.getWeek().getExerciseSlot().getTemplate().getExercisePlan().getClient().equals(clientRepository.getByUser(request))) {
+            throw new CoachNotFoundException("Exercise Plan not found in your account");
+        }
+
+        return exerciseSet;
 
     }
 
     public void deleteExerciseSetById(Long exerciseSetId, String username){
-        exerciseSetRepository.delete(getExerciseSetById(exerciseSetId, username));
+        User request = userRepository.findByUsername(username);
+
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach. You cannot delete a plan");
+        }
+
+        // Utilize getExerciseSetById checks to insure coach username matches client username from plan
+        ExerciseSet exerciseSet = getExerciseSetById(exerciseSetId, username);
+
+        exerciseSetRepository.delete(exerciseSet);
 
     }
 }

@@ -31,6 +31,13 @@ public class ExerciseSetController {
         return new ResponseEntity<>(exerciseSet, HttpStatus.CREATED);
     }
 
+    @GetMapping("")
+    public ResponseEntity<?> getAllExerciseSetsForWeek(@PathVariable Long week, Principal principal) {
+        Iterable<ExerciseSet> exerciseSets = exerciseSetService.getAllExerciseSetsForWeek(week, principal.getName());
+
+        return new ResponseEntity<>(exerciseSets, HttpStatus.OK);
+    }
+
     @GetMapping("/{exerciseSetId}")
     public ResponseEntity<?> getExerciseSetById(@PathVariable Long exerciseSetId, Principal principal){
         ExerciseSet exerciseSet = exerciseSetService.getExerciseSetById(exerciseSetId, principal.getName());
