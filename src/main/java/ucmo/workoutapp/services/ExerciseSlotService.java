@@ -161,10 +161,19 @@ public class ExerciseSlotService {
 
     // Set the exercise of the exercise slot to "null" to delete it
     public void deleteExerciseFromExerciseSlotById(Long exerciseSlotId, String username){
+        User request = userRepository.findByUsername(username);
         // Get the correct exercise slot form the database
+
         ExerciseSlot exerciseSlot = exerciseSlotRepository.getById(exerciseSlotId);
 
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach. You cannot delete a plan");
+        }
+
+        // Utilize getExerciseFromExerciseSlotById checks to ensure coach username matches client username from plan
+        Exercise exercise = getExerciseFromExerciseSlotById(exerciseSlotId, username);
+
         // "Delete" the exercise by setting the exercise in the slot to null
-        exerciseSlot.setExerciseId(null);
+        exerciseSlot.setExerciseId(exercise.getId());
     }
 }
