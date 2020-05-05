@@ -23,38 +23,32 @@ public class ExercisePlanService {
     @Autowired
     private UserRepository userRepository;
 
-    public ExercisePlan createOrUpdateExercisePlan(Long clientId, ExercisePlan exercisePlan, String coach){
+    public ExercisePlan createOrUpdateExercisePlan(Long clientId, ExercisePlan exercisePlan, String username){
         Client client = clientRepository.getById(clientId);
+        User request = userRepository.findByUsername(username);
 
-        User request = userRepository.findByUsername(coach);
-        if(!request.isCoach()) {
-            throw new CoachNotFoundException("The account is not a coach account");
+        if (exercisePlan == null) {
+            throw new EntityNotFoundException("Exercise Plan not found");
         }
+
         if (client == null) {
             throw new ClientNotFoundException("Client not found");
         }
 
-        if (!client.getCoach().equals(coach)) {
-            throw new CoachNotFoundException("Client not associated with this coach");
+        if (!request.isCoach() || !client.getCoach().equals(request.getUsername())) {
+            throw new CoachNotFoundException("You are not the coach of this client or you are not a coach at all.");
         }
 
         if (exercisePlan.getPlanId() != null) {
             ExercisePlan existingPlan = exercisePlanRepository.getByPlanId(exercisePlan.getPlanId());
 
-            if (existingPlan != null && (!existingPlan.getClient().equals(client))) {
-                throw new PlanNotFoundException("Exercise Plan not found for this client");
-            } else if (existingPlan == null) {
-                throw new PlanNotFoundException("Plan with ID: '" + exercisePlan.getPlanId() + "' cannot be updated because it doesn't exist");
-            }
-
-            return exercisePlanRepository.save(exercisePlan);
+            return exercisePlanRepository.save(existingPlan);
         }
 
         exercisePlan.setClient(client);
 
         return exercisePlanRepository.save(exercisePlan);
     }
-
 
     public Iterable<ExercisePlan> getAllExercisePlans(Long clientId, String username) {
         User request = userRepository.findByUsername(username);

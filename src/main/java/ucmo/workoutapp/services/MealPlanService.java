@@ -45,12 +45,6 @@ public class MealPlanService {
         if (mealPlan.getPlanId() != null) {
             MealPlan existingPlan = mealPlanRepository.getByPlanId(mealPlan.getPlanId());
 
-            if (existingPlan != null && (!existingPlan.getClient().equals(client))) {
-                throw new PlanNotFoundException("Cannot update Meal Plan in this client");
-            } else if (existingPlan == null) {
-                throw new PlanNotFoundException("Plan with ID: '" + mealPlan.getPlanId() + "' cannot be updated because it doesn't exist");
-            }
-
             return mealPlanRepository.save(existingPlan);
         }
 

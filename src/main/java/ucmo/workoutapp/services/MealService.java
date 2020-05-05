@@ -31,30 +31,20 @@ public class MealService {
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
 
-        if (!request.isCoach()) {
-            throw new CoachNotFoundException("You are not a coach");
+        if (mealPlan == null) {
+            throw new PlanNotFoundException("Exercise Plan does not exist");
         }
 
         if (meal == null) {
             throw new EntityNotFoundException("Template is null");
         }
 
-        if (mealPlan == null) {
-            throw new PlanNotFoundException("Exercise Plan does not exist");
-        }
-
-        if (!mealPlan.getClient().getUser().getUsername().equals(username) || !mealPlan.getClient().getCoach().equals(request.getUsername())) {
-            throw new CoachNotFoundException("You are not the client or you are not the client's coach");
+        if (!request.isCoach() || !mealPlan.getClient().getCoach().equals(request.getUsername())) {
+            throw new CoachNotFoundException("You are not the coach of this client or you are not a coach at all.");
         }
 
         if (meal.getId() != null) {
             Meal existingMeal = mealRepository.getById(meal.getId());
-
-            if (existingMeal != null && (!existingMeal.getMealPlan().getClient().equals(request.getUsername()))) {
-                throw new PlanNotFoundException("Cannot update Meal in this Meal Plan");
-            } else if (existingMeal == null) {
-                throw new PlanNotFoundException("Meal with ID: " + meal.getId() + "' cannot be updated because it doesn't exist");
-            }
 
             return mealRepository.save(existingMeal);
         }
@@ -64,7 +54,17 @@ public class MealService {
         return mealRepository.save(meal);
     }
 
-    //get meal for a plan
+    public Iterable<Meal> getAllMealsForMealPlanById(Long planId, String username){
+        MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
+        User request = userRepository.findByUsername(username);
+
+        if(!mealPlan.getClient().getUser().getUsername().equals(username) || !mealPlan.getClient().getCoach().equals(request.getUsername())){
+            throw new CoachNotFoundException("You are no the client or you are not the client's coach");
+        }
+
+        return mealRepository.getAllByMealPlan(planId);
+    }
+
     public Meal getMealById(Long planId, Long mealId, String username){
         MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
         User request = userRepository.findByUsername(username);
@@ -84,16 +84,5 @@ public class MealService {
         }
 
          mealRepository.delete(getMealById(mealId, planId, username));
-    }
-
-    public Iterable<Meal> getAllMealsForMealPlanById(Long planId, String username){
-        MealPlan mealPlan = mealPlanRepository.getByPlanId(planId);
-        User request = userRepository.findByUsername(username);
-
-        if(!mealPlan.getClient().getUser().getUsername().equals(username) || !mealPlan.getClient().getCoach().equals(request.getUsername())){
-            throw new CoachNotFoundException("You are no the client or you are not the client's coach");
-        }
-
-        return mealRepository.getAllByMealPlan(planId);
     }
 }
