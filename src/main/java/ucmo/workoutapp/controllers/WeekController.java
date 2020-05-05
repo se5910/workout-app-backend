@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/template/{templateId}/exerciseSlot/{exerciseSlotId}/week")
+@RequestMapping("/api/client/{clientId}/exercisePlan/{planId}/template/{templateId}/exerciseSlot/{exerciseSlotId}/week")
 public class WeekController {
 
     @Autowired

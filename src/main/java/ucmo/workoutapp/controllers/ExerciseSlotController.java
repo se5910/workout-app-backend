@@ -16,7 +16,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/template/{templateId}/exerciseSlot")
+@RequestMapping("/api/client/{clientId}/exercisePlan/{planId}/template/{templateId}/exerciseSlot")
 public class ExerciseSlotController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
