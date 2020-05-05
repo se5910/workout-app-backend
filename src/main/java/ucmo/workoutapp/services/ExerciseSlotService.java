@@ -133,15 +133,12 @@ public class ExerciseSlotService {
             throw new CoachNotFoundException("You are not the coach of this client or you are not a coach at all.");
         }
 
-        if (exerciseSlot != null) {
-            ExerciseSlot existingExerciseSlot = exerciseSlotRepository.getById(exerciseId);
-
-            existingExerciseSlot.setWeeks(exerciseSlot.getWeeks());
-            existingExerciseSlot.setTemplate(exerciseSlot.getTemplate());
-            existingExerciseSlot.setExerciseId(exerciseSlot.getExerciseId());
-
-            return exerciseSlotRepository.save(exerciseSlot);
-        }
+//        if (exerciseSlot.getId() != null) {
+//
+//            exerciseSlot.setExerciseId(exercise.getId());
+//
+//            return exerciseSlotRepository.save(exerciseSlot);
+//        }
 
         exerciseSlot.setExerciseId(exerciseId);
 
