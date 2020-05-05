@@ -40,9 +40,6 @@ public class User implements UserDetails {
 
     private boolean isCoach;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
-    private Questionnaire questionnaire;
-
     private String coachRequested;
 
     @PrePersist
@@ -148,13 +145,6 @@ public class User implements UserDetails {
         isCoach = coach;
     }
 
-    public Questionnaire getQuestionnaire() {
-        return questionnaire;
-    }
-
-    public void setQuestionnaire(Questionnaire questionnaire) {
-        this.questionnaire = questionnaire;
-    }
 
     public String getCoachRequested() {
         return coachRequested;
