@@ -53,7 +53,7 @@ public class ExerciseSlotService {
         return exerciseSlotRepository.save(exerciseSlot);
     }
 
-    public Iterable<ExerciseSlot> getAllExerciseSlotsByTemplateId(Long templateId, String username){
+    public Iterable<ExerciseSlot> getAllExerciseSlotsById(Long templateId, String username){
         Template template = templateRepository.getById(templateId);
         User request = userRepository.findByUsername(username);
 

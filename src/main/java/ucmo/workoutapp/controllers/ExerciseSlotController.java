@@ -41,7 +41,7 @@ public class ExerciseSlotController {
     // @access  Private
     @GetMapping("")
     public Iterable<ExerciseSlot> getAllExerciseSlotsById(@PathVariable Long templateId, Principal principal){
-        return exerciseSlotService.getAllExerciseSlotsByTemplateId(templateId, principal.getName());
+        return exerciseSlotService.getAllExerciseSlotsById(templateId, principal.getName());
     }
 
     // @route   POST /api/exercise/{planId}/{templateId}/exerciseSlot
@@ -58,8 +58,8 @@ public class ExerciseSlotController {
     // @desc    Get all exercise slots from template
     // @access  Private
     @DeleteMapping("/{exerciseSlotId}")
-    public ResponseEntity<?> deleteExercisesSlotById(@PathVariable Long exerciseSlotId, @PathVariable Long templateId, Principal principal){
-        exerciseSlotService.deleteExerciseSlotById(exerciseSlotId, principal.getName());
+    public ResponseEntity<?> deleteExercisesSlotById(@PathVariable Long templateId, @PathVariable Long exerciseSlotId, Principal principal){
+        exerciseSlotService.deleteExerciseSlotById(templateId, exerciseSlotId, principal.getName());
 
         return new ResponseEntity<>("Exercise slot with ID: '" + exerciseSlotId + "' was deleted.", HttpStatus.OK);
     }
