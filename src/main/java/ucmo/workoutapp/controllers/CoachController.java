@@ -49,7 +49,7 @@ public class CoachController {
     }
 
     @GetMapping("/clients")
-    public Iterable<?> getAllClientsByCoach(Principal principal) {
-        return clientService.getAllClients();
+    public Iterable<Client> getAllClientsByCoach(Principal principal) {
+        return clientService.getAllClientsByCoach(principal.getName());
     }
 }

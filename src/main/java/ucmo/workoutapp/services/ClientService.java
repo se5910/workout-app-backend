@@ -6,6 +6,7 @@ import ucmo.workoutapp.entities.Client;
 import ucmo.workoutapp.entities.User;
 import ucmo.workoutapp.exceptions.ClientNotFoundException;
 import ucmo.workoutapp.exceptions.CoachNotFoundException;
+import ucmo.workoutapp.exceptions.ItemNotFoundException;
 import ucmo.workoutapp.repositories.ClientRepository;
 import ucmo.workoutapp.repositories.UserRepository;
 
@@ -17,10 +18,15 @@ public class ClientService {
     @Autowired
     private UserRepository userRepository;
 
-    public Client SaveOrUpdateClient(Client clientObject, String username){
-        User user = userRepository.findByUsername(username);
-        Client client = clientRepository.getByUser(user);
+    public Client createOrUpdateClient(Client clientObject, String username) {
+        User request = userRepository.findByUsername(username);
+        Client client = clientRepository.getByUser(request);
+
         if (client != null) {
+            if (request.isCoach()) {
+                throw new ItemNotFoundException("You are a coach you cannot edit a clients profile.");
+            }
+
             client.setAge(clientObject.getAge());
             client.setBodyFatPercentage(clientObject.getBodyFatPercentage());
             client.setGoalStatement(clientObject.getGoalStatement());
@@ -29,86 +35,111 @@ public class ClientService {
             client.setGoalWeight(clientObject.getGoalWeight());
             client.setHealthHistory(clientObject.getHealthHistory());
             client.setWeight(clientObject.getWeight());
-
+            client.setCoach(clientObject.getCoach());
 
             return clientRepository.save(client);
-        } else {
-
-            clientObject.setUser(user);
-            clientObject.setCoach("test");
-            return clientRepository.save(clientObject);
         }
+
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach. You cannot create a client.");
+        }
+
+        clientObject.setUser(request);
+
+        return clientRepository.save(clientObject);
     }
 
-    public Client getClientByUser(String username) {
-        try {
-            User user = userRepository.findByUsername(username);
+    public Client getCurrentClient(String username) {
+        User request = userRepository.findByUsername(username);
+        Client client = clientRepository.getByUser(request);
 
-            if (user == null) {
-                throw new ClientNotFoundException("How about now?");
-            }
-
-            Client client = clientRepository.getByUser(user);
-
-            if (client == null) {
-                throw new ClientNotFoundException("Client doesn't not exist");
-            }
-
-            // Need toLowerCase()
-            System.out.println(user.getFullName()); //This is lowercase
-            System.out.println(client.getName()); //This is not
-
-            if (!user.getFullName().equals(client.getName())) {
-                throw new ClientNotFoundException("Profile not found in your account");
-            }
-
-            return client;
-        } catch (Exception e){
-            throw new ClientNotFoundException("No Profile");
+        if (request == null) {
+            throw new ClientNotFoundException("How about now?");
         }
-    }
 
-    public Client getClientById(Long clientId, String coach) {
-        Client client = clientRepository.getById(clientId);
+        if (request.isCoach()) {
+            throw new CoachNotFoundException("You are a coch not a client. Cannot get current client.");
+        }
+
         if (client == null) {
-            throw new ClientNotFoundException("Client not found");
+            throw new ClientNotFoundException("Client doesn't not exist");
         }
 
-        if (!client.getCoach().equals(coach)) {
-            throw new ClientNotFoundException("No clients found in your account");
+        if (!request.getFullName().equals(client.getName())) {
+            throw new ClientNotFoundException("You cannot access another client's data");
         }
 
         return client;
     }
 
-    public Iterable<Client> getAllClients() {
-        return clientRepository.findAll();
-    }
-
-    public Iterable<Client> getAllClientsByCoach(String username) {
-        System.out.println(username);
-        return clientRepository.findAllByCoach(username);
-
-    }
-
-    public Client approveClient(Long clientId, String coach) {
+    public Client getClientById(Long clientId, String username) {
         Client client = clientRepository.getById(clientId);
-        User request = userRepository.findByUsername(coach);
+        User request = userRepository.findByUsername(username);
 
-        if (!request.isCoach()) {
-            throw new CoachNotFoundException("You are not authorized.");
+        if (client == null) {
+            throw new ClientNotFoundException("Client not found");
         }
 
-        if (!client.getCoach().equals(coach)) {
-            throw new ClientNotFoundException("This client does not exist in your account");
+        if (!request.isCoach() && !client.getUser().getUsername().equals(request.getUsername())) {
+            throw new ClientNotFoundException("You are a client and cannot access other client data.");
+        }
+
+        if (!client.getCoach().equals(request.getUsername())) {
+            throw new CoachNotFoundException("You are not the coach of this client.");
+        }
+
+        return client;
+    }
+
+    // ------------------- COACH FUNCTIONALITIES NOW ----------------------
+
+    public Iterable<Client> getAllClientsByCoach(String username) {
+        User request = userRepository.findByUsername(username);
+
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach.");
+        }
+
+        return clientRepository.findAllByCoach(request.getUsername());
+
+    }
+
+    public Client approveClient(Long clientId, String username) {
+        Client client = clientRepository.getById(clientId);
+        User request = userRepository.findByUsername(username);
+
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach. Unable to approve client.");
+        }
+
+        if (!client.getCoach().equals(request.getUsername())) {
+            throw new ClientNotFoundException("You cannot approve this client. They have not requested you as the coach.");
         }
 
         client.setApproved(true);
-        client.setCoach(coach);
+        client.setCoach(username);
 
         clientRepository.save(client);
 
         return client;
     }
 
+    public Client rejectClient(Long clientId, String username) {
+        Client client = clientRepository.getById(clientId);
+        User request = userRepository.findByUsername(username);
+
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are not a coach. Unable to approve client.");
+        }
+
+        if (!client.getCoach().equals(request.getUsername())) {
+            throw new ClientNotFoundException("You cannot approve this client. They have not requested you as the coach.");
+        }
+
+        client.setCoach(null);
+
+        clientRepository.save(client);
+
+        return client;
+    }
 }

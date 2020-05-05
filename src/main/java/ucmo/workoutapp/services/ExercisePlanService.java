@@ -101,5 +101,6 @@ public class ExercisePlanService {
     public void deleteByExercisePlanId(Long clientId, Long planId, String username) {
         exercisePlanRepository.delete(getExercisePlanById(clientId, planId, username));
 
+
     }
 }

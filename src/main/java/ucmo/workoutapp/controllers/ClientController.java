@@ -35,7 +35,7 @@ public class ClientController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
 
-        Client newClient = clientService.SaveOrUpdateClient(client, principal.getName());
+        Client newClient = clientService.createOrUpdateClient(client, principal.getName());
         return new ResponseEntity<>(newClient, HttpStatus.CREATED);
     }
 
@@ -44,7 +44,7 @@ public class ClientController {
     // @access  Private
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentClient(Principal principal) {
-        Client currentClient = clientService.getClientByUser(principal.getName());
+        Client currentClient = clientService.getCurrentClient(principal.getName());
 
         return new ResponseEntity<>(currentClient, HttpStatus.OK);
     }
