@@ -36,12 +36,12 @@ public class ExerciseSetService {
             throw new EntityNotFoundException("Week is null");
         }
 
-        if (!request.isCoach() && week.getExerciseSlot().getTemplate().getExercisePlan().getClient().getUser().equals(request)) {
-            throw new ClientNotFoundException("You are not a coach and you are not this client. Unable to make changes to 'Set'.");
+        if (!request.isCoach()) {
+            throw new CoachNotFoundException("You are no a coach you cannot create or update a week");
         }
 
-        if (request.isCoach() && week.getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
-            throw new ClientNotFoundException("You are not the coach of this client. Unable to make changes to 'Set'.");
+        if (request.isCoach() && !week.getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+            throw new ClientNotFoundException("You are not a coach and you are not this client. Unable to make changes to 'Set'.");
         }
 
         if (exerciseSet.getId() == null) {
