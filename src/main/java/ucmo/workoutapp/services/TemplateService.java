@@ -49,6 +49,9 @@ public class TemplateService {
 
         if (template.getId() != null){
             Template existingTemplate = templateRepository.getById(template.getId());
+            existingTemplate.setName(template.getName());
+            existingTemplate.setPhase(template.getPhase());
+            existingTemplate.setWorkoutType(template.getWorkoutType());
 
             return templateRepository.save(existingTemplate);
         }
