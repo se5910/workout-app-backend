@@ -43,7 +43,7 @@ public class WeekService {
             throw new CoachNotFoundException("You are no a coach you cannot create or update a week");
         }
 
-        if (request.isCoach() && exerciseSlot.getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+        if (request.isCoach() && !exerciseSlot.getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
             throw new CoachNotFoundException("You are not the coach of this client");
         }
 
