@@ -3,6 +3,7 @@ package ucmo.workoutapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucmo.workoutapp.entities.*;
+import ucmo.workoutapp.exceptions.ClientNotFoundException;
 import ucmo.workoutapp.exceptions.CoachNotFoundException;
 import ucmo.workoutapp.exceptions.PlanNotFoundException;
 import ucmo.workoutapp.repositories.*;
@@ -23,8 +24,38 @@ public class ExerciseSetService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public ExerciseSet createExerciseSetForWeek(ExerciseSet exerciseSet, Long weekId, String username){
+    public ExerciseSet createOrUpdateExerciseForSet(ExerciseSet exerciseSet, Long weekId, String username){
         Week week = weekRepository.getById(weekId);
+        User request = userRepository.findByUsername(username);
+
+        if (exerciseSet == null) {
+            throw new EntityNotFoundException("Exercise Set is null");
+        }
+
+        if (week == null) {
+            throw new EntityNotFoundException("Week is null");
+        }
+
+        if (!request.isCoach() && exerciseSet.getWeek().getExerciseSlot().getTemplate().getExercisePlan().getClient().getUser().equals(request)) {
+            throw new ClientNotFoundException("You are not a coach and you are not this client. Unable to make changes to 'Set'.");
+        }
+
+        if (request.isCoach() && exerciseSet.getWeek().getExerciseSlot().getTemplate().getExercisePlan().getClient().getCoach().equals(request.getUsername())) {
+            throw new ClientNotFoundException("You are not the coach of this client. Unable to make changes to 'Set'.");
+        }
+
+        if (exerciseSet.getId() == null) {
+            ExerciseSet existingExerciseSet = exerciseSetRepository.getById(exerciseSet.getId());
+
+            existingExerciseSet.setExerciseSetNumber(exerciseSet.getExerciseSetNumber());
+            existingExerciseSet.setWeek(exerciseSet.getWeek());
+            existingExerciseSet.setReps(exerciseSet.getReps());
+            existingExerciseSet.setRpe(exerciseSet.getRpe());
+            existingExerciseSet.setWeight(exerciseSet.getWeight());
+
+            return exerciseSetRepository.save(existingExerciseSet);
+        }
+
         exerciseSet.setWeek(week);
 
         // Get the number of sets belonging to the week

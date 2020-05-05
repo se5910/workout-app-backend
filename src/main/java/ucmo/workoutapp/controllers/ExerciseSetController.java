@@ -23,10 +23,10 @@ public class ExerciseSetController {
     private ExerciseSetService exerciseSetService;
     
     @PostMapping("")
-    public ResponseEntity<?> createSetForWeek(@Valid @RequestBody ExerciseSet exerciseSet, BindingResult result, @PathVariable Long weekId, Principal principal){
+    public ResponseEntity<?> createOrUpdateExerciseForSet(@Valid @RequestBody ExerciseSet exerciseSet, @PathVariable Long weekId, BindingResult result,  Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        exerciseSetService.createExerciseSetForWeek(exerciseSet, weekId, principal.getName());
+        exerciseSetService.createOrUpdateExerciseForSet(exerciseSet, weekId, principal.getName());
 
         return new ResponseEntity<>(exerciseSet, HttpStatus.CREATED);
     }
