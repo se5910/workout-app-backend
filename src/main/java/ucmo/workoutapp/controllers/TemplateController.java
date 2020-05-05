@@ -17,7 +17,7 @@ import java.security.Principal;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/exercisePlan/{planId}/template")
+@RequestMapping("/api/client/{clientId}/exercisePlan/{planId}/template")
 public class TemplateController {
     @Autowired
     private TemplateService templateService;
