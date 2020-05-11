@@ -22,10 +22,12 @@ public class ClientService {
         User request = userRepository.findByUsername(username);
         Client client = clientRepository.getByUser(request);
 
-        if (client != null) {
-            if (request.isCoach()) {
-                throw new ItemNotFoundException("You are a coach you cannot edit a clients profile.");
-            }
+        if (request.isCoach()) {
+            throw new ClientNotFoundException("You are a coach you cannot change a client's information.");
+        }
+
+        if (clientObject.getId() != null) {
+            // POSSIBLE REFACTORING. LOOK INTO COACH RESPONSIBILITY
 
             client.setAge(clientObject.getAge());
             client.setBodyFatPercentage(clientObject.getBodyFatPercentage());
