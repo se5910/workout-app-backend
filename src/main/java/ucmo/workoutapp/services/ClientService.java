@@ -22,15 +22,12 @@ public class ClientService {
         User request = userRepository.findByUsername(username);
         Client client = clientRepository.getByUser(request);
 
-        if (client != null) {
-            // POSSIBLE REFACTORING. LOOK INTO COACH RESPONSIBILITY
-            if (!client.getCoach().equals(request.getUsername())) {
-                throw new ItemNotFoundException("You are not the coach of this client.");
-            }
+        if (request.isCoach()) {
+            throw new ClientNotFoundException("You are a coach you cannot change a client's information.");
+        }
 
-            //if (!client.getUser().getUsername().equals(request.getUsername())) {
-            //    throw new ClientNotFoundException("This client information does not match your login information.");
-            // }
+        if (clientObject.getId() != null) {
+            // POSSIBLE REFACTORING. LOOK INTO COACH RESPONSIBILITY
 
             client.setAge(clientObject.getAge());
             client.setBodyFatPercentage(clientObject.getBodyFatPercentage());
@@ -40,7 +37,7 @@ public class ClientService {
             client.setGoalWeight(clientObject.getGoalWeight());
             client.setHealthHistory(clientObject.getHealthHistory());
             client.setWeight(clientObject.getWeight());
-            // client.setCoach(clientObject.getCoach());
+            client.setCoach(clientObject.getCoach());
 
             return clientRepository.save(client);
         }
