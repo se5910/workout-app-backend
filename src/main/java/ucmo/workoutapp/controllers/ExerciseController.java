@@ -13,6 +13,7 @@ import ucmo.workoutapp.services.ExerciseService;
 import javax.validation.Valid;
 import java.security.Principal;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/exercise")
 public class ExerciseController {

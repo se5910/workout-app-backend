@@ -24,6 +24,7 @@ import java.security.Principal;
 
 import static ucmo.workoutapp.security.SecurityConstants.TOKEN_PREFIX;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
