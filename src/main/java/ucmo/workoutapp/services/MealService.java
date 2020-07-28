@@ -12,7 +12,6 @@ import ucmo.workoutapp.repositories.MealPlanRepository;
 import ucmo.workoutapp.repositories.MealRepository;
 import ucmo.workoutapp.repositories.UserRepository;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityNotFoundException;
 
 @Service
