@@ -17,6 +17,9 @@ INSERT INTO `client` VALUES (1,26,26,'john@hype4fitness.com','2020-05-05 14:23:0
 (2,24,22,'josh@hype4fitness.com','2020-05-05 14:24:16.139000','I want josh',170,'none',75,_binary '\0','josh',74,NULL,250,6),
 (3,21,12,'glynn@hype4fitness.com','2020-05-05 14:25:36.604000','I want glynn',120,'none',75,_binary '\0','glynn',120,NULL,170,7);
 
-INSERT INTO `exercise`(`id`, `exercise_name`, `muscle_group`) VALUES (1,'bench','chest');
-INSERT INTO `exercise`(`id`, `exercise_name`, `muscle_group`) VALUES (2,'db flys','chest');
-INSERT INTO `exercise`(`id`, `exercise_name`, `muscle_group`) VALUES (3,'push ups','chest');
+INSERT INTO 
+  exercise (id, exercise_name, muscle_group) 
+VALUES
+  (1,'bench','chest'), 
+  (2,'db flys','chest'),
+  (3,'push ups','chest');
